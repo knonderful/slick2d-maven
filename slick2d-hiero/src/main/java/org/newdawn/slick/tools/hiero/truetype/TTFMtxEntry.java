@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 
-/* $Id: TTFMtxEntry.java 426576 2006-07-28 15:44:37Z jeremias $ */
- 
+ /* $Id: TTFMtxEntry.java 426576 2006-07-28 15:44:37Z jeremias $ */
 package org.newdawn.slick.tools.hiero.truetype;
 
 import java.util.List;
@@ -25,178 +24,211 @@ import java.util.List;
  * This class represents a TrueType Mtx Entry.
  */
 class TTFMtxEntry {
-	/** The WX for this table entry */
-    private int wx;
-    /** The LSB */
-    private int lsb;
-    /** the name for this MTX entry */
-    private String name = "";
-    /** The glyph index of this entry */
-    private int index;
-    /** The unicode indexes this entry relates to */
-    private List unicodeIndex = new java.util.ArrayList();
-    /** The bounding box specified in this entry */
-    private int[] boundingBox = new int[4];
-    /** The offset into the table for this entry */
-    private long offset;
-    /** The number of MTX found */
-    private byte found = 0;
 
-    /**
-     * Returns a String representation of this object.
-     * 
-     * @param t TTFFile to use for unit conversion
-     * @return String String representation
-     */
-    public String toString(TTFFile t) {
-        return "Glyph " + name + " index: " + getIndexAsString() + " bbox ["
-             + (boundingBox[0]) + " "
-             + (boundingBox[1]) + " "
-             + (boundingBox[2]) + " "
-             + (boundingBox[3]) + "] wx: "
-             + (wx);
-    }
+  /**
+   * The WX for this table entry
+   */
+  private int wx;
+  /**
+   * The LSB
+   */
+  private int lsb;
+  /**
+   * the name for this MTX entry
+   */
+  private String name = "";
+  /**
+   * The glyph index of this entry
+   */
+  private int index;
+  /**
+   * The unicode indexes this entry relates to
+   */
+  private List unicodeIndex = new java.util.ArrayList();
+  /**
+   * The bounding box specified in this entry
+   */
+  private int[] boundingBox = new int[4];
+  /**
+   * The offset into the table for this entry
+   */
+  private long offset;
+  /**
+   * The number of MTX found
+   */
+  private byte found = 0;
 
-    /**
-     * Returns the boundingBox.
-     * @return int[]
-     */
-    public int[] getBoundingBox() {
-        return boundingBox;
-    }
+  /**
+   * Returns a String representation of this object.
+   *
+   * @param t TTFFile to use for unit conversion
+   * @return String String representation
+   */
+  public String toString(TTFFile t) {
+    return "Glyph " + name + " index: " + getIndexAsString() + " bbox ["
+            + (boundingBox[0]) + " "
+            + (boundingBox[1]) + " "
+            + (boundingBox[2]) + " "
+            + (boundingBox[3]) + "] wx: "
+            + (wx);
+  }
 
-    /**
-     * Sets the boundingBox.
-     * @param boundingBox The boundingBox to set
-     */
-    public void setBoundingBox(int[] boundingBox) {
-        this.boundingBox = boundingBox;
-    }
+  /**
+   * Returns the boundingBox.
+   *
+   * @return int[]
+   */
+  public int[] getBoundingBox() {
+    return boundingBox;
+  }
 
-    /**
-     * Returns the found.
-     * @return byte
-     */
-    public byte getFound() {
-        return found;
-    }
+  /**
+   * Sets the boundingBox.
+   *
+   * @param boundingBox The boundingBox to set
+   */
+  public void setBoundingBox(int[] boundingBox) {
+    this.boundingBox = boundingBox;
+  }
 
-    /**
-     * Returns the index.
-     * @return int
-     */
-    public int getIndex() {
-        return index;
-    }
-        
-    /**
-     * Determines whether this index represents a reserved character.
-     * @return True if it is reserved
-     */
-    public boolean isIndexReserved() {
-        return (getIndex() >= 32768) && (getIndex() <= 65535);
-    }
-    
-    /**
-     * Returns a String representation of the index taking into account if
-     * the index is in the reserved range.
-     * @return index as String
-     */
-    public String getIndexAsString() {
-        if (isIndexReserved()) {
-            return Integer.toString(getIndex()) + " (reserved)";
-        } else {
-            return Integer.toString(getIndex());
-        }
-    }
+  /**
+   * Returns the found.
+   *
+   * @return byte
+   */
+  public byte getFound() {
+    return found;
+  }
 
-    /**
-     * Returns the lsb.
-     * @return int
-     */
-    public int getLsb() {
-        return lsb;
-    }
+  /**
+   * Returns the index.
+   *
+   * @return int
+   */
+  public int getIndex() {
+    return index;
+  }
 
-    /**
-     * Returns the name.
-     * @return String
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Determines whether this index represents a reserved character.
+   *
+   * @return True if it is reserved
+   */
+  public boolean isIndexReserved() {
+    return (getIndex() >= 32768) && (getIndex() <= 65535);
+  }
 
-    /**
-     * Returns the offset.
-     * @return long
-     */
-    public long getOffset() {
-        return offset;
+  /**
+   * Returns a String representation of the index taking into account if the
+   * index is in the reserved range.
+   *
+   * @return index as String
+   */
+  public String getIndexAsString() {
+    if (isIndexReserved()) {
+      return Integer.toString(getIndex()) + " (reserved)";
+    } else {
+      return Integer.toString(getIndex());
     }
+  }
 
-    /**
-     * Returns the unicodeIndex.
-     * @return List
-     */
-    public List getUnicodeIndex() {
-        return unicodeIndex;
-    }
+  /**
+   * Returns the lsb.
+   *
+   * @return int
+   */
+  public int getLsb() {
+    return lsb;
+  }
 
-    /**
-     * Returns the wx.
-     * @return int
-     */
-    public int getWx() {
-        return wx;
-    }
+  /**
+   * Returns the name.
+   *
+   * @return String
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the found.
-     * @param found The found to set
-     */
-    public void setFound(byte found) {
-        this.found = found;
-    }
+  /**
+   * Returns the offset.
+   *
+   * @return long
+   */
+  public long getOffset() {
+    return offset;
+  }
 
-    /**
-     * Sets the index.
-     * @param index The index to set
-     */
-    public void setIndex(int index) {
-        this.index = index;
-    }
+  /**
+   * Returns the unicodeIndex.
+   *
+   * @return List
+   */
+  public List getUnicodeIndex() {
+    return unicodeIndex;
+  }
 
-    /**
-     * Sets the lsb.
-     * @param lsb The lsb to set
-     */
-    public void setLsb(int lsb) {
-        this.lsb = lsb;
-    }
+  /**
+   * Returns the wx.
+   *
+   * @return int
+   */
+  public int getWx() {
+    return wx;
+  }
 
-    /**
-     * Sets the name.
-     * @param name The name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
+  /**
+   * Sets the found.
+   *
+   * @param found The found to set
+   */
+  public void setFound(byte found) {
+    this.found = found;
+  }
 
-    /**
-     * Sets the offset.
-     * @param offset The offset to set
-     */
-    public void setOffset(long offset) {
-        this.offset = offset;
-    }
+  /**
+   * Sets the index.
+   *
+   * @param index The index to set
+   */
+  public void setIndex(int index) {
+    this.index = index;
+  }
 
-    /**
-     * Sets the wx.
-     * @param wx The wx to set
-     */
-    public void setWx(int wx) {
-        this.wx = wx;
-    }
+  /**
+   * Sets the lsb.
+   *
+   * @param lsb The lsb to set
+   */
+  public void setLsb(int lsb) {
+    this.lsb = lsb;
+  }
 
+  /**
+   * Sets the name.
+   *
+   * @param name The name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Sets the offset.
+   *
+   * @param offset The offset to set
+   */
+  public void setOffset(long offset) {
+    this.offset = offset;
+  }
+
+  /**
+   * Sets the wx.
+   *
+   * @param wx The wx to set
+   */
+  public void setWx(int wx) {
+    this.wx = wx;
+  }
 
 }

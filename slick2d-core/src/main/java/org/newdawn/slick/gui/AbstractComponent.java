@@ -13,170 +13,172 @@ import org.newdawn.slick.util.InputAdapter;
 /**
  * The utility class to handle all the input related gubbins for basic GUI
  * components
- * 
+ *
  * @author kevin
  */
 public abstract class AbstractComponent extends InputAdapter {
-	/** The component that currently has focus */
-	private static AbstractComponent currentFocus = null;
-	
-	/** The game container */
-	protected GUIContext container;
 
-	/** Listeners for the component to notify */
-	protected Set listeners;
+  /**
+   * The component that currently has focus
+   */
+  private static AbstractComponent currentFocus = null;
 
-	/** True if this component currently has focus */
-	private boolean focus = false;
+  /**
+   * The game container
+   */
+  protected GUIContext container;
 
-	/** The input we're responding to */
-	protected Input input;
-	
-	/**
-	 * Create a new component
-	 * 
-	 * @param container
-	 *            The container displaying this component
-	 */
-	public AbstractComponent(GUIContext container) {
-		this.container = container;
+  /**
+   * Listeners for the component to notify
+   */
+  protected Set listeners;
 
-		listeners = new HashSet();
+  /**
+   * True if this component currently has focus
+   */
+  private boolean focus = false;
 
-		input = container.getInput();
-		input.addPrimaryListener(this);
+  /**
+   * The input we're responding to
+   */
+  protected Input input;
 
-		setLocation(0, 0);
-	}
-	
-	/**
-	 * Add a component listener to be informed when the component sees fit.
-	 * 
-	 * It will ignore listeners already added.
-	 * 
-	 * @param listener
-	 *            listener
-	 */
-	public void addListener(ComponentListener listener) {
-		listeners.add(listener);
-	}
+  /**
+   * Create a new component
+   *
+   * @param container The container displaying this component
+   */
+  public AbstractComponent(GUIContext container) {
+    this.container = container;
 
-	/**
-	 * Remove a component listener.
-	 * 
-	 * It will ignore if the listener wasn't added.
-	 * 
-	 * @param listener
-	 *            listener
-	 */
-	public void removeListener(ComponentListener listener) {
-		listeners.remove(listener);
-	}
+    listeners = new HashSet();
 
-	/**
-	 * Notify all the listeners.
-	 */
-	protected void notifyListeners() {
-		Iterator it = listeners.iterator();
-		while (it.hasNext()) {
-			((ComponentListener) it.next()).componentActivated(this);
-		}
-	}
+    input = container.getInput();
+    input.addPrimaryListener(this);
 
-	/**
-	 * Render this component to the screen
-	 * 
-	 * @param container
-	 *            The container displaying this component
-	 * @param g
-	 *            The graphics context used to render to the display
-	 * @throws SlickException
-	 *             If there has been an error rendering the component
-	 */
-	public abstract void render(GUIContext container, Graphics g)
-			throws SlickException;
+    setLocation(0, 0);
+  }
 
-	/**
-	 * Moves the component.
-	 * 
-	 * @param x
-	 *            X coordinate
-	 * @param y
-	 *            Y coordinate
-	 */
-	public abstract void setLocation(int x, int y);
+  /**
+   * Add a component listener to be informed when the component sees fit.
+   *
+   * It will ignore listeners already added.
+   *
+   * @param listener listener
+   */
+  public void addListener(ComponentListener listener) {
+    listeners.add(listener);
+  }
 
-	/**
-	 * Returns the position in the X coordinate
-	 * 
-	 * @return x
-	 */
-	public abstract int getX();
+  /**
+   * Remove a component listener.
+   *
+   * It will ignore if the listener wasn't added.
+   *
+   * @param listener listener
+   */
+  public void removeListener(ComponentListener listener) {
+    listeners.remove(listener);
+  }
 
-	/**
-	 * Returns the position in the Y coordinate
-	 * 
-	 * @return y
-	 */
-	public abstract int getY();
+  /**
+   * Notify all the listeners.
+   */
+  protected void notifyListeners() {
+    Iterator it = listeners.iterator();
+    while (it.hasNext()) {
+      ((ComponentListener) it.next()).componentActivated(this);
+    }
+  }
 
-	/**
-	 * Get the width of the component
-	 * 
-	 * @return The width of the component
-	 */
-	public abstract int getWidth();
+  /**
+   * Render this component to the screen
+   *
+   * @param container The container displaying this component
+   * @param g The graphics context used to render to the display
+   * @throws SlickException If there has been an error rendering the component
+   */
+  public abstract void render(GUIContext container, Graphics g)
+          throws SlickException;
 
-	/**
-	 * Get the height of the component
-	 * 
-	 * @return The height of the component
-	 */
-	public abstract int getHeight();
+  /**
+   * Moves the component.
+   *
+   * @param x X coordinate
+   * @param y Y coordinate
+   */
+  public abstract void setLocation(int x, int y);
 
-	/**
-	 * Indicate whether this component should be focused or not
-	 * 
-	 * @param focus
-	 *            if the component should be focused
-	 */
-	public void setFocus(boolean focus) {
-		if (focus) {
-			if (currentFocus != null) {
-				currentFocus.setFocus(false);
-			}
-			currentFocus = this;
-		} else {
-			if (currentFocus == this) {
-				currentFocus = null;
-			}
-		}
-		this.focus = focus;
-	}
+  /**
+   * Returns the position in the X coordinate
+   *
+   * @return x
+   */
+  public abstract int getX();
 
-	/**
-	 * Check if this component currently has focus
-	 * 
-	 * @return if this field currently has focus
-	 */
-	public boolean hasFocus() {
-		return focus;
-	}
+  /**
+   * Returns the position in the Y coordinate
+   *
+   * @return y
+   */
+  public abstract int getY();
 
-	/**
-	 * Consume the event currently being processed
-	 */
-	protected void consumeEvent() {
-		input.consumeEvent();
-	}
-	
-	/**
-	 * Gives the focus to this component with a click of the mouse.
-	 * 
-	 * @see org.newdawn.slick.gui.AbstractComponent#mouseReleased(int, int, int)
-	 */
-	public void mouseReleased(int button, int x, int y) {
-		setFocus(Rectangle.contains(x, y, getX(), getY(), getWidth(),
-				getHeight()));
-	}
+  /**
+   * Get the width of the component
+   *
+   * @return The width of the component
+   */
+  public abstract int getWidth();
+
+  /**
+   * Get the height of the component
+   *
+   * @return The height of the component
+   */
+  public abstract int getHeight();
+
+  /**
+   * Indicate whether this component should be focused or not
+   *
+   * @param focus if the component should be focused
+   */
+  public void setFocus(boolean focus) {
+    if (focus) {
+      if (currentFocus != null) {
+        currentFocus.setFocus(false);
+      }
+      currentFocus = this;
+    } else {
+      if (currentFocus == this) {
+        currentFocus = null;
+      }
+    }
+    this.focus = focus;
+  }
+
+  /**
+   * Check if this component currently has focus
+   *
+   * @return if this field currently has focus
+   */
+  public boolean hasFocus() {
+    return focus;
+  }
+
+  /**
+   * Consume the event currently being processed
+   */
+  protected void consumeEvent() {
+    input.consumeEvent();
+  }
+
+  /**
+   * Gives the focus to this component with a click of the mouse.
+   *
+   * @see org.newdawn.slick.gui.AbstractComponent#mouseReleased(int, int, int)
+   */
+  public void mouseReleased(int button, int x, int y) {
+    setFocus(Rectangle.contains(x, y, getX(), getY(), getWidth(),
+            getHeight()));
+  }
 }

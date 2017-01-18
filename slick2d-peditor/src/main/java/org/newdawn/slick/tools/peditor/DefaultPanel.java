@@ -11,15 +11,16 @@ import javax.swing.JPanel;
  * @author kevin
  */
 public class DefaultPanel extends JPanel {
-	/**
-	 * @see javax.swing.JComponent#setEnabled(boolean)
-	 */
-	public void setEnabled(boolean enabled) {
-		super.setEnabled(enabled);
-		
-		Component[] components = getComponents();
-		for (int i=0;i<components.length;i++) {
-			components[i].setEnabled(enabled);
-		}
-	}
+
+  /**
+   * @see javax.swing.JComponent#setEnabled(boolean)
+   */
+  public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+
+    Component[] components = getComponents();
+    for (int i = 0; i < components.length; i++) {
+      components[i].setEnabled(enabled);
+    }
+  }
 }

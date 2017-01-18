@@ -6,10 +6,11 @@ package org.newdawn.slick.tools.hiero.truetype;
  * @author kevin
  */
 public interface StatusListener {
-	/**
-	 * Update the status message
-	 * 
-	 * @param msg The message to be displayed
-	 */
-	public void updateStatus(String msg);
+
+  /**
+   * Update the status message
+   *
+   * @param msg The message to be displayed
+   */
+  public void updateStatus(String msg);
 }

@@ -1,53 +1,56 @@
-
 package org.newdawn.slick.font.effects;
 
 import java.util.List;
 
 /**
- * An effect that has a number of configuration values. This allows the effect to be configured in the Hiero GUI and to be saved
- * and loaded to and from a file.
- * 
+ * An effect that has a number of configuration values. This allows the effect
+ * to be configured in the Hiero GUI and to be saved and loaded to and from a
+ * file.
+ *
  * @author Nathan Sweet <misc@n4te.com>
  */
 public interface ConfigurableEffect extends Effect {
-	/**
-	 * Returns the list of {@link Value}s for this effect. This list is not typically backed by the effect, so changes to the
-	 * values will not take affect until {@link #setValues(List)} is called.
-	 */
-	public List getValues();
 
-	/**
-	 * Sets the list of {@link Value}s for this effect.
-	 */
-	public void setValues(List values);
+  /**
+   * Returns the list of {@link Value}s for this effect. This list is not
+   * typically backed by the effect, so changes to the values will not take
+   * affect until {@link #setValues(List)} is called.
+   */
+  public List getValues();
 
-	/**
-	 * Represents a configurable value for an effect.
-	 */
-	static public interface Value {
-		/**
-		 * Returns the name of the value.
-		 */
-		public String getName ();
+  /**
+   * Sets the list of {@link Value}s for this effect.
+   */
+  public void setValues(List values);
 
-		/**
-		 * Sets the string representation of the value.
-		 */
-		public void setString (String value);
+  /**
+   * Represents a configurable value for an effect.
+   */
+  static public interface Value {
 
-		/**
-		 * Gets the string representation of the value.
-		 */
-		public String getString ();
+    /**
+     * Returns the name of the value.
+     */
+    public String getName();
 
-		/**
-		 * Gets the object representation of the value.
-		 */
-		public Object getObject ();
+    /**
+     * Sets the string representation of the value.
+     */
+    public void setString(String value);
 
-		/**
-		 * Shows a dialog allowing a user to configure this value.
-		 */
-		public void showDialog ();
-	}
+    /**
+     * Gets the string representation of the value.
+     */
+    public String getString();
+
+    /**
+     * Gets the object representation of the value.
+     */
+    public Object getObject();
+
+    /**
+     * Shows a dialog allowing a user to configure this value.
+     */
+    public void showDialog();
+  }
 }
