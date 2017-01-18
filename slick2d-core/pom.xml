@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.slick2d-ng</groupId>
     <artifactId>slick2d-parent</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>slick2d-core</artifactId>

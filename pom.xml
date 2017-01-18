@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.slick2d-ng</groupId>
   <artifactId>slick2d-parent</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Slick2D Maven distribution - parent</name>
