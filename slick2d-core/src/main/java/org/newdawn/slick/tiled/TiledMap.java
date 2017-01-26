@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
@@ -955,8 +953,6 @@ public class TiledMap {
      */
     public ObjectGroup(Element element) throws SlickException {
       name = element.getAttribute("name");
-      width = Integer.parseInt(element.getAttribute("width"));
-      height = Integer.parseInt(element.getAttribute("height"));
       objects = new ArrayList();
 
       // now read the layer properties
