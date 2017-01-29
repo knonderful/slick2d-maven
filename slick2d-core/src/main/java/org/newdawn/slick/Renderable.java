@@ -14,18 +14,4 @@ public interface Renderable {
    * @param y The y coordinate to draw the artefact at
    */
   public void draw(float x, float y);
-
-  /**
-   * Gets the width.
-   *
-   * @return The width.
-   */
-  int getWidth();
-
-  /**
-   * Gets the height.
-   *
-   * @return The height.
-   */
-  int getHeight();
 }

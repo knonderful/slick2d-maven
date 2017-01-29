@@ -360,26 +360,6 @@ public class Animation implements Renderable {
   }
 
   /**
-   * Get the width of the current frame
-   *
-   * @return The width of the current frame
-   */
-  @Override
-  public int getWidth() {
-    return ((Frame) frames.get(currentFrame)).image.getWidth();
-  }
-
-  /**
-   * Get the height of the current frame
-   *
-   * @return The height of the current frame
-   */
-  @Override
-  public int getHeight() {
-    return ((Frame) frames.get(currentFrame)).image.getHeight();
-  }
-
-  /**
    * Update the animation, note that this will have odd effects if auto update
    * is also turned on
    *
