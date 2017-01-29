@@ -45,4 +45,17 @@ public interface Renderable {
    */
   public void draw(float x, float y, float width, float height, Color filter);
 
+  /**
+   * Gets the width.
+   *
+   * @return The width.
+   */
+  int getWidth();
+
+  /**
+   * Gets the height.
+   *
+   * @return The height.
+   */
+  int getHeight();
 }
