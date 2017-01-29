@@ -2,7 +2,6 @@ package org.newdawn.slick;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.newdawn.slick.opengl.ImageData;
 import org.newdawn.slick.opengl.InternalTextureLoader;
 import org.newdawn.slick.opengl.Texture;
@@ -612,7 +611,6 @@ public class Image implements Renderable {
    * @param y The y location to draw the image at
    * @param filter The color to filter with when drawing
    */
-  @Override
   public void draw(float x, float y, Color filter) {
     init();
     draw(x, y, width, height, filter);
@@ -733,7 +731,6 @@ public class Image implements Renderable {
    * @param width The width to render the image at
    * @param height The height to render the image at
    */
-  @Override
   public void draw(float x, float y, float width, float height) {
     init();
     draw(x, y, width, height, Color.white);
@@ -813,7 +810,6 @@ public class Image implements Renderable {
    * @param height The height to render the image at
    * @param filter The color to filter with while drawing
    */
-  @Override
   public void draw(float x, float y, float width, float height, Color filter) {
     if (alpha != 1) {
       if (filter == null) {

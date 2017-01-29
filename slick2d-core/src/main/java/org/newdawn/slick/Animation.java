@@ -307,13 +307,6 @@ public class Animation implements Renderable {
   }
 
   /**
-   * Draw the animation to the screen
-   */
-  public void draw() {
-    draw(0, 0);
-  }
-
-  /**
    * Draw the animation at a specific location
    *
    * @param x The x position to draw the animation at
@@ -321,45 +314,6 @@ public class Animation implements Renderable {
    */
   @Override
   public void draw(float x, float y) {
-    draw(x, y, getWidth(), getHeight());
-  }
-
-  /**
-   * Draw the animation at a specific location
-   *
-   * @param x The x position to draw the animation at
-   * @param y The y position to draw the animation at
-   * @param filter The filter to apply
-   */
-  @Override
-  public void draw(float x, float y, Color filter) {
-    draw(x, y, getWidth(), getHeight(), filter);
-  }
-
-  /**
-   * Draw the animation
-   *
-   * @param x The x position to draw the animation at
-   * @param y The y position to draw the animation at
-   * @param width The width to draw the animation at
-   * @param height The height to draw the animation at
-   */
-  @Override
-  public void draw(float x, float y, float width, float height) {
-    draw(x, y, width, height, Color.white);
-  }
-
-  /**
-   * Draw the animation
-   *
-   * @param x The x position to draw the animation at
-   * @param y The y position to draw the animation at
-   * @param width The width to draw the animation at
-   * @param height The height to draw the animation at
-   * @param col The colour filter to use
-   */
-  @Override
-  public void draw(float x, float y, float width, float height, Color col) {
     if (frames.size() == 0) {
       return;
     }
@@ -375,8 +329,7 @@ public class Animation implements Renderable {
       nextFrame(delta);
     }
 
-    Frame frame = (Frame) frames.get(currentFrame);
-    frame.image.draw(x, y, width, height, col);
+    frames.get(currentFrame).image.draw(x, y);
   }
 
   /**
@@ -411,6 +364,7 @@ public class Animation implements Renderable {
    *
    * @return The width of the current frame
    */
+  @Override
   public int getWidth() {
     return ((Frame) frames.get(currentFrame)).image.getWidth();
   }
@@ -420,6 +374,7 @@ public class Animation implements Renderable {
    *
    * @return The height of the current frame
    */
+  @Override
   public int getHeight() {
     return ((Frame) frames.get(currentFrame)).image.getHeight();
   }
