@@ -40,7 +40,7 @@ public class ControllerDirectionControl extends ControllerControl {
    *
    * @author kevin
    */
-  private static class Direction {
+  public static class Direction {
 
     /**
      * The event to be fired for this direction
