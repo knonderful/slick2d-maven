@@ -1,7 +1,6 @@
 package org.newdawn.slick;
 
 import java.util.ArrayList;
-
 import org.lwjgl.Sys;
 import org.newdawn.slick.util.Log;
 
@@ -16,7 +15,7 @@ public class Animation implements Renderable {
   /**
    * The list of frames to render in this animation
    */
-  private ArrayList frames = new ArrayList();
+  private ArrayList<Frame> frames = new ArrayList<>();
   /**
    * The frame currently being displayed
    */
@@ -83,7 +82,7 @@ public class Animation implements Renderable {
    * @param frames The images for the animation frames
    * @param duration The duration to show each frame
    */
-  public Animation(Image[] frames, int duration) {
+  public Animation(Renderable[] frames, int duration) {
     this(frames, duration, true);
   }
 
@@ -93,7 +92,7 @@ public class Animation implements Renderable {
    * @param frames The images for the animation frames
    * @param durations The duration to show each frame
    */
-  public Animation(Image[] frames, int[] durations) {
+  public Animation(Renderable[] frames, int[] durations) {
     this(frames, durations, true);
   }
 
@@ -118,7 +117,7 @@ public class Animation implements Renderable {
    * means that the current frame will be caculated based on the time between
    * renders
    */
-  public Animation(Image[] frames, int duration, boolean autoUpdate) {
+  public Animation(Renderable[] frames, int duration, boolean autoUpdate) {
     for (int i = 0; i < frames.length; i++) {
       addFrame(frames[i], duration);
     }
@@ -135,7 +134,7 @@ public class Animation implements Renderable {
    * means that the current frame will be caculated based on the time between
    * renders
    */
-  public Animation(Image[] frames, int[] durations, boolean autoUpdate) {
+  public Animation(Renderable[] frames, int[] durations, boolean autoUpdate) {
     this.autoUpdate = autoUpdate;
     if (frames.length != durations.length) {
       throw new RuntimeException("There must be one duration per frame");
@@ -193,47 +192,6 @@ public class Animation implements Renderable {
         }
       }
     }
-  }
-
-  /**
-   * Creates a new Animation where each frame is a sub-image of
-   * <tt>SpriteSheet</tt> ss.
-   *
-   * @param ss The <tt>SpriteSheet</tt> backing this animation
-   * @param frames An array of coordinates of sub-image locations for each frame
-   * @param duration The duration each frame should be displayed for
-   */
-  public Animation(SpriteSheet ss, int[] frames, int[] duration) {
-    spriteSheet = ss;
-    int x = -1;
-    int y = -1;
-
-    for (int i = 0; i < frames.length / 2; i++) {
-      x = frames[i * 2];
-      y = frames[i * 2 + 1];
-      addFrame(duration[i], x, y);
-    }
-  }
-
-  /**
-   * Add animation frame to the animation.
-   *
-   * @param duration The duration to display the frame for
-   * @param x The x location of the frame on the <tt>SpriteSheet</tt>
-   * @param y The y location of the frame on the <tt>spriteSheet</tt>
-   */
-  public void addFrame(int duration, int x, int y) {
-    if (duration == 0) {
-      Log.error("Invalid duration: " + duration);
-      throw new RuntimeException("Invalid duration: " + duration);
-    }
-
-    if (frames.isEmpty()) {
-      nextChange = (int) (duration / speed);
-    }
-
-    frames.add(new Frame(duration, x, y));
-    currentFrame = 0;
   }
 
   /**
@@ -334,7 +292,7 @@ public class Animation implements Renderable {
    * @param frame The image to display for the frame
    * @param duration The duration to display the frame for
    */
-  public void addFrame(Image frame, int duration) {
+  public void addFrame(Renderable frame, int duration) {
     if (duration == 0) {
       Log.error("Invalid duration: " + duration);
       throw new RuntimeException("Invalid duration: " + duration);
@@ -467,66 +425,6 @@ public class Animation implements Renderable {
   }
 
   /**
-   * Draw the animation
-   *
-   * @param x The x position to draw the animation at
-   * @param y The y position to draw the animation at
-   * @param width The width to draw the animation at
-   * @param height The height to draw the animation at
-   */
-  public void drawFlash(float x, float y, float width, float height) {
-    drawFlash(x, y, width, height, Color.white);
-  }
-
-  /**
-   * Draw the animation
-   *
-   * @param x The x position to draw the animation at
-   * @param y The y position to draw the animation at
-   * @param width The width to draw the animation at
-   * @param height The height to draw the animation at
-   * @param col The colour for the flash
-   */
-  public void drawFlash(float x, float y, float width, float height, Color col) {
-    if (frames.size() == 0) {
-      return;
-    }
-
-    if (autoUpdate) {
-      long now = getTime();
-      long delta = now - lastUpdate;
-      if (firstUpdate) {
-        delta = 0;
-        firstUpdate = false;
-      }
-      lastUpdate = now;
-      nextFrame(delta);
-    }
-
-    Frame frame = (Frame) frames.get(currentFrame);
-    frame.image.drawFlash(x, y, width, height, col);
-  }
-
-  /**
-   * Update the animation cycle without draw the image, useful for keeping two
-   * animations in sync
-   *
-   * @deprecated
-   */
-  public void updateNoDraw() {
-    if (autoUpdate) {
-      long now = getTime();
-      long delta = now - lastUpdate;
-      if (firstUpdate) {
-        delta = 0;
-        firstUpdate = false;
-      }
-      lastUpdate = now;
-      nextFrame(delta);
-    }
-  }
-
-  /**
    * Update the animation, note that this will have odd effects if auto update
    * is also turned on
    *
@@ -561,7 +459,7 @@ public class Animation implements Renderable {
    * @param index The index of the frame image to retrieve
    * @return The image of the specified animation frame
    */
-  public Image getImage(int index) {
+  public Renderable getRenderable(int index) {
     Frame frame = (Frame) frames.get(index);
     return frame.image;
   }
@@ -580,7 +478,7 @@ public class Animation implements Renderable {
    *
    * @return The image associated with the current animation frame
    */
-  public Image getCurrentFrame() {
+  public Renderable getCurrentFrame() {
     Frame frame = (Frame) frames.get(currentFrame);
     return frame.image;
   }
@@ -594,7 +492,7 @@ public class Animation implements Renderable {
     if (stopped) {
       return;
     }
-    if (frames.size() == 0) {
+    if (frames.isEmpty()) {
       return;
     }
 
@@ -624,7 +522,7 @@ public class Animation implements Renderable {
           direction = -1;
         }
       }
-      int realDuration = (int) (((Frame) frames.get(currentFrame)).duration / speed);
+      int realDuration = (int) (frames.get(currentFrame).duration / speed);
       nextChange = nextChange + realDuration;
     }
   }
@@ -664,7 +562,7 @@ public class Animation implements Renderable {
    * @return The duration in (ms) of the given frame
    */
   public int getDuration(int index) {
-    return ((Frame) frames.get(index)).duration;
+    return frames.get(index).duration;
   }
 
   /**
@@ -674,7 +572,7 @@ public class Animation implements Renderable {
    * @param duration The duration in (ms) for the given frame
    */
   public void setDuration(int index, int duration) {
-    ((Frame) frames.get(index)).duration = duration;
+    frames.get(index).duration = duration;
   }
 
   /**
@@ -697,7 +595,7 @@ public class Animation implements Renderable {
   public String toString() {
     String res = "[Animation (" + frames.size() + ") ";
     for (int i = 0; i < frames.size(); i++) {
-      Frame frame = (Frame) frames.get(i);
+      Frame frame = frames.get(i);
       res += frame.duration + ",";
     }
 
@@ -735,7 +633,7 @@ public class Animation implements Renderable {
     /**
      * The image to display for this frame
      */
-    public Image image;
+    public Renderable image;
     /**
      * The duration to display the image fro
      */
@@ -755,24 +653,9 @@ public class Animation implements Renderable {
      * @param image The image to display for the frame
      * @param duration The duration in millisecond to display the image for
      */
-    public Frame(Image image, int duration) {
+    public Frame(Renderable image, int duration) {
       this.image = image;
       this.duration = duration;
-    }
-
-    /**
-     * Creates a new animation frame with the frames image location on a sprite
-     * sheet
-     *
-     * @param duration The duration in millisecond to display the image for
-     * @param x the x location of the frame on the <tt>SpriteSheet</tt>
-     * @param y the y location of the frame on the <tt>SpriteSheet</tt>
-     */
-    public Frame(int duration, int x, int y) {
-      this.image = spriteSheet.getSubImage(x, y);
-      this.duration = duration;
-      this.x = x;
-      this.y = y;
     }
   }
 }
