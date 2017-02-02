@@ -39,13 +39,7 @@
   </scm>
 
   <modules>
-    <module>slick2d-basic-game-archetype</module>
-    <module>slick2d-core</module>
-    <module>slick2d-examples</module>
-    <module>slick2d-hiero</module>
-    <module>slick2d-packulike</module>
-    <module>slick2d-peditor</module>
-    <module>slick2d-scalar</module>
+    <module>slick2d-ng</module>
   </modules>
 
   <properties>
