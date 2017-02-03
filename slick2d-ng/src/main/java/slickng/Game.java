@@ -3,9 +3,9 @@ package slickng;
 /**
  * This class represent a game implementation.
  * <p>
- * When the game is started, {@link #init(slickng.GameContext)} is called. Then,
- * for each frame {@link #update(slickng.GameContext, int)} is called, followed
- * by {@link #render(slickng.GameContext, slickng.Graphics)}.
+ * When the game is started, {@link #init(InitContext)} is called. Then,
+ * for each frame {@link #update(UpdateContext, int)} is called, followed
+ * by {@link #render(RenderContext)}.
  * <p>
  * Finally, {@link #requestClose()} is called when the game is closed by the
  * user.
