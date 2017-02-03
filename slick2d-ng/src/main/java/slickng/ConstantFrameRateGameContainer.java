@@ -48,7 +48,7 @@ public class ConstantFrameRateGameContainer implements GameContainer {
     this.deltaStep = 1000f / frameRate;
   }
 
-  private int updateDelta() {
+  private int nextDelta() {
     float time = deltaRest + deltaStep;
     int rounded = (int) time;
     this.deltaRest = time - rounded;
@@ -73,7 +73,7 @@ public class ConstantFrameRateGameContainer implements GameContainer {
         } else {
           // Game logic update
           try {
-            int delta = updateDelta();
+            int delta = nextDelta();
             game.update(context, delta);
           } catch (SlickException e) {
             LOG.log(Level.SEVERE, "Game update method has thrown an exception.", e);
