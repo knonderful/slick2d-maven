@@ -20,12 +20,12 @@ import slickng.SurfaceFactory;
 public class OpenGlGraphics implements Graphics {
 
   private static final Logger LOG = Logger.getLogger(OpenGlGraphics.class.getName());
-  private static final int TARGET_FPS = 60;
-
-  private final DisplayMode displayMode;
 
   private final SGL sgl = new ImmediateModeOGLRenderer();
   private final OpenGlSurfaceFactory surfaceFactory = new OpenGlSurfaceFactory(sgl);
+
+  private final DisplayMode displayMode;
+  private final int frameSync;
 
   private static String displayModeFailMessage(int width, int height, boolean fullscreen) {
     return String.format("Could not set display to %dx%d%s.", width, height, fullscreen ? " (fullscreen)" : "");
@@ -35,14 +35,16 @@ public class OpenGlGraphics implements Graphics {
    * Creates a new instance, instantiating the display mode and the OpenGL
    * context with the specified parameters.
    *
-   * @param width      The width of the display surface.
-   * @param height     The height of the display surface.
-   * @param fullscreen A flag that specifies whether full-screen mode should be
-   *                   used.
+   * @param options The OpenGL graphics options.
    * @throws SlickException If the graphics could not be created with the
    *                        specified parameters.
    */
-  public OpenGlGraphics(int width, int height, boolean fullscreen) throws SlickException {
+  public OpenGlGraphics(OpenGlGraphicsOptions options) throws SlickException {
+    this.frameSync = options.getFrameSync();
+    int width = options.getWidth();
+    int height = options.getHeight();
+    boolean fullscreen = options.isFullscreen();
+
     DisplayMode originalDisplayMode = Display.getDisplayMode();
 
     try {
@@ -96,8 +98,9 @@ public class OpenGlGraphics implements Graphics {
     sgl.flush();
     Display.update();
 
-    // TODO: Made this configurable.
-    Display.sync(TARGET_FPS);
+    if (frameSync > 0) {
+      Display.sync(frameSync);
+    }
   }
 
   @Override
