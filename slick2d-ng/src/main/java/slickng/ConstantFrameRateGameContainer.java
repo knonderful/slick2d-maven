@@ -18,7 +18,7 @@ public class ConstantFrameRateGameContainer implements GameContainer {
   private static final Logger LOG = Logger.getLogger(ConstantFrameRateGameContainer.class.getName());
 
   private final Game game;
-  private final DefaultGameContext context;
+  private final Graphics graphics;
   private final float deltaStep;
   private boolean running = false;
   private float deltaRest = 0f;
@@ -36,13 +36,11 @@ public class ConstantFrameRateGameContainer implements GameContainer {
    */
   public ConstantFrameRateGameContainer(Game game, int width, int height, boolean fullscreen, int frameRate) throws SlickException {
     this.game = requireNonNull(game, "Argument game must be non-null.");
-    this.context = new DefaultGameContext(
-            new OpenGlGraphics(OpenGlGraphicsOptions.getDefault()
-                    .setWidth(width)
-                    .setHeight(height)
-                    .setFullscreen(false)
-                    .setFrameSync(frameRate)
-            )
+    this.graphics = new OpenGlGraphics(OpenGlGraphicsOptions.getDefault()
+            .setWidth(width)
+            .setHeight(height)
+            .setFullscreen(false)
+            .setFrameSync(frameRate)
     );
 
     this.deltaStep = 1000f / frameRate;
@@ -57,8 +55,6 @@ public class ConstantFrameRateGameContainer implements GameContainer {
 
   @Override
   public void start() throws SlickException {
-    Graphics graphics = context.getGraphics();
-
     try {
       graphics.init();
 
@@ -74,7 +70,7 @@ public class ConstantFrameRateGameContainer implements GameContainer {
           // Game logic update
           try {
             int delta = nextDelta();
-            game.update(context, delta);
+            game.update(null, delta);
           } catch (SlickException e) {
             LOG.log(Level.SEVERE, "Game update method has thrown an exception.", e);
             running = false;

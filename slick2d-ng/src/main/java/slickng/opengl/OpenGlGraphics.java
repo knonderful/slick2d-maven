@@ -189,6 +189,6 @@ public class OpenGlGraphics implements Graphics {
     // Load identity matrix
     sgl.glLoadIdentity();
 
-    throw new UnsupportedOperationException("Not yet supported.");
+    return null;
   }
 }

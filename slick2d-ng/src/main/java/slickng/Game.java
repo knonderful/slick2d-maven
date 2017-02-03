@@ -15,19 +15,19 @@ public interface Game {
   /**
    * Initializes the game.
    *
-   * @param context The game context.
+   * @param context The init context.
    * @throws SlickException If the game could not be initialized.
    */
-  public void init(GameContext context) throws SlickException;
+  public void init(InitContext context) throws SlickException;
 
   /**
    * Updates the game state.
    *
-   * @param context The game context.
+   * @param context The update context.
    * @param delta   The time since the last game update in milliseconds.
    * @throws SlickException If the game could not be updated.
    */
-  public void update(GameContext context, int delta) throws SlickException;
+  public void update(UpdateContext context, int delta) throws SlickException;
 
   /**
    * Renders the game.
