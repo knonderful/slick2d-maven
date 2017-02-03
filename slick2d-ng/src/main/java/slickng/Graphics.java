@@ -54,4 +54,12 @@ public interface Graphics {
    * Signals the end of a render iteration.
    */
   void finishRender();
+
+  /**
+   * Determines whether the display has been requested to close by the user.
+   *
+   * @return {@code true} if the user requested to close the display, otherwise
+   *         {@code false}.
+   */
+  boolean isCloseRequested();
 }

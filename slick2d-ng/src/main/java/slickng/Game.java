@@ -1,12 +1,46 @@
 package slickng;
 
+/**
+ * This class represent a game implementation.
+ * <p>
+ * When the game is started, {@link #init(slickng.GameContext)} is called. Then,
+ * for each frame {@link #update(slickng.GameContext, int)} is called, followed
+ * by {@link #render(slickng.GameContext, slickng.Graphics)}.
+ * <p>
+ * Finally, {@link #requestClose()} is called when the game is closed by the
+ * user.
+ */
 public interface Game {
 
-  public void init(GameContext container) throws SlickException;
+  /**
+   * Initializes the game.
+   *
+   * @param context The game context.
+   * @throws SlickException If the game could not be initialized.
+   */
+  public void init(GameContext context) throws SlickException;
 
-  public void update(GameContext container, int delta) throws SlickException;
+  /**
+   * Updates the game state.
+   *
+   * @param context The game context.
+   * @param delta   The time since the last game update in milliseconds.
+   * @throws SlickException If the game could not be updated.
+   */
+  public void update(GameContext context, int delta) throws SlickException;
 
-  public void render(GameContext container, Graphics graphics) throws SlickException;
+  /**
+   * Renders the game.
+   *
+   * @param context The render context.
+   * @throws SlickException
+   */
+  public void render(RenderContext context) throws SlickException;
 
-  public boolean close();
+  /**
+   * Requests to close the game.
+   *
+   * @return {@code true} if the game can be closed, otherwise {@code false}.
+   */
+  public boolean requestClose();
 }

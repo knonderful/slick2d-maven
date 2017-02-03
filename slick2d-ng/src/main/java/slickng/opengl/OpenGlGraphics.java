@@ -177,6 +177,11 @@ public class OpenGlGraphics implements Graphics {
   }
 
   @Override
+  public boolean isCloseRequested() {
+    return Display.isCloseRequested();
+  }
+
+  @Override
   public RenderContext startRender() {
     // Blank the OpenGL surface
     sgl.glColor4f(0f, 0f, 0f, 0f);
