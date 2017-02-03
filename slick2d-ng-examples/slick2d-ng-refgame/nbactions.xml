@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>run</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Djava.library.path=lib -classpath %classpath slickng.examples.refgame.RefGame</exec.args>
+                <exec.executable>java</exec.executable>
+                <exec.workingdir>E:\work\slickgame\slick2d-maven\slick2d-ng-examples\slick2d-ng-refgame\target\slick2d-ng-refgame-1.0.0-SNAPSHOT-release\slick2d-ng-refgame-1.0.0-SNAPSHOT</exec.workingdir>
+            </properties>
+        </action>
+        <action>
+            <actionName>debug</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -Djava.library.path=lib -classpath %classpath slickng.examples.refgame.RefGame</exec.args>
+                <exec.executable>java</exec.executable>
+                <jpda.listen>true</jpda.listen>
+                <exec.workingdir>E:\work\slickgame\slick2d-maven\slick2d-ng-examples\slick2d-ng-refgame\target\slick2d-ng-refgame-1.0.0-SNAPSHOT-release\slick2d-ng-refgame-1.0.0-SNAPSHOT</exec.workingdir>
+            </properties>
+        </action>
+        <action>
+            <actionName>profile</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Djava.library.path=lib -classpath %classpath slickng.examples.refgame.RefGame</exec.args>
+                <exec.executable>java</exec.executable>
+                <exec.workingdir>E:\work\slickgame\slick2d-maven\slick2d-ng-examples\slick2d-ng-refgame\target\slick2d-ng-refgame-1.0.0-SNAPSHOT-release\slick2d-ng-refgame-1.0.0-SNAPSHOT</exec.workingdir>
+            </properties>
+        </action>
+    </actions>
