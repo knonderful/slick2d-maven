@@ -168,7 +168,7 @@ public class OpenGlGraphics implements Graphics {
     if (!Display.isCreated()) {
       throw new SlickException("Failed to initialise the LWJGL display");
     }
-
+    
     int width = getWidth();
     int height = getHeight();
 
@@ -184,8 +184,9 @@ public class OpenGlGraphics implements Graphics {
   @Override
   public RenderContext startRender() {
     // Blank the OpenGL surface
-    sgl.glColor4f(0f, 0f, 0f, 0f);
+    sgl.glClearColor(0f, 0f, 0f, 1f);
     sgl.glClear(SGL.GL_COLOR_BUFFER_BIT | SGL.GL_DEPTH_BUFFER_BIT);
+
     // Load identity matrix
     sgl.glLoadIdentity();
 
