@@ -32,7 +32,7 @@ class OpenGlImageData implements ImageData {
   }
 
   @Override
-  public int getHeight() {
+  public int getImageHeight() {
     return height;
   }
 
@@ -52,7 +52,7 @@ class OpenGlImageData implements ImageData {
   }
 
   @Override
-  public int getWidth() {
+  public int getImageWidth() {
     return width;
   }
 

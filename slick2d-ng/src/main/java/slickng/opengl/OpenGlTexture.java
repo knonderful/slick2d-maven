@@ -42,7 +42,7 @@ class OpenGlTexture {
             SGL.GL_UNSIGNED_BYTE,
             imageData.getData());
 
-    return new OpenGlTexture(textureId, imageData.getWidth(), imageData.getHeight(), imageData.getTextureWidth(), imageData.getTextureHeight());
+    return new OpenGlTexture(textureId, imageData.getImageWidth(), imageData.getImageHeight(), imageData.getTextureWidth(), imageData.getTextureHeight());
   }
 
   private static int createTextureID(SGL sgl) {

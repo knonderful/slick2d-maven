@@ -8,10 +8,8 @@ import java.nio.ByteBuffer;
 public interface ImageData {
 
   /**
-   * Retrieves the raw image data.
-   * <p>
-   * The data must be a buffer of unsigned bytes in RGBA format in the native
-   * byte order of the current underlying platform.
+   * Retrieves the raw image data buffer. The data in this buffer must be in the
+   * format specified by {@link #getPixelFormat()}.
    *
    * @return The byte buffer.
    */
@@ -22,14 +20,14 @@ public interface ImageData {
    *
    * @return The width in pixels.
    */
-  int getWidth();
+  int getImageWidth();
 
   /**
    * Retrieves the height of the image.
    *
    * @return The height in pixels.
    */
-  int getHeight();
+  int getImageHeight();
 
   /**
    * Retrieves the width of the underlying texture.
