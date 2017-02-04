@@ -99,7 +99,7 @@ public class PngImageDataReader implements ImageDataReader {
     }
 
     ByteBuffer imageBuffer = imageData.getData();
-    imageBuffer.put(data, 0, data.length);
+    imageBuffer.put(data);
     imageBuffer.flip();
     g.dispose();
 
