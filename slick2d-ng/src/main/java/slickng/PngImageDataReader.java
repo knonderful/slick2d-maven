@@ -20,6 +20,8 @@ import javax.imageio.ImageIO;
  */
 public class PngImageDataReader implements ImageDataReader {
 
+  private final Color transparent;
+
   /**
    * The color model including alpha for the GL image.
    */
@@ -35,14 +37,24 @@ public class PngImageDataReader implements ImageDataReader {
    * Creates a new instance.
    */
   public PngImageDataReader() {
+    this(null);
+  }
+
+  /**
+   * Creates a new instance.
+   *
+   * @param transparent The color to use for transparency.
+   */
+  public PngImageDataReader(Color transparent) {
+    this.transparent = transparent;
   }
 
   @Override
   public ImageData read(ImageDataFactory factory, InputStream inputStream) throws IOException {
-    return imageToByteBuffer(factory, ImageIO.read(inputStream), null);
+    return imageToByteBuffer(factory, ImageIO.read(inputStream), transparent);
   }
 
-  private ImageData imageToByteBuffer(ImageDataFactory factory, BufferedImage image, Color transparent) {
+  private static ImageData imageToByteBuffer(ImageDataFactory factory, BufferedImage image, Color transparent) {
     int width = image.getWidth();
     int height = image.getHeight();
 

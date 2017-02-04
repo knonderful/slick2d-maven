@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import slickng.Color;
 import slickng.ConstantFrameRateGameContainer;
 import slickng.Game;
 import slickng.InitContext;
@@ -31,7 +32,7 @@ public class RefGame implements Game {
   @Override
   public void init(InitContext context) throws SlickException {
     InputStream pngStream = getResourceStream("resources/megaman_parts.png");
-    Surface surf = context.createSurface(new PngImageDataReader(), pngStream);
+    Surface surf = context.createSurface(new PngImageDataReader(new Color(255, 0, 255)), pngStream);
     surfaceLibrary.add(MEGAMAN_PARTS, surf);
   }
 
