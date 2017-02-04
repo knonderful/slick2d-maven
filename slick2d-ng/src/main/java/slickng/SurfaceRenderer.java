@@ -24,7 +24,8 @@ public interface SurfaceRenderer {
   void render(float x, float y, float width, float height);
 
   /**
-   * Renders a fragment of the surface with the provided location.
+   * Renders a fragment of the surface with the provided location. The render
+   * target will have the size of the fragment.
    *
    * @param x          The X-position at which to render.
    * @param y          The Y-position at which to render.
