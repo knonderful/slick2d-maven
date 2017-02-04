@@ -10,6 +10,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
 import slickng.Graphics;
+import slickng.ImageDataFactory;
 import slickng.RenderContext;
 import slickng.SlickException;
 import slickng.SurfaceFactory;
@@ -22,7 +23,9 @@ public class OpenGlGraphics implements Graphics {
   private static final Logger LOG = Logger.getLogger(OpenGlGraphics.class.getName());
 
   private final SGL sgl = new ImmediateModeOGLRenderer();
+  private final OpenGlRenderContext renderContext = new OpenGlRenderContext(sgl);
   private final OpenGlSurfaceFactory surfaceFactory = new OpenGlSurfaceFactory(sgl);
+  private final OpenGlImageDataFactory imageDataFactory = new OpenGlImageDataFactory();
 
   private final DisplayMode displayMode;
   private final int frameSync;
@@ -109,6 +112,11 @@ public class OpenGlGraphics implements Graphics {
   }
 
   @Override
+  public ImageDataFactory getImageDataFactory() {
+    return imageDataFactory;
+  }
+
+  @Override
   public SurfaceFactory getSurfaceFactory() {
     return surfaceFactory;
   }
@@ -168,7 +176,7 @@ public class OpenGlGraphics implements Graphics {
     if (!Display.isCreated()) {
       throw new SlickException("Failed to initialise the LWJGL display");
     }
-    
+
     int width = getWidth();
     int height = getHeight();
 
@@ -190,6 +198,6 @@ public class OpenGlGraphics implements Graphics {
     // Load identity matrix
     sgl.glLoadIdentity();
 
-    return null;
+    return renderContext;
   }
 }

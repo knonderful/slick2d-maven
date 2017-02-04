@@ -14,6 +14,10 @@ class OpenGlTexture {
   private static final int DEST_PIXEL_FORMAT = SGL.GL_RGBA8;
 
   private final int textureId;
+  private final int width;
+  private final int height;
+  private final int textureWidth;
+  private final int textureHeight;
 
   static OpenGlTexture create(SGL sgl, ImageData imageData) {
     // This can only happen if an ImageData from another renderer gets passed in (or if there is a programmatical error).
@@ -38,7 +42,7 @@ class OpenGlTexture {
             SGL.GL_UNSIGNED_BYTE,
             imageData.getData());
 
-    return new OpenGlTexture(textureId);
+    return new OpenGlTexture(textureId, imageData.getWidth(), imageData.getHeight(), imageData.getTextureWidth(), imageData.getTextureHeight());
   }
 
   private static int createTextureID(SGL sgl) {
@@ -47,8 +51,32 @@ class OpenGlTexture {
     return tmp.get(0);
   }
 
-  private OpenGlTexture(int textureId) {
+  private OpenGlTexture(int textureId, int width, int height, int textureWidth, int textureHeight) {
     this.textureId = textureId;
+    this.width = width;
+    this.height = height;
+    this.textureWidth = textureWidth;
+    this.textureHeight = textureHeight;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
+  public int getTextureId() {
+    return textureId;
+  }
+
+  public int getTextureWidth() {
+    return textureWidth;
+  }
+
+  public int getTextureHeight() {
+    return textureHeight;
+  }
+
+  public int getWidth() {
+    return width;
   }
 
   void bind(SGL sgl) {

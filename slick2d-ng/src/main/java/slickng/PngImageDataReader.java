@@ -14,12 +14,6 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
-import slickng.Color;
-import slickng.ImageData;
-import slickng.ImageDataFactory;
-import slickng.PixelFormat;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * {@link ImageDataReader} implementation for reading PNG images.
@@ -37,23 +31,18 @@ public class PngImageDataReader implements ImageDataReader {
                   ComponentColorModel.TRANSLUCENT,
                   DataBuffer.TYPE_BYTE);
 
-  private final ImageDataFactory factory;
-
   /**
-   * Creates a new instance with the provided {@link ImageDataFactory}.
-   *
-   * @param factory The {@link ImageDataFactory}.
+   * Creates a new instance.
    */
-  public PngImageDataReader(ImageDataFactory factory) {
-    this.factory = requireNonNull(factory, "Argument factory must be non-null.");
+  public PngImageDataReader() {
   }
 
   @Override
-  public ImageData read(InputStream inputStream) throws IOException {
-    return imageToByteBuffer(ImageIO.read(inputStream), null);
+  public ImageData read(ImageDataFactory factory, InputStream inputStream) throws IOException {
+    return imageToByteBuffer(factory, ImageIO.read(inputStream), null);
   }
 
-  private ImageData imageToByteBuffer(BufferedImage image, Color transparent) {
+  private ImageData imageToByteBuffer(ImageDataFactory factory, BufferedImage image, Color transparent) {
     int width = image.getWidth();
     int height = image.getHeight();
 

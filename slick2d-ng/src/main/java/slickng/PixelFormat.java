@@ -1,7 +1,7 @@
 package slickng;
 
 public enum PixelFormat {
-  RGBA(32);
+  RGBA(4);
   
   private final int bytesPerPixel;
 

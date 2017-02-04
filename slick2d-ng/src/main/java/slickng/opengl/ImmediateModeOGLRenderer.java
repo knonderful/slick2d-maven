@@ -401,12 +401,12 @@ public class ImmediateModeOGLRenderer implements SGL {
 	 * (non-Javadoc)
 	 * @see org.newdawn.slick.opengl.renderer.SGL#glGetError()
    */
-  public void glGetError() {
-    GL11.glGetError();
+  public int glGetError() {
+    return GL11.glGetError();
   }
 
   /*
-	 * (non-Javadoc)
+ 	 * (non-Javadoc)
 	 * @see org.newdawn.slick.opengl.renderer.SGL#glTexImage2D(int, int, int, int, int, int, int, int, java.nio.ByteBuffer)
    */
   public void glTexImage2D(int target, int i, int dstPixelFormat,

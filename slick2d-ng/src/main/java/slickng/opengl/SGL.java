@@ -609,7 +609,7 @@ public interface SGL {
   /**
    * OpenGL Method - @url http://www.opengl.org/documentation/
    */
-  void glGetError();
+  int glGetError();
 
   /**
    * OpenGL Method - @url http://www.opengl.org/documentation/

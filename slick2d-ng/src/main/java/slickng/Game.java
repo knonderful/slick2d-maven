@@ -7,8 +7,11 @@ package slickng;
  * for each frame {@link #update(UpdateContext, int)} is called, followed
  * by {@link #render(RenderContext)}.
  * <p>
- * Finally, {@link #requestClose()} is called when the game is closed by the
+ * {@link #requestClose()} is called when the game is closed by the
  * user.
+ * <p>
+ * {@link #deinit()} is called when the game loop has ended and the game will be
+ * closed.
  */
 public interface Game {
 
@@ -18,7 +21,12 @@ public interface Game {
    * @param context The init context.
    * @throws SlickException If the game could not be initialized.
    */
-  public void init(InitContext context) throws SlickException;
+  void init(InitContext context) throws SlickException;
+
+  /**
+   * De-initializes the game.
+   */
+  void deinit();
 
   /**
    * Updates the game state.
@@ -27,7 +35,7 @@ public interface Game {
    * @param delta   The time since the last game update in milliseconds.
    * @throws SlickException If the game could not be updated.
    */
-  public void update(UpdateContext context, int delta) throws SlickException;
+  void update(UpdateContext context, int delta) throws SlickException;
 
   /**
    * Renders the game.
@@ -35,12 +43,12 @@ public interface Game {
    * @param context The render context.
    * @throws SlickException
    */
-  public void render(RenderContext context) throws SlickException;
+  void render(RenderContext context) throws SlickException;
 
   /**
    * Requests to close the game.
    *
    * @return {@code true} if the game can be closed, otherwise {@code false}.
    */
-  public boolean requestClose();
+  boolean requestClose();
 }

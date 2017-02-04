@@ -6,41 +6,46 @@ import java.util.function.Consumer;
  * The context for {@link Game#render(slickng.RenderContext)}.
  */
 public interface RenderContext {
+
   // This allows for the renderer/graphics implementation to bind a surface
   // while the consumer can perform multiple operations on that surface. No
   // multiple bind() calls are needed, thus saving processing power. =)
   void with(Surface surface, Consumer<SurfaceOperations> consumer);
-  
+
   public interface SurfaceOperations {
+
     /**
-     * Renders the entire surface to the destination position.
-     * @param destX
-     * @param destY 
+     * Renders the entire surface with the provided location.
+     *
+     * @param x The X-position at which to render.
+     * @param y The Y-position at which to render.
      */
-    void render(float destX, float destY);
-    
+    void render(float x, float y);
+
     /**
-     * Renders the entire surface to the destination rectangle.
-     * @param destX
-     * @param destY
-     * @param destWidth
-     * @param destHeight 
+     * Renders the entire surface with the provided location and dimensions.
+     *
+     * @param x      The X-position at which to render.
+     * @param y      The Y-position at which to render.
+     * @param width  The width of the render target.
+     * @param height The height of the render target.
      */
-    void render(float destX, float destY, float destWidth, float destHeight);
-    
+    void render(float x, float y, float width, float height);
+
     /**
-     * Renders a rectangle from the surface to the destination rectangle.
-     * 
-     * @param destX
-     * @param destY
-     * @param destWidth
-     * @param destHeight
-     * @param srcX
-     * @param srcY
-     * @param srcWidth
-     * @param srcHeight 
+     * Renders a fragment of the surface with the provided location and
+     * dimensions.
+     *
+     * @param x          The X-position at which to render.
+     * @param y          The Y-position at which to render.
+     * @param width      The width of the render target.
+     * @param height     The height of the render target.
+     * @param fragOffX   The X-offset of the fragment in the surface.
+     * @param fragOffY   The Y-offset of the fragment in the surface.
+     * @param fragWidth  The width of the fragment.
+     * @param fragHeight The heigh of the fragment.
      */
-    void render(float destX, float destY, float destWidth, float destHeight,
-            float srcX, float srcY, float srcWidth, float srcHeight);
+    void render(float x, float y, float width, float height,
+            float fragOffX, float fragOffY, float fragWidth, float fragHeight);
   }
 }

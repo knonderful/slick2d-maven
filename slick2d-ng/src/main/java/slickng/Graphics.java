@@ -22,12 +22,18 @@ public interface Graphics {
   boolean hasFocus();
 
   /**
-   * Retrieves a {@link SurfaceFactory} for creating surfaces for this graphics
-   * implementation.
+   * Retrieves a {@link SurfaceFactory} for creating surfaces.
    *
    * @return The {@link SurfaceFactory}.
    */
   SurfaceFactory getSurfaceFactory();
+
+  /**
+   * Retrieves a {@link ImageDataFactory} for creating image data.
+   *
+   * @return The {@link ImageDataFactory}.
+   */
+  ImageDataFactory getImageDataFactory();
 
   /**
    * Returns the width of the graphics context.

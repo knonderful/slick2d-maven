@@ -1,5 +1,7 @@
 package slickng;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import slickng.opengl.OpenGlGraphics;
@@ -20,6 +22,8 @@ public class ConstantFrameRateGameContainer implements GameContainer {
   private final Game game;
   private final Graphics graphics;
   private final float deltaStep;
+  private final GameContext gameContext;
+
   private boolean running = false;
   private float deltaRest = 0f;
 
@@ -31,7 +35,8 @@ public class ConstantFrameRateGameContainer implements GameContainer {
    * @param height     The height of the screen.
    * @param fullscreen A flag that specifies whether the game should be run in
    *                   full-screen mode.
-   * @param frameRate  The frame rate at which the game should run.
+   * @param frameRate  The frame rate at which the game should run, in frames
+   *                   per second.
    * @throws SlickException If the container could not be created.
    */
   public ConstantFrameRateGameContainer(Game game, int width, int height, boolean fullscreen, int frameRate) throws SlickException {
@@ -42,14 +47,14 @@ public class ConstantFrameRateGameContainer implements GameContainer {
             .setFullscreen(false)
             .setFrameSync(frameRate)
     );
-
     this.deltaStep = 1000f / frameRate;
+    this.gameContext = new GameContext(new DummyInput(), graphics);
   }
 
   private int nextDelta() {
     float time = deltaRest + deltaStep;
     int rounded = (int) time;
-    this.deltaRest = time - rounded;
+    deltaRest = time - rounded;
     return rounded;
   }
 
@@ -57,6 +62,7 @@ public class ConstantFrameRateGameContainer implements GameContainer {
   public void start() throws SlickException {
     try {
       graphics.init();
+      game.init(gameContext);
 
       running = true;
 
@@ -70,7 +76,7 @@ public class ConstantFrameRateGameContainer implements GameContainer {
           // Game logic update
           try {
             int delta = nextDelta();
-            game.update(null, delta);
+            game.update(gameContext, delta);
           } catch (SlickException e) {
             LOG.log(Level.SEVERE, "Game update method has thrown an exception.", e);
             running = false;
@@ -98,11 +104,41 @@ public class ConstantFrameRateGameContainer implements GameContainer {
       }
     } finally {
       graphics.deinit();
+      game.deinit();
     }
   }
 
   @Override
   public void stop() {
     running = false;
+  }
+
+  private static class GameContext implements InitContext, UpdateContext {
+
+    private final Input input;
+    private final Graphics graphics;
+
+    GameContext(Input input, Graphics graphics) {
+      this.input = requireNonNull(input, "Argument input must be non-null.");
+      this.graphics = requireNonNull(graphics, "Argument graphics must be non-null.");
+    }
+
+    @Override
+    public Surface createSurface(ImageDataReader reader, InputStream inputStream) throws SlickException {
+      try {
+        ImageData imageData = reader.read(graphics.getImageDataFactory(), inputStream);
+        return graphics.getSurfaceFactory().create(imageData);
+      } catch (IOException e) {
+        throw new SlickException("Could not create surface.", e);
+      }
+    }
+
+    @Override
+    public Input getInput() {
+      return input;
+    }
+  }
+
+  private static class DummyInput implements Input {
   }
 }

@@ -7,7 +7,10 @@ import slickng.PixelFormat;
 /**
  * {@link ImageDataFactory} for the OpenGL renderer.
  */
-public class OpenGlImageDataFactory implements ImageDataFactory {
+class OpenGlImageDataFactory implements ImageDataFactory {
+
+  OpenGlImageDataFactory() {
+  }
 
   @Override
   public ImageData create(PixelFormat pixelFormat, int width, int height) {
