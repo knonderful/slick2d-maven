@@ -8,6 +8,7 @@
   </parent>
   <artifactId>slick2d-ng-refgame</artifactId>
   <packaging>jar</packaging>
+  <name>Slick2D Reference Game</name>
 
   <dependencies>
     <dependency>
