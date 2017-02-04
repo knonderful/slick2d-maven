@@ -28,8 +28,8 @@ class OpenGlTexture {
     int textureId = createTextureID(sgl);
     sgl.glBindTexture(TARGET, textureId);
 
-    sgl.glTexParameteri(TARGET, SGL.GL_TEXTURE_MIN_FILTER, SGL.GL_LINEAR);
-    sgl.glTexParameteri(TARGET, SGL.GL_TEXTURE_MAG_FILTER, SGL.GL_LINEAR);
+    sgl.glTexParameteri(TARGET, SGL.GL_TEXTURE_MIN_FILTER, SGL.GL_NEAREST);
+    sgl.glTexParameteri(TARGET, SGL.GL_TEXTURE_MAG_FILTER, SGL.GL_NEAREST);
 
     // produce a texture from the byte buffer
     sgl.glTexImage2D(TARGET,
