@@ -2,7 +2,9 @@ package slickng;
 
 public interface Surface {
 
-  float getWidth();
+  int getWidth();
   
-  float getHeight();
+  int getHeight();
+
+  TileSheet createTileSheet(int tileWidth, int tileHeight);
 }

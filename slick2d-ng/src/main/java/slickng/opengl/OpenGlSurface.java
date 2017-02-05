@@ -2,6 +2,7 @@ package slickng.opengl;
 
 import slickng.ImageData;
 import slickng.Surface;
+import slickng.TileSheet;
 
 import static java.util.Objects.requireNonNull;
 
@@ -18,7 +19,12 @@ class OpenGlSurface implements Surface {
   }
 
   @Override
-  public float getHeight() {
+  public TileSheet createTileSheet(int tileWidth, int tileHeight) {
+    return new OpenGlTileSheet(tileWidth, tileHeight, getTextureWidth(), getTextureHeight());
+  }
+
+  @Override
+  public int getHeight() {
     return texture.getHeight();
   }
 
@@ -31,7 +37,7 @@ class OpenGlSurface implements Surface {
   }
 
   @Override
-  public float getWidth() {
+  public int getWidth() {
     return texture.getWidth();
   }
 

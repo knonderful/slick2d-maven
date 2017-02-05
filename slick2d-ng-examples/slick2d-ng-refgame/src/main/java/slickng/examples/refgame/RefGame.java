@@ -12,7 +12,9 @@ import slickng.PngImageDataReader;
 import slickng.RenderContext;
 import slickng.SlickException;
 import slickng.Surface;
+import slickng.TileSheet;
 import slickng.UpdateContext;
+import slickng.gfx.CompositeSprite;
 import slickng.gfx.SurfaceLibrary;
 
 /**
@@ -23,6 +25,7 @@ public class RefGame implements Game {
   private static final String MEGAMAN_PARTS = "megaman_parts";
 
   private final SurfaceLibrary surfaceLibrary = new SurfaceLibrary();
+  private CompositeSprite sprite;
 
   @Override
   public void deinit() {
@@ -34,6 +37,23 @@ public class RefGame implements Game {
     InputStream pngStream = getResourceStream("resources/megaman_parts.png");
     Surface surf = context.createSurface(new PngImageDataReader(new Color(255, 0, 255)), pngStream);
     surfaceLibrary.add(MEGAMAN_PARTS, surf);
+
+    TileSheet tileSheet = surf.createTileSheet(8, 8);
+    sprite = new CompositeSprite(9);
+
+    // Head
+    sprite.add(4, 0, tileSheet.getTile(7, 0));
+    sprite.add(12, 0, tileSheet.getTile(8, 0));
+    // Torso
+    sprite.add(0, 8, tileSheet.getTile(9, 1));
+    sprite.add(8, 8, tileSheet.getTile(10, 1));
+    sprite.add(16, 8, tileSheet.getTile(11, 1));
+    // Legs
+    sprite.add(0, 16, tileSheet.getTile(9, 2));
+    sprite.add(8, 16, tileSheet.getTile(10, 2));
+    sprite.add(16, 16, tileSheet.getTile(11, 2));
+    // Face
+    sprite.add(7, 6, tileSheet.getTile(0, 0));
   }
 
   private InputStream getResourceStream(String path) throws SlickException {
@@ -46,8 +66,8 @@ public class RefGame implements Game {
 
   @Override
   public void render(RenderContext context) throws SlickException {
-    context.with(surfaceLibrary.get(MEGAMAN_PARTS), ops -> {
-      ops.render(10f, 10f);
+    context.with(surfaceLibrary.get(MEGAMAN_PARTS), renderer -> {
+      sprite.render(renderer, 16f, 16f);
     });
   }
 

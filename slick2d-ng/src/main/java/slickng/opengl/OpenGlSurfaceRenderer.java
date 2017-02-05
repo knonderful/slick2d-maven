@@ -1,6 +1,7 @@
 package slickng.opengl;
 
 import slickng.SurfaceRenderer;
+import slickng.Tile;
 
 class OpenGlSurfaceRenderer implements SurfaceRenderer {
 
@@ -37,6 +38,18 @@ class OpenGlSurfaceRenderer implements SurfaceRenderer {
     renderFragmentInternal(
             x, y, x + width, y + height,
             textOffX, textOffY, textOffX + textWidth, textOffY + textHeight);
+  }
+
+  @Override
+  public void renderTile(Tile tile, float x, float y) {
+    OpenGlTile t = castTile(tile);
+    renderFragmentInternal(
+            x, y, x + t.getWidth(), y + t.getHeight(),
+            t.getTx1(), t.getTy1(), t.getTx2(), t.getTy2());
+  }
+
+  private static OpenGlTile castTile(Tile tile) {
+    return (OpenGlTile) tile;
   }
 
   private void renderFragmentInternal(float x, float y, float x2, float y2,

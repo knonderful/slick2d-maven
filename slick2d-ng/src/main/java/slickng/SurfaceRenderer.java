@@ -52,4 +52,6 @@ public interface SurfaceRenderer {
    */
   void renderFragment(float x, float y, float width, float height,
           float fragOffX, float fragOffY, float fragWidth, float fragHeight);
+
+  void renderTile(Tile tile, float x, float y);
 }
