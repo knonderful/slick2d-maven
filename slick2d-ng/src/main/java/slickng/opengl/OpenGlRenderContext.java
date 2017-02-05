@@ -2,11 +2,10 @@ package slickng.opengl;
 
 import java.util.function.Consumer;
 import slickng.RenderContext;
+import slickng.gfx.Renderer2D;
 import slickng.gfx.Surface;
 
 import static java.util.Objects.requireNonNull;
-
-import slickng.gfx.Renderer2D;
 
 /**
  * The {@link RenderContext} for the OpenGL renderer.
@@ -17,6 +16,11 @@ class OpenGlRenderContext implements RenderContext {
 
   OpenGlRenderContext(SGL sgl) {
     this.sgl = requireNonNull(sgl, "Argument sgl must be non-null.");
+  }
+
+  @Override
+  public void scale(float x, float y) {
+    sgl.glScalef(x, y, 1f);
   }
 
   @Override

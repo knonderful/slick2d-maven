@@ -1,8 +1,8 @@
 package slickng;
 
-import slickng.gfx.Surface;
 import java.util.function.Consumer;
 import slickng.gfx.Renderer2D;
+import slickng.gfx.Surface;
 
 /**
  * The context for {@link Game#render(slickng.RenderContext)}.
@@ -17,4 +17,11 @@ public interface RenderContext {
    */
   void with(Surface surface, Consumer<Renderer2D> consumer);
 
+  /**
+   * Scales the context.
+   *
+   * @param x The horizontal scale factor.
+   * @param y The vertical scale factor.
+   */
+  void scale(float x, float y);
 }

@@ -8,14 +8,14 @@ import slickng.Color;
 import slickng.ConstantFrameRateGameContainer;
 import slickng.Game;
 import slickng.InitContext;
-import slickng.gfx.PngImageDataReader;
 import slickng.RenderContext;
 import slickng.SlickException;
-import slickng.gfx.Surface;
-import slickng.gfx.TileSheet;
 import slickng.UpdateContext;
 import slickng.gfx.CompositeSprite;
+import slickng.gfx.PngImageDataReader;
+import slickng.gfx.Surface;
 import slickng.gfx.SurfaceLibrary;
+import slickng.gfx.TileSheet;
 
 /**
  * A reference {@link Game} implementation.
@@ -66,6 +66,8 @@ public class RefGame implements Game {
 
   @Override
   public void render(RenderContext context) throws SlickException {
+    context.scale(2.0f, 2.0f);
+
     context.with(surfaceLibrary.get(MEGAMAN_PARTS), renderer -> {
       sprite.render(renderer, 16f, 16f);
     });
@@ -80,7 +82,7 @@ public class RefGame implements Game {
   public void update(UpdateContext context, int delta) throws SlickException {
     // To be implemented
   }
-  
+
   public static void main(String[] args) throws SlickException {
     ConstantFrameRateGameContainer container = new ConstantFrameRateGameContainer(new RefGame(), 640, 480, false, 60);
     container.start();
