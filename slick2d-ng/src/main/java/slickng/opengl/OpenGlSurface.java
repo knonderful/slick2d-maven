@@ -6,6 +6,9 @@ import slickng.TileSheet;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * The {@link Surface} implementation for the OpenGL renderer.
+ */
 class OpenGlSurface implements Surface {
 
   private final OpenGlTexture texture;
@@ -28,11 +31,11 @@ class OpenGlSurface implements Surface {
     return texture.getHeight();
   }
 
-  public int getTextureHeight() {
+  int getTextureHeight() {
     return texture.getTextureHeight();
   }
 
-  public int getTextureWidth() {
+  int getTextureWidth() {
     return texture.getTextureWidth();
   }
 
@@ -41,6 +44,12 @@ class OpenGlSurface implements Surface {
     return texture.getWidth();
   }
 
+  /**
+   * Binds the {@link OpenGlTexture} to the OpenGL context. This method must be
+   * called in order to use the {@link OpenGlSurface} for rendering.
+   *
+   * @param sgl The {@link SGL}.
+   */
   void bind(SGL sgl) {
     texture.bind(sgl);
   }

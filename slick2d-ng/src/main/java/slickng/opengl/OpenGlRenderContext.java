@@ -7,6 +7,9 @@ import slickng.SurfaceRenderer;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * The {@link RenderContext} for the OpenGL renderer.
+ */
 class OpenGlRenderContext implements RenderContext {
 
   private final SGL sgl;

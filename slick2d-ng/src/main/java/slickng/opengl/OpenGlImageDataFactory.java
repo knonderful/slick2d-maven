@@ -16,5 +16,4 @@ class OpenGlImageDataFactory implements ImageDataFactory {
   public ImageData create(PixelFormat pixelFormat, int width, int height) {
     return new OpenGlImageData(pixelFormat, width, height);
   }
-
 }

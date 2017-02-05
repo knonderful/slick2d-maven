@@ -9,6 +9,10 @@ import slickng.geom.Vector2f;
 
 /**
  * A {@link Sprite} that is composed of multiple tiles.
+ * <p>
+ * A call to {@link #render(slickng.SurfaceRenderer, float, float)} will render
+ * the tiles in the order that they were provided to
+ * {@link #add(float, float, slickng.Tile)}.
  */
 public class CompositeSprite implements Sprite {
 

@@ -6,6 +6,13 @@ import slickng.PixelFormat;
 
 import static org.lwjgl.BufferUtils.createIntBuffer;
 
+/**
+ * An OpenGL texture.
+ * <p>
+ * Note that a texture must be bound to the OpenGL context by calling
+ * {@link #bind(slickng.opengl.SGL)} before it can be used. At most one texture
+ * can be bound at a time.
+ */
 class OpenGlTexture {
 
   private static final int TARGET = SGL.GL_TEXTURE_2D;
@@ -59,26 +66,31 @@ class OpenGlTexture {
     this.textureHeight = textureHeight;
   }
 
-  public int getHeight() {
+  int getHeight() {
     return height;
   }
 
-  public int getTextureId() {
+  int getTextureId() {
     return textureId;
   }
 
-  public int getTextureWidth() {
+  int getTextureWidth() {
     return textureWidth;
   }
 
-  public int getTextureHeight() {
+  int getTextureHeight() {
     return textureHeight;
   }
 
-  public int getWidth() {
+  int getWidth() {
     return width;
   }
 
+  /**
+   * Binds the {@link OpenGlTexture} to the OpenGL context.
+   *
+   * @param sgl The {@link SGL}.
+   */
   void bind(SGL sgl) {
     sgl.glBindTexture(TARGET, textureId);
   }

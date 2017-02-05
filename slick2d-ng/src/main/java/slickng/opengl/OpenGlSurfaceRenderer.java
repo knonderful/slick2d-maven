@@ -3,6 +3,9 @@ package slickng.opengl;
 import slickng.SurfaceRenderer;
 import slickng.Tile;
 
+/**
+ * The {@link SurfaceRenderer} implementation for the OpenGL renderer.
+ */
 class OpenGlSurfaceRenderer implements SurfaceRenderer {
 
   private final SGL sgl;

@@ -43,9 +43,9 @@ public class OpenGlGraphics implements Graphics {
    *                        specified parameters.
    */
   public OpenGlGraphics(OpenGlGraphicsOptions options) throws SlickException {
-    this.frameSync = options.getFrameSync();
-    int width = options.getWidth();
-    int height = options.getHeight();
+    this.frameSync = options.getFpsLimit();
+    int width = options.getDisplayWidth();
+    int height = options.getDisplayHeight();
     boolean fullscreen = options.isFullscreen();
 
     DisplayMode originalDisplayMode = Display.getDisplayMode();

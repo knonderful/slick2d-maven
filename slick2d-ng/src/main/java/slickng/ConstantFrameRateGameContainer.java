@@ -42,10 +42,10 @@ public class ConstantFrameRateGameContainer implements GameContainer {
   public ConstantFrameRateGameContainer(Game game, int width, int height, boolean fullscreen, int frameRate) throws SlickException {
     this.game = requireNonNull(game, "Argument game must be non-null.");
     this.graphics = new OpenGlGraphics(OpenGlGraphicsOptions.getDefault()
-            .setWidth(width)
-            .setHeight(height)
+            .setDisplayWidth(width)
+            .setDisplayHeight(height)
             .setFullscreen(false)
-            .setFrameSync(frameRate)
+            .setFpsLimit(frameRate)
     );
     this.deltaStep = 1000f / frameRate;
     this.gameContext = new GameContext(new DummyInput(), graphics);
