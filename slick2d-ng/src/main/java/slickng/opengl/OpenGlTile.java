@@ -1,6 +1,6 @@
 package slickng.opengl;
 
-import slickng.Tile;
+import slickng.gfx.Tile;
 
 /**
  * {@link Tile} implementation for the OpenGL renderer.

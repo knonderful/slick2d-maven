@@ -1,7 +1,7 @@
 package slickng.opengl;
 
-import slickng.Tile;
-import slickng.TileSheet;
+import slickng.gfx.Tile;
+import slickng.gfx.TileSheet;
 
 /**
  * {@link TileSheet} implementation for the OpenGL renderer.

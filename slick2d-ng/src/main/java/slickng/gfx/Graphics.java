@@ -1,4 +1,7 @@
-package slickng;
+package slickng.gfx;
+
+import slickng.RenderContext;
+import slickng.SlickException;
 
 public interface Graphics {
 

@@ -2,8 +2,8 @@ package slickng.opengl;
 
 import java.util.function.Consumer;
 import slickng.RenderContext;
-import slickng.Surface;
-import slickng.SurfaceRenderer;
+import slickng.gfx.Surface;
+import slickng.gfx.SurfaceRenderer;
 
 import static java.util.Objects.requireNonNull;
 

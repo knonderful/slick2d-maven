@@ -1,4 +1,4 @@
-package slickng;
+package slickng.gfx;
 
 /**
  * A tile represents a rectangular region of a {@link Surface}.

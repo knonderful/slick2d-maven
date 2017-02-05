@@ -1,8 +1,8 @@
 package slickng.opengl;
 
-import slickng.ImageData;
-import slickng.ImageDataFactory;
-import slickng.PixelFormat;
+import slickng.gfx.ImageData;
+import slickng.gfx.ImageDataFactory;
+import slickng.gfx.PixelFormat;
 
 /**
  * {@link ImageDataFactory} for the OpenGL renderer.

@@ -1,4 +1,4 @@
-package slickng;
+package slickng.gfx;
 
 /**
  * A factory of {@link Surface} instances.

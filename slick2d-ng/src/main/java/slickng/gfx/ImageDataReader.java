@@ -1,4 +1,4 @@
-package slickng;
+package slickng.gfx;
 
 import java.io.IOException;
 import java.io.InputStream;

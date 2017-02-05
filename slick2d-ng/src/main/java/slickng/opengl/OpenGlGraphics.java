@@ -9,11 +9,11 @@ import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.PixelFormat;
-import slickng.Graphics;
-import slickng.ImageDataFactory;
+import slickng.gfx.Graphics;
+import slickng.gfx.ImageDataFactory;
 import slickng.RenderContext;
 import slickng.SlickException;
-import slickng.SurfaceFactory;
+import slickng.gfx.SurfaceFactory;
 
 /**
  * An OpenGL-based {@link Graphics} implementation.

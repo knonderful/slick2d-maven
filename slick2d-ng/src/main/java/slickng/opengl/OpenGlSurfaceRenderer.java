@@ -1,7 +1,7 @@
 package slickng.opengl;
 
-import slickng.SurfaceRenderer;
-import slickng.Tile;
+import slickng.gfx.SurfaceRenderer;
+import slickng.gfx.Tile;
 
 /**
  * The {@link SurfaceRenderer} implementation for the OpenGL renderer.

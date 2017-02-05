@@ -1,8 +1,8 @@
 package slickng.opengl;
 
-import slickng.ImageData;
-import slickng.Surface;
-import slickng.SurfaceFactory;
+import slickng.gfx.ImageData;
+import slickng.gfx.Surface;
+import slickng.gfx.SurfaceFactory;
 
 import static java.util.Objects.requireNonNull;
 

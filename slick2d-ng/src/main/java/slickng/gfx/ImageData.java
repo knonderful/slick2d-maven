@@ -1,4 +1,4 @@
-package slickng;
+package slickng.gfx;
 
 import java.nio.ByteBuffer;
 

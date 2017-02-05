@@ -1,4 +1,4 @@
-package slickng;
+package slickng.gfx;
 
 /**
  * A 2D graphic that can be rendered using a {@link SurfaceRenderer}.

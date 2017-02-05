@@ -2,7 +2,6 @@ package slickng.gfx;
 
 import java.util.HashMap;
 import java.util.Map;
-import slickng.Surface;
 
 /**
  * A library for {@link Surface}s.

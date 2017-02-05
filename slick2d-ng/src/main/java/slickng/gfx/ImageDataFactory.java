@@ -1,4 +1,4 @@
-package slickng;
+package slickng.gfx;
 
 /**
  * A factory for {@link ImageData} instances.

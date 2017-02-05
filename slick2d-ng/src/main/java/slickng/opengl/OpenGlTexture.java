@@ -1,8 +1,8 @@
 package slickng.opengl;
 
 import java.nio.IntBuffer;
-import slickng.ImageData;
-import slickng.PixelFormat;
+import slickng.gfx.ImageData;
+import slickng.gfx.PixelFormat;
 
 import static org.lwjgl.BufferUtils.createIntBuffer;
 

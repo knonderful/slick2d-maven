@@ -1,4 +1,4 @@
-package slickng;
+package slickng.gfx;
 
 import java.awt.Graphics2D;
 import java.awt.color.ColorSpace;
@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
+import slickng.Color;
 
 /**
  * {@link ImageDataReader} implementation for reading PNG images.

@@ -2,9 +2,6 @@ package slickng.gfx;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import slickng.Sprite;
-import slickng.SurfaceRenderer;
-import slickng.Tile;
 import slickng.geom.Vector2f;
 
 /**

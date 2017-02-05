@@ -1,4 +1,4 @@
-package slickng;
+package slickng.gfx;
 
 public interface Surface {
 

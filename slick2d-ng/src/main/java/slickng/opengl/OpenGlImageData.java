@@ -2,8 +2,8 @@ package slickng.opengl;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import slickng.ImageData;
-import slickng.PixelFormat;
+import slickng.gfx.ImageData;
+import slickng.gfx.PixelFormat;
 
 /**
  * {@link ImageData} implementation for the OpenGL renderer.

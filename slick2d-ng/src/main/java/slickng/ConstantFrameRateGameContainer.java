@@ -1,5 +1,9 @@
 package slickng;
 
+import slickng.gfx.ImageData;
+import slickng.gfx.Graphics;
+import slickng.gfx.Surface;
+import slickng.gfx.ImageDataReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;

@@ -1,4 +1,4 @@
-package slickng;
+package slickng.gfx;
 
 /**
  * A renderer for {@link Surface}s.

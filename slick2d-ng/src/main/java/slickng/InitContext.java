@@ -1,5 +1,7 @@
 package slickng;
 
+import slickng.gfx.Surface;
+import slickng.gfx.ImageDataReader;
 import java.io.InputStream;
 
 /**

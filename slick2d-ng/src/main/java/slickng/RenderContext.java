@@ -1,5 +1,7 @@
 package slickng;
 
+import slickng.gfx.SurfaceRenderer;
+import slickng.gfx.Surface;
 import java.util.function.Consumer;
 
 /**
