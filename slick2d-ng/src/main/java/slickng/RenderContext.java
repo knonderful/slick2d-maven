@@ -7,9 +7,12 @@ import java.util.function.Consumer;
  */
 public interface RenderContext {
 
-  // This allows for the renderer/graphics implementation to bind a surface
-  // while the consumer can perform multiple operations on that surface. No
-  // multiple bind() calls are needed, thus saving processing power. =)
+  /**
+   * Performs rendering operations with the provided {@link Surface}.
+   *
+   * @param surface  The {@link Surface}.
+   * @param consumer The {@link SurfaceRenderer} consumer.
+   */
   void with(Surface surface, Consumer<SurfaceRenderer> consumer);
 
 }
