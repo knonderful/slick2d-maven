@@ -53,5 +53,12 @@ public interface Renderer2D {
   void renderFragment(float x, float y, float width, float height,
           float fragOffX, float fragOffY, float fragWidth, float fragHeight);
 
+  /**
+   * Renders a {@link Tile} at the provided location.
+   *
+   * @param tile The {@link Tile} to render.
+   * @param x    The X-position at which to render.
+   * @param y    The Y-position at which to render.
+   */
   void renderTile(Tile tile, float x, float y);
 }
