@@ -1,12 +1,12 @@
 package slickng.opengl;
 
-import slickng.gfx.SurfaceRenderer;
 import slickng.gfx.Tile;
+import slickng.gfx.Renderer2D;
 
 /**
- * The {@link SurfaceRenderer} implementation for the OpenGL renderer.
+ * The {@link Renderer2D} implementation for the OpenGL renderer.
  */
-class OpenGlSurfaceRenderer implements SurfaceRenderer {
+class OpenGlSurfaceRenderer implements Renderer2D {
 
   private final SGL sgl;
   private final OpenGlSurface surface;

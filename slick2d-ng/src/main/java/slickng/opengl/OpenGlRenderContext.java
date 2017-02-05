@@ -3,9 +3,10 @@ package slickng.opengl;
 import java.util.function.Consumer;
 import slickng.RenderContext;
 import slickng.gfx.Surface;
-import slickng.gfx.SurfaceRenderer;
 
 import static java.util.Objects.requireNonNull;
+
+import slickng.gfx.Renderer2D;
 
 /**
  * The {@link RenderContext} for the OpenGL renderer.
@@ -19,7 +20,7 @@ class OpenGlRenderContext implements RenderContext {
   }
 
   @Override
-  public void with(Surface surface, Consumer<SurfaceRenderer> consumer) {
+  public void with(Surface surface, Consumer<Renderer2D> consumer) {
     OpenGlSurface surf = castSurface(surface);
     surf.bind(sgl);
 

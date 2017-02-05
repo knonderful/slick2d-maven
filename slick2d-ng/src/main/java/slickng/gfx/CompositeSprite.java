@@ -31,7 +31,7 @@ public class CompositeSprite implements Sprite {
   }
 
   @Override
-  public void render(SurfaceRenderer renderer, float x, float y) {
+  public void render(Renderer2D renderer, float x, float y) {
     mapping.forEach((offset, tile) -> {
       renderer.renderTile(tile, x + offset.getX(), x + offset.getY());
     });

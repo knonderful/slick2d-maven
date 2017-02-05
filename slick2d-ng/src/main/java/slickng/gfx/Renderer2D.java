@@ -1,9 +1,9 @@
 package slickng.gfx;
 
 /**
- * A renderer for {@link Surface}s.
+ * A renderer for two-dimensional operations.
  */
-public interface SurfaceRenderer {
+public interface Renderer2D {
 
   /**
    * Renders the entire surface with the provided location.
