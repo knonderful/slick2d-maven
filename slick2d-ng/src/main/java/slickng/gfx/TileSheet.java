@@ -32,4 +32,18 @@ public interface TileSheet {
    * @return The height.
    */
   int getTileHeight();
+
+  /**
+   * Retrieves the width of the {@link TileSheet}.
+   *
+   * @return The width in {@link Tile}s.
+   */
+  int getWidth();
+
+  /**
+   * Retrieves the height of the {@link TileSheet}.
+   *
+   * @return The height in {@link Tile}s.
+   */
+  int getHeight();
 }

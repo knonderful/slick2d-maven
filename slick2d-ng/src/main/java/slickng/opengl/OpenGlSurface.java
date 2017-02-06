@@ -1,5 +1,6 @@
 package slickng.opengl;
 
+import java.util.Objects;
 import slickng.gfx.ImageData;
 import slickng.gfx.Surface;
 import slickng.gfx.TileSheet;
@@ -23,12 +24,37 @@ class OpenGlSurface implements Surface {
 
   @Override
   public TileSheet createTileSheet(int tileWidth, int tileHeight) {
-    return new OpenGlTileSheet(tileWidth, tileHeight, getTextureWidth(), getTextureHeight());
+    return new OpenGlTileSheet(tileWidth, tileHeight, getWidth(), getHeight(), getTextureWidth(), getTextureHeight());
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final OpenGlSurface other = (OpenGlSurface) obj;
+    if (!Objects.equals(this.texture, other.texture)) {
+      return false;
+    }
+    return true;
   }
 
   @Override
   public int getHeight() {
     return texture.getHeight();
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 17 * hash + Objects.hashCode(this.texture);
+    return hash;
   }
 
   int getTextureHeight() {

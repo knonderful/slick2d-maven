@@ -3,7 +3,10 @@ package slickng.examples.refgame;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 import slickng.Color;
 import slickng.ConstantFrameRateGameContainer;
 import slickng.Game;
@@ -16,6 +19,8 @@ import slickng.gfx.PngImageDataReader;
 import slickng.gfx.Surface;
 import slickng.gfx.SurfaceLibrary;
 import slickng.gfx.TileSheet;
+import slickng.tiled.TMap;
+import slickng.tiled.io.TMapReader;
 
 /**
  * A reference {@link Game} implementation.
@@ -54,6 +59,19 @@ public class RefGame implements Game {
     sprite.add(16, 16, tileSheet.getTile(11, 2));
     // Face
     sprite.add(7, 6, tileSheet.getTile(0, 0));
+
+    TMapReader mapReader = new TMapReader(source -> {
+      InputStream stream = getResourceStream("resources/" + source);
+      // TODO: get transparency from TMX file...
+      return context.createSurface(new PngImageDataReader(new Color(255, 0, 255)), stream);
+    });
+
+    TMap map;
+    try {
+      map = mapReader.read(getResourceStream("resources/testlevel_new.tmx"));
+    } catch (IOException | ParserConfigurationException | SAXException | SlickException e) {
+      throw new SlickException("Could not not read map file.", e);
+    }
   }
 
   private InputStream getResourceStream(String path) throws SlickException {

@@ -8,8 +8,8 @@ import slickng.gfx.TileSheet;
  */
 class OpenGlTileSheet implements TileSheet {
 
-  private final int rasterWidth;
-  private final int rasterHeight;
+  private final int width;
+  private final int height;
   private final int tileWidth;
   private final int tileHeight;
   private final int textureWidth;
@@ -25,25 +25,30 @@ class OpenGlTileSheet implements TileSheet {
    * @param textureWidth  The width of the OpenGL texture.
    * @param textureHeight The height of the OpenGL texture.
    */
-  OpenGlTileSheet(int tileWidth, int tileHeight, int textureWidth, int textureHeight) {
+  OpenGlTileSheet(int tileWidth, int tileHeight, int surfaceWidth, int surfaceHeight, int textureWidth, int textureHeight) {
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
     this.textureWidth = textureWidth;
     this.textureHeight = textureHeight;
 
-    this.rasterWidth = textureWidth / tileWidth;
-    this.rasterHeight = textureHeight / tileHeight;
+    this.width = surfaceWidth / tileWidth;
+    this.height = surfaceHeight / tileHeight;
 
-    this.cache = new Tile[rasterWidth][rasterHeight];
+    this.cache = new Tile[width][height];
+  }
+
+  @Override
+  public int getHeight() {
+    return height;
   }
 
   @Override
   public Tile getTile(int indexX, int indexY) {
-    if (indexX >= rasterWidth) {
-      throw new IllegalArgumentException(String.format("Argument indexX (%d) is out of range for the tile sheet (%dx%d).", indexX, rasterWidth, rasterHeight));
+    if (indexX >= width) {
+      throw new IllegalArgumentException(String.format("Argument indexX (%d) is out of range for the tile sheet (%dx%d).", indexX, width, height));
     }
-    if (indexX >= rasterHeight) {
-      throw new IllegalArgumentException(String.format("Argument indexY (%d) is out of range for the tile sheet (%dx%d).", indexX, rasterWidth, rasterHeight));
+    if (indexX >= height) {
+      throw new IllegalArgumentException(String.format("Argument indexY (%d) is out of range for the tile sheet (%dx%d).", indexX, width, height));
     }
 
     // Get tile from the cache, if available
@@ -65,6 +70,11 @@ class OpenGlTileSheet implements TileSheet {
   @Override
   public int getTileWidth() {
     return tileWidth;
+  }
+
+  @Override
+  public int getWidth() {
+    return width;
   }
 
 }
