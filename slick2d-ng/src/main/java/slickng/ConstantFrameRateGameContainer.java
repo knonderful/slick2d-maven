@@ -1,13 +1,14 @@
 package slickng;
 
-import slickng.gfx.ImageData;
-import slickng.gfx.Graphics;
-import slickng.gfx.Surface;
-import slickng.gfx.ImageDataReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import slickng.gfx.Display;
+import slickng.gfx.Graphics;
+import slickng.gfx.ImageData;
+import slickng.gfx.ImageDataReader;
+import slickng.gfx.Surface;
 import slickng.opengl.OpenGlGraphics;
 import slickng.opengl.OpenGlGraphicsOptions;
 
@@ -65,13 +66,13 @@ public class ConstantFrameRateGameContainer implements GameContainer {
   @Override
   public void start() throws SlickException {
     try {
-      graphics.init();
+      Display display = graphics.init();
       game.init(gameContext);
 
       running = true;
 
       while (running) {
-        if (!graphics.hasFocus()) {
+        if (!display.isActive()) {
           try {
             Thread.sleep(100);
           } catch (InterruptedException e) {
@@ -98,8 +99,11 @@ public class ConstantFrameRateGameContainer implements GameContainer {
           }
         }
 
+        // Update the display
+        display.update();
+
         // Check for display close requests
-        if (graphics.isCloseRequested()) {
+        if (display.isCloseRequested()) {
           if (game.requestClose()) {
             running = false;
           }
