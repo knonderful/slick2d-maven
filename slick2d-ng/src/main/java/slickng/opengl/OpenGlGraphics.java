@@ -2,6 +2,7 @@ package slickng.opengl;
 
 import java.util.logging.Logger;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 import slickng.RenderContext;
 import slickng.SlickException;
 import slickng.gfx.Graphics;
@@ -15,9 +16,8 @@ public class OpenGlGraphics implements Graphics {
 
   private static final Logger LOG = Logger.getLogger(OpenGlGraphics.class.getName());
 
-  private final SGL sgl = new ImmediateModeOGLRenderer();
-  private final OpenGlRenderContext renderContext = new OpenGlRenderContext(sgl);
-  private final OpenGlSurfaceFactory surfaceFactory = new OpenGlSurfaceFactory(sgl);
+  private final OpenGlRenderContext renderContext = new OpenGlRenderContext();
+  private final OpenGlSurfaceFactory surfaceFactory = new OpenGlSurfaceFactory();
   private final OpenGlImageDataFactory imageDataFactory = new OpenGlImageDataFactory();
 
   private final OpenGlGraphicsOptions options;
@@ -38,6 +38,29 @@ public class OpenGlGraphics implements Graphics {
     }
   }
 
+  private void initOpenGl(int width, int height) {
+    GL11.glEnable(GL11.GL_TEXTURE_2D);
+    GL11.glShadeModel(GL11.GL_SMOOTH);
+    GL11.glDisable(GL11.GL_DEPTH_TEST);
+    GL11.glDisable(GL11.GL_LIGHTING);
+
+    GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    GL11.glClearDepth(1);
+
+    GL11.glEnable(GL11.GL_BLEND);
+    GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+    GL11.glViewport(0, 0, width, height);
+    GL11.glMatrixMode(GL11.GL_MODELVIEW);
+  }
+
+  private void enterOrtho(int width, int height) {
+    GL11.glMatrixMode(GL11.GL_PROJECTION);
+    GL11.glLoadIdentity();
+    GL11.glOrtho(0, width, height, 0, 1, -1);
+    GL11.glMatrixMode(GL11.GL_MODELVIEW);
+  }
+
   @Override
   public void deinit() {
     Display.destroy();
@@ -45,7 +68,7 @@ public class OpenGlGraphics implements Graphics {
 
   @Override
   public void finishRender() {
-    sgl.flush();
+    GL11.glFlush();
   }
 
   @Override
@@ -67,8 +90,8 @@ public class OpenGlGraphics implements Graphics {
     int width = display.getWidth();
     int height = display.getHeight();
 
-    sgl.initDisplay(width, height);
-    sgl.enterOrtho(width, height);
+    initOpenGl(width, height);
+    enterOrtho(width, height);
 
     return display;
   }
@@ -76,11 +99,11 @@ public class OpenGlGraphics implements Graphics {
   @Override
   public RenderContext startRender() {
     // Blank the OpenGL surface
-    sgl.glClearColor(0f, 0f, 0f, 1f);
-    sgl.glClear(SGL.GL_COLOR_BUFFER_BIT | SGL.GL_DEPTH_BUFFER_BIT);
+    GL11.glClearColor(0f, 0f, 0f, 1f);
+    GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
     // Load identity matrix
-    sgl.glLoadIdentity();
+    GL11.glLoadIdentity();
 
     return renderContext;
   }

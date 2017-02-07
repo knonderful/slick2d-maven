@@ -1,18 +1,17 @@
 package slickng.opengl;
 
-import slickng.gfx.Tile;
+import org.lwjgl.opengl.GL11;
 import slickng.gfx.Renderer2D;
+import slickng.gfx.Tile;
 
 /**
  * The {@link Renderer2D} implementation for the OpenGL renderer.
  */
 class OpenGlSurfaceRenderer implements Renderer2D {
 
-  private final SGL sgl;
   private final OpenGlSurface surface;
 
-  OpenGlSurfaceRenderer(SGL sgl, OpenGlSurface surface) {
-    this.sgl = sgl;
+  OpenGlSurfaceRenderer(OpenGlSurface surface) {
     this.surface = surface;
   }
 
@@ -66,13 +65,13 @@ class OpenGlSurfaceRenderer implements Renderer2D {
 
   private void renderInternal(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4,
           float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4) {
-    sgl.glTexCoord2f(tx1, ty1);
-    sgl.glVertex3f(x1, y1, 0);
-    sgl.glTexCoord2f(tx2, ty2);
-    sgl.glVertex3f(x2, y2, 0);
-    sgl.glTexCoord2f(tx3, ty3);
-    sgl.glVertex3f(x3, y3, 0);
-    sgl.glTexCoord2f(tx4, ty4);
-    sgl.glVertex3f(x4, y4, 0);
+    GL11.glTexCoord2f(tx1, ty1);
+    GL11.glVertex3f(x1, y1, 0);
+    GL11.glTexCoord2f(tx2, ty2);
+    GL11.glVertex3f(x2, y2, 0);
+    GL11.glTexCoord2f(tx3, ty3);
+    GL11.glVertex3f(x3, y3, 0);
+    GL11.glTexCoord2f(tx4, ty4);
+    GL11.glVertex3f(x4, y4, 0);
   }
 }

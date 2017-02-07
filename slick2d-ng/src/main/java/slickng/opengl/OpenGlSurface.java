@@ -14,8 +14,8 @@ class OpenGlSurface implements Surface {
 
   private final OpenGlTexture texture;
 
-  static OpenGlSurface fromImageData(SGL sgl, ImageData imageData) {
-    return new OpenGlSurface(OpenGlTexture.create(sgl, imageData));
+  static OpenGlSurface fromImageData(ImageData imageData) {
+    return new OpenGlSurface(OpenGlTexture.create(imageData));
   }
 
   private OpenGlSurface(OpenGlTexture texture) {
@@ -73,10 +73,8 @@ class OpenGlSurface implements Surface {
   /**
    * Binds the {@link OpenGlTexture} to the OpenGL context. This method must be
    * called in order to use the {@link OpenGlSurface} for rendering.
-   *
-   * @param sgl The {@link SGL}.
    */
-  void bind(SGL sgl) {
-    texture.bind(sgl);
+  void bind() {
+    texture.bind();
   }
 }

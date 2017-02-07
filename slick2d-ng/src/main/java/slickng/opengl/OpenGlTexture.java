@@ -1,6 +1,7 @@
 package slickng.opengl;
 
 import java.nio.IntBuffer;
+import org.lwjgl.opengl.GL11;
 import slickng.gfx.ImageData;
 import slickng.gfx.PixelFormat;
 
@@ -15,10 +16,10 @@ import static org.lwjgl.BufferUtils.createIntBuffer;
  */
 class OpenGlTexture {
 
-  private static final int TARGET = SGL.GL_TEXTURE_2D;
+  private static final int TARGET = GL11.GL_TEXTURE_2D;
   private static final PixelFormat EXPECTED_PIXEL_FORMAT = PixelFormat.RGBA;
-  private static final int SRC_PIXEL_FORMAT = SGL.GL_RGBA;
-  private static final int DEST_PIXEL_FORMAT = SGL.GL_RGBA8;
+  private static final int SRC_PIXEL_FORMAT = GL11.GL_RGBA;
+  private static final int DEST_PIXEL_FORMAT = GL11.GL_RGBA8;
 
   private final int textureId;
   private final int width;
@@ -26,35 +27,35 @@ class OpenGlTexture {
   private final int textureWidth;
   private final int textureHeight;
 
-  static OpenGlTexture create(SGL sgl, ImageData imageData) {
+  static OpenGlTexture create(ImageData imageData) {
     // This can only happen if an ImageData from another renderer gets passed in (or if there is a programmatical error).
     if (imageData.getPixelFormat() != EXPECTED_PIXEL_FORMAT) {
       throw new IllegalArgumentException(String.format("This implementation only supports pixel format %s, but received %s.", EXPECTED_PIXEL_FORMAT, imageData.getPixelFormat()));
     }
 
-    int textureId = createTextureID(sgl);
-    sgl.glBindTexture(TARGET, textureId);
+    int textureId = createTextureID();
+    GL11.glBindTexture(TARGET, textureId);
 
-    sgl.glTexParameteri(TARGET, SGL.GL_TEXTURE_MIN_FILTER, SGL.GL_NEAREST);
-    sgl.glTexParameteri(TARGET, SGL.GL_TEXTURE_MAG_FILTER, SGL.GL_NEAREST);
+    GL11.glTexParameteri(TARGET, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+    GL11.glTexParameteri(TARGET, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 
     // produce a texture from the byte buffer
-    sgl.glTexImage2D(TARGET,
+    GL11.glTexImage2D(TARGET,
             0,
             DEST_PIXEL_FORMAT,
             imageData.getTextureWidth(),
             imageData.getTextureHeight(),
             0,
             SRC_PIXEL_FORMAT,
-            SGL.GL_UNSIGNED_BYTE,
+            GL11.GL_UNSIGNED_BYTE,
             imageData.getData());
 
     return new OpenGlTexture(textureId, imageData.getImageWidth(), imageData.getImageHeight(), imageData.getTextureWidth(), imageData.getTextureHeight());
   }
 
-  private static int createTextureID(SGL sgl) {
+  private static int createTextureID() {
     IntBuffer tmp = createIntBuffer(1);
-    sgl.glGenTextures(tmp);
+    GL11.glGenTextures(tmp);
     return tmp.get(0);
   }
 
@@ -88,11 +89,9 @@ class OpenGlTexture {
 
   /**
    * Binds the {@link OpenGlTexture} to the OpenGL context.
-   *
-   * @param sgl The {@link SGL}.
    */
-  void bind(SGL sgl) {
-    sgl.glBindTexture(TARGET, textureId);
+  void bind() {
+    GL11.glBindTexture(TARGET, textureId);
   }
 
   @Override
