@@ -1,10 +1,11 @@
 package slickng.opengl;
 
 import java.util.function.Consumer;
-import org.lwjgl.opengl.GL11;
 import slickng.RenderContext;
 import slickng.gfx.Renderer2D;
 import slickng.gfx.Surface;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * The {@link RenderContext} for the OpenGL renderer.
@@ -16,7 +17,7 @@ class OpenGlRenderContext implements RenderContext {
 
   @Override
   public void scale(float x, float y) {
-    GL11.glScalef(x, y, 1f);
+    glScalef(x, y, 1f);
   }
 
   @Override
@@ -24,9 +25,9 @@ class OpenGlRenderContext implements RenderContext {
     OpenGlSurface surf = castSurface(surface);
     surf.bind();
 
-    GL11.glBegin(GL11.GL_QUADS);
+    glBegin(GL_QUADS);
     consumer.accept(new OpenGlSurfaceRenderer(surf));
-    GL11.glEnd();
+    glEnd();
   }
 
   private OpenGlSurface castSurface(Surface surface) {

@@ -1,11 +1,11 @@
 package slickng.opengl;
 
 import java.nio.IntBuffer;
-import org.lwjgl.opengl.GL11;
 import slickng.gfx.ImageData;
 import slickng.gfx.PixelFormat;
 
 import static org.lwjgl.BufferUtils.createIntBuffer;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * An OpenGL texture.
@@ -16,10 +16,10 @@ import static org.lwjgl.BufferUtils.createIntBuffer;
  */
 class OpenGlTexture {
 
-  private static final int TARGET = GL11.GL_TEXTURE_2D;
+  private static final int TARGET = GL_TEXTURE_2D;
   private static final PixelFormat EXPECTED_PIXEL_FORMAT = PixelFormat.RGBA;
-  private static final int SRC_PIXEL_FORMAT = GL11.GL_RGBA;
-  private static final int DEST_PIXEL_FORMAT = GL11.GL_RGBA8;
+  private static final int SRC_PIXEL_FORMAT = GL_RGBA;
+  private static final int DEST_PIXEL_FORMAT = GL_RGBA8;
 
   private final int textureId;
   private final int width;
@@ -34,20 +34,20 @@ class OpenGlTexture {
     }
 
     int textureId = createTextureID();
-    GL11.glBindTexture(TARGET, textureId);
+    glBindTexture(TARGET, textureId);
 
-    GL11.glTexParameteri(TARGET, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-    GL11.glTexParameteri(TARGET, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+    glTexParameteri(TARGET, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(TARGET, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     // produce a texture from the byte buffer
-    GL11.glTexImage2D(TARGET,
+    glTexImage2D(TARGET,
             0,
             DEST_PIXEL_FORMAT,
             imageData.getTextureWidth(),
             imageData.getTextureHeight(),
             0,
             SRC_PIXEL_FORMAT,
-            GL11.GL_UNSIGNED_BYTE,
+            GL_UNSIGNED_BYTE,
             imageData.getData());
 
     return new OpenGlTexture(textureId, imageData.getImageWidth(), imageData.getImageHeight(), imageData.getTextureWidth(), imageData.getTextureHeight());
@@ -55,7 +55,7 @@ class OpenGlTexture {
 
   private static int createTextureID() {
     IntBuffer tmp = createIntBuffer(1);
-    GL11.glGenTextures(tmp);
+    glGenTextures(tmp);
     return tmp.get(0);
   }
 
@@ -91,7 +91,7 @@ class OpenGlTexture {
    * Binds the {@link OpenGlTexture} to the OpenGL context.
    */
   void bind() {
-    GL11.glBindTexture(TARGET, textureId);
+    glBindTexture(TARGET, textureId);
   }
 
   @Override
