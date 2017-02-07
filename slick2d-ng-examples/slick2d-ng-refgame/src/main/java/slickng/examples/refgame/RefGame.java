@@ -8,7 +8,7 @@ import java.io.InputStream;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import slickng.Color;
-import slickng.ConstantFrameRateGameContainer;
+import slickng.lwjgl.LwjlGameContainer;
 import slickng.Game;
 import slickng.InitContext;
 import slickng.RenderContext;
@@ -102,7 +102,7 @@ public class RefGame implements Game {
   }
 
   public static void main(String[] args) throws SlickException {
-    ConstantFrameRateGameContainer container = new ConstantFrameRateGameContainer(new RefGame(), 640, 480, false, 60);
+    LwjlGameContainer container = new LwjlGameContainer(new RefGame(), 640, 480, false, 60);
     container.start();
   }
 

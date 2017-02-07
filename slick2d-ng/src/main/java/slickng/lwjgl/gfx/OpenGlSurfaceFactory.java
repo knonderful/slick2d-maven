@@ -1,4 +1,4 @@
-package slickng.opengl;
+package slickng.lwjgl.gfx;
 
 import slickng.gfx.ImageData;
 import slickng.gfx.Surface;

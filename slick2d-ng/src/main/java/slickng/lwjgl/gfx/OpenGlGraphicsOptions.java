@@ -1,4 +1,4 @@
-package slickng.opengl;
+package slickng.lwjgl.gfx;
 
 /**
  * Instantiation options for an {@link OpenGlGraphics} instance.

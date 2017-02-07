@@ -1,4 +1,4 @@
-package slickng.opengl;
+package slickng.lwjgl.gfx;
 
 import java.nio.IntBuffer;
 import slickng.gfx.ImageData;

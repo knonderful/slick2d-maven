@@ -1,28 +1,32 @@
-package slickng;
+package slickng.lwjgl;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import slickng.Game;
+import slickng.GameContainer;
+import slickng.InitContext;
+import slickng.Input;
+import slickng.SlickException;
+import slickng.UpdateContext;
 import slickng.gfx.Display;
 import slickng.gfx.Graphics;
 import slickng.gfx.ImageData;
 import slickng.gfx.ImageDataReader;
 import slickng.gfx.Surface;
-import slickng.opengl.OpenGlGraphics;
-import slickng.opengl.OpenGlGraphicsOptions;
+import slickng.lwjgl.gfx.OpenGlGraphics;
+import slickng.lwjgl.gfx.OpenGlGraphicsOptions;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * A {@link GameContainer} implementation that runs a game at a constant frame
- * rate.
- * <p>
- * This implementation is not thread-safe.
+ * A {@link GameContainer} implementation is implemented using the LWJGL
+ * library.
  */
-public class ConstantFrameRateGameContainer implements GameContainer {
+public class LwjlGameContainer implements GameContainer {
 
-  private static final Logger LOG = Logger.getLogger(ConstantFrameRateGameContainer.class.getName());
+  private static final Logger LOG = Logger.getLogger(LwjlGameContainer.class.getName());
 
   private final Game game;
   private final Graphics graphics;
@@ -44,7 +48,7 @@ public class ConstantFrameRateGameContainer implements GameContainer {
    *                   per second.
    * @throws SlickException If the container could not be created.
    */
-  public ConstantFrameRateGameContainer(Game game, int width, int height, boolean fullscreen, int frameRate) throws SlickException {
+  public LwjlGameContainer(Game game, int width, int height, boolean fullscreen, int frameRate) throws SlickException {
     this.game = requireNonNull(game, "Argument game must be non-null.");
     this.graphics = new OpenGlGraphics(OpenGlGraphicsOptions.getDefault()
             .setDisplayWidth(width)

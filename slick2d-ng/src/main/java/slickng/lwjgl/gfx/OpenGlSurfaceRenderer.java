@@ -1,4 +1,4 @@
-package slickng.opengl;
+package slickng.lwjgl.gfx;
 
 import slickng.gfx.Renderer2D;
 import slickng.gfx.Tile;

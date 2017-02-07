@@ -1,4 +1,4 @@
-package slickng.opengl;
+package slickng.lwjgl.gfx;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;

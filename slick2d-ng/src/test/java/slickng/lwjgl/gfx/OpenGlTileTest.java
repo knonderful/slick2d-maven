@@ -1,5 +1,6 @@
-package slickng.opengl;
+package slickng.lwjgl.gfx;
 
+import slickng.lwjgl.gfx.OpenGlTile;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

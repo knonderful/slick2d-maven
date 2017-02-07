@@ -1,4 +1,4 @@
-package slickng.opengl;
+package slickng.lwjgl.gfx;
 
 import java.util.function.Consumer;
 import slickng.RenderContext;

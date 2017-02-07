@@ -1,4 +1,4 @@
-package slickng.opengl;
+package slickng.lwjgl.gfx;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
