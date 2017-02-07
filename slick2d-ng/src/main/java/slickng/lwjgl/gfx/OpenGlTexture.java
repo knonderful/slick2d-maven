@@ -17,7 +17,7 @@ import static org.lwjgl.opengl.GL11.*;
 class OpenGlTexture {
 
   private static final int TARGET = GL_TEXTURE_2D;
-  private static final PixelFormat EXPECTED_PIXEL_FORMAT = PixelFormat.RGBA;
+  private static final PixelFormat EXPECTED_PIXEL_FORMAT = PixelFormat.RGBA_8;
   private static final int SRC_PIXEL_FORMAT = GL_RGBA;
   private static final int DEST_PIXEL_FORMAT = GL_RGBA8;
 

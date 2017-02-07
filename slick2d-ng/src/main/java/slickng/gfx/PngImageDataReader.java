@@ -59,7 +59,7 @@ public class PngImageDataReader implements ImageDataReader {
     int width = image.getWidth();
     int height = image.getHeight();
 
-    ImageData imageData = factory.create(PixelFormat.RGBA, width, height);
+    ImageData imageData = factory.create(PixelFormat.RGBA_8, width, height);
     int texWidth = imageData.getTextureWidth();
     int texHeight = imageData.getTextureHeight();
 
