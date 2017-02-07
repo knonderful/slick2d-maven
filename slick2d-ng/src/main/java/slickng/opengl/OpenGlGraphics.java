@@ -93,6 +93,8 @@ public class OpenGlGraphics implements Graphics {
     initOpenGl(width, height);
     enterOrtho(width, height);
 
+    LOG.info(String.format("OpenGL version: %s", GL11.glGetString(GL11.GL_VERSION)));
+
     return display;
   }
 
