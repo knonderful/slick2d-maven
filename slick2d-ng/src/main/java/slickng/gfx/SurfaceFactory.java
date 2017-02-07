@@ -1,5 +1,7 @@
 package slickng.gfx;
 
+import slickng.UnsupportedFormatException;
+
 /**
  * A factory of {@link Surface} instances.
  */
@@ -10,8 +12,10 @@ public interface SurfaceFactory {
    *
    * @param imageData The image data.
    * @return The surface.
+   * @throws UnsupportedFormatException If this factory does not support the
+   *                                    provided {@link ImageData}.
    */
-  Surface create(ImageData imageData);
+  Surface create(ImageData imageData) throws UnsupportedFormatException;
 
   /**
    * Releases the surface.

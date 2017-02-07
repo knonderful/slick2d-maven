@@ -1,10 +1,11 @@
 package slickng.tiled.io;
 
-import slickng.SlickException;
+import java.io.IOException;
+import slickng.UnsupportedFormatException;
 import slickng.gfx.Surface;
 
 @FunctionalInterface
 public interface SurfaceResolver {
 
-  Surface resolve(String source) throws SlickException;
+  Surface resolve(String source) throws IOException, UnsupportedFormatException;
 }

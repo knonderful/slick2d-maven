@@ -16,13 +16,27 @@ public interface ImageDataFactory {
    * as requested. Note that the resulting {@link ImageData} is <b>not</b>
    * guaranteed to be of the requested width and height. This means that caller
    * must use {@link ImageData#getTextureWidth()},
-   * {@link ImageData#getTextureHeight()} and {@link ImageData#getPixelFormat()}
-   * to determine how to write data to the buffer.
+   * {@link ImageData#getTextureHeight()} to determine how to write data to the
+   * buffer.
+   * <p>
+   * The obtained {@link ImageData} <b>must</b> be released by after use calling
+   * {@link #release(slickng.gfx.ImageData)}.
    *
    * @param pixelFormat The pixel format.
-   * @param width  The minimal width.
-   * @param height The minimal height.
+   * @param width       The minimal width.
+   * @param height      The minimal height.
    * @return The {@link ImageData}.
    */
   ImageData create(PixelFormat pixelFormat, int width, int height);
+
+  /**
+   * Releases a previously created {@link ImageData}.
+   * <p>
+   * This method <b>must</b> be called after the consumer does not want to use
+   * the {@link ImageData} anymore. The {@link ImageData} should not be used
+   * after it has been released.
+   *
+   * @param imageData The {@link ImageData}.
+   */
+  void release(ImageData imageData);
 }

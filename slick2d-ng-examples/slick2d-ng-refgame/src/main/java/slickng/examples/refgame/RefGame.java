@@ -2,13 +2,11 @@ package slickng.examples.refgame;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import slickng.Color;
-import slickng.lwjgl.LwjlGameContainer;
 import slickng.Game;
 import slickng.InitContext;
 import slickng.RenderContext;
@@ -19,6 +17,7 @@ import slickng.gfx.PngImageDataReader;
 import slickng.gfx.Surface;
 import slickng.gfx.SurfaceLibrary;
 import slickng.gfx.TileSheet;
+import slickng.lwjgl.LwjlGameContainer;
 import slickng.tiled.TMap;
 import slickng.tiled.io.TMapReader;
 
@@ -39,8 +38,13 @@ public class RefGame implements Game {
 
   @Override
   public void init(InitContext context) throws SlickException {
-    InputStream pngStream = getResourceStream("resources/megaman_parts.png");
-    Surface surf = context.createSurface(new PngImageDataReader(new Color(255, 0, 255)), pngStream);
+    Surface surf;
+    try (InputStream pngStream = getResourceStream("resources/megaman_parts.png")) {
+      surf = context.createSurface(new PngImageDataReader(new Color(255, 0, 255)), pngStream);
+    } catch (IOException e) {
+      throw new SlickException(String.format("I/O error while trying to load the graphics data."), e);
+    }
+
     surfaceLibrary.add(MEGAMAN_PARTS, surf);
 
     TileSheet tileSheet = surf.createTileSheet(8, 8);
@@ -61,9 +65,10 @@ public class RefGame implements Game {
     sprite.add(7, 6, tileSheet.getTile(0, 0));
 
     TMapReader mapReader = new TMapReader(source -> {
-      InputStream stream = getResourceStream("resources/" + source);
-      // TODO: get transparency from TMX file...
-      return context.createSurface(new PngImageDataReader(new Color(255, 0, 255)), stream);
+      try (InputStream stream = getResourceStream("resources/" + source)) {
+        // TODO: get transparency from TMX file...
+        return context.createSurface(new PngImageDataReader(new Color(255, 0, 255)), stream);
+      }
     });
 
     TMap map;
@@ -74,12 +79,8 @@ public class RefGame implements Game {
     }
   }
 
-  private InputStream getResourceStream(String path) throws SlickException {
-    try {
-      return new FileInputStream(new File(path));
-    } catch (FileNotFoundException e) {
-      throw new SlickException(String.format("Resource not found: %s", path), e);
-    }
+  private InputStream getResourceStream(String path) throws IOException {
+    return new FileInputStream(new File(path));
   }
 
   @Override

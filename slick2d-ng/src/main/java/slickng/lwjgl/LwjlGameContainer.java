@@ -9,12 +9,15 @@ import slickng.GameContainer;
 import slickng.InitContext;
 import slickng.Input;
 import slickng.SlickException;
+import slickng.UnsupportedFormatException;
 import slickng.UpdateContext;
 import slickng.gfx.Display;
 import slickng.gfx.Graphics;
 import slickng.gfx.ImageData;
+import slickng.gfx.ImageDataFactory;
 import slickng.gfx.ImageDataReader;
 import slickng.gfx.Surface;
+import slickng.gfx.SurfaceFactory;
 import slickng.lwjgl.gfx.OpenGlGraphics;
 import slickng.lwjgl.gfx.OpenGlGraphicsOptions;
 
@@ -136,18 +139,27 @@ public class LwjlGameContainer implements GameContainer {
     }
 
     @Override
-    public Surface createSurface(ImageDataReader reader, InputStream inputStream) throws SlickException {
-      try {
-        ImageData imageData = reader.read(graphics.getImageDataFactory(), inputStream);
-        return graphics.getSurfaceFactory().create(imageData);
-      } catch (IOException e) {
-        throw new SlickException("Could not create surface.", e);
-      }
+    public Surface createSurface(ImageDataReader reader, InputStream inputStream) throws IOException, UnsupportedFormatException {
+      ImageDataFactory fact = graphics.getImageDataFactory();
+      ImageData imageData = reader.read(fact, inputStream);
+      Surface surf = graphics.getSurfaceFactory().create(imageData);
+      fact.release(imageData);
+      return surf;
+    }
+
+    @Override
+    public ImageDataFactory getImageDataFactory() {
+      return graphics.getImageDataFactory();
     }
 
     @Override
     public Input getInput() {
       return input;
+    }
+
+    @Override
+    public SurfaceFactory getSurfaceFactory() {
+      return graphics.getSurfaceFactory();
     }
   }
 
