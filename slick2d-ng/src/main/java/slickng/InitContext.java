@@ -1,8 +1,8 @@
 package slickng;
 
-import slickng.gfx.Surface;
-import slickng.gfx.ImageDataReader;
 import java.io.InputStream;
+import slickng.gfx.ImageDataReader;
+import slickng.gfx.Surface;
 
 /**
  * The context for {@link Game#init(slickng.InitContext)}.
@@ -14,6 +14,8 @@ public interface InitContext {
    *
    * @param reader      The {@link ImageDataReader}.
    * @param inputStream The {@link InputStream} that contains the image data.
+   * @return The {@link Surface}.
+   * @throws SlickException If the {@link Surface} could not be created.
    */
   Surface createSurface(ImageDataReader reader, InputStream inputStream) throws SlickException;
 
