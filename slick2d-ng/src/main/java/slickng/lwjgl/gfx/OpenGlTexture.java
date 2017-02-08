@@ -1,6 +1,10 @@
 package slickng.lwjgl.gfx;
 
 import java.nio.IntBuffer;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
+import slickng.gfx.ImageBuffer;
 import slickng.gfx.ImageData;
 import slickng.gfx.PixelFormat;
 
@@ -21,6 +25,8 @@ class OpenGlTexture {
   private static final int SRC_PIXEL_FORMAT = GL_RGBA;
   private static final int DEST_PIXEL_FORMAT = GL_RGBA8;
 
+  private static final Map<PixelFormat, Integer> PIXEL_FORMAT_MAP = createPixelFormatMap();
+
   private final int textureId;
   private final int width;
   private final int height;
@@ -39,18 +45,34 @@ class OpenGlTexture {
     glTexParameteri(TARGET, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(TARGET, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+    ImageBuffer imageBuffer = imageData.getBuffer();
+
     // produce a texture from the byte buffer
     glTexImage2D(TARGET,
             0,
-            DEST_PIXEL_FORMAT,
-            imageData.getTextureWidth(),
-            imageData.getTextureHeight(),
+            toOpenGl(imageData.getPixelFormat()),
+            imageBuffer.getSurfaceWidth(),
+            imageBuffer.getSurfaceHeight(),
             0,
             SRC_PIXEL_FORMAT,
             GL_UNSIGNED_BYTE,
-            imageData.getData());
+            imageBuffer.getData());
 
-    return new OpenGlTexture(textureId, imageData.getImageWidth(), imageData.getImageHeight(), imageData.getTextureWidth(), imageData.getTextureHeight());
+    return new OpenGlTexture(textureId, imageBuffer.getImageWidth(), imageBuffer.getImageHeight(), imageBuffer.getSurfaceWidth(), imageBuffer.getSurfaceHeight());
+  }
+
+  private static Map<PixelFormat, Integer> createPixelFormatMap() {
+    Map<PixelFormat, Integer> pixelFormatMap = new EnumMap<>(PixelFormat.class);
+    pixelFormatMap.put(PixelFormat.RGBA_8, GL_RGBA8);
+    return Collections.unmodifiableMap(pixelFormatMap);
+  }
+
+  private static int toOpenGl(PixelFormat pixelFormat) {
+    Integer openGlFormat = PIXEL_FORMAT_MAP.get(pixelFormat);
+    if (openGlFormat == null) {
+      throw new IllegalStateException(String.format("Pixel format %s not supported by graphics implementation.", pixelFormat));
+    }
+    return openGlFormat;
   }
 
   private static int createTextureID() {

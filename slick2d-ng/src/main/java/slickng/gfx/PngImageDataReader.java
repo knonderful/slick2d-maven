@@ -9,12 +9,13 @@ import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import slickng.Color;
+import slickng.UnsupportedFormatException;
 
 /**
  * {@link ImageDataReader} implementation for reading PNG images.
@@ -51,19 +52,17 @@ public class PngImageDataReader implements ImageDataReader {
   }
 
   @Override
-  public ImageData read(ImageDataFactory factory, InputStream inputStream) throws IOException {
+  public ImageDataRgba8 read(ImageDataFactory factory, InputStream inputStream) throws IOException, UnsupportedFormatException {
     return imageToByteBuffer(factory, ImageIO.read(inputStream), transparent);
   }
 
-  private static ImageData imageToByteBuffer(ImageDataFactory factory, BufferedImage image, Color transparent) {
+  private static ImageDataRgba8 imageToByteBuffer(ImageDataFactory factory, BufferedImage image, Color transparent) throws IOException, UnsupportedFormatException {
     int width = image.getWidth();
     int height = image.getHeight();
 
-    ImageData imageData = factory.create(PixelFormat.RGBA_8, width, height);
-    int texWidth = imageData.getTextureWidth();
-    int texHeight = imageData.getTextureHeight();
+    ImageDataRgba8 imageData = factory.create(ImageDataRgba8.class, width, height);
 
-    WritableRaster raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, texWidth, texHeight, 4, null);
+    WritableRaster raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, 4, null);
     BufferedImage texImage = new BufferedImage(GL_ALPHA_COLOR_MODEL, raster, false, new Hashtable<>());
 
     // copy the source image into the produced image
@@ -71,7 +70,7 @@ public class PngImageDataReader implements ImageDataReader {
 
     // need to blank the image for mac compatibility if we're using alpha
     g.setColor(new java.awt.Color(0f, 0f, 0f, 0f));
-    g.fillRect(0, 0, texWidth, texHeight);
+    g.fillRect(0, 0, width, height);
     g.drawImage(image, 0, 0, null);
 
     // build a byte buffer from the temporary image 
@@ -99,11 +98,7 @@ public class PngImageDataReader implements ImageDataReader {
       }
     }
 
-    ByteBuffer imageBuffer = imageData.getData();
-    imageBuffer.put(data);
-    imageBuffer.flip();
-    g.dispose();
-
+    imageData.getBuffer().write(new ByteArrayInputStream(data));
     return imageData;
   }
 

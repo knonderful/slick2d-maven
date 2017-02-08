@@ -1,5 +1,7 @@
 package slickng.gfx;
 
+import slickng.UnsupportedFormatException;
+
 /**
  * A factory for {@link ImageData} instances.
  * <p>
@@ -22,12 +24,16 @@ public interface ImageDataFactory {
    * The obtained {@link ImageData} <b>must</b> be released by after use calling
    * {@link #release(slickng.gfx.ImageData)}.
    *
-   * @param pixelFormat The pixel format.
-   * @param width       The minimal width.
-   * @param height      The minimal height.
+   * @param <T>    The type of {@link ImageData}.
+   * @param type   The type of {@link ImageData}.
+   * @param width  The minimal width.
+   * @param height The minimal height.
    * @return The {@link ImageData}.
+   * @throws UnsupportedFormatException If the {@link ImageData} is not
+   *                                    supported by the
+   *                                    {@link ImageDataFactory}.
    */
-  ImageData create(PixelFormat pixelFormat, int width, int height);
+  <T extends ImageData> T create(Class<T> type, int width, int height) throws UnsupportedFormatException;
 
   /**
    * Releases a previously created {@link ImageData}.
