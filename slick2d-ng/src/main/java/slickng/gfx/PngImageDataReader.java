@@ -20,7 +20,7 @@ import slickng.UnsupportedFormatException;
 /**
  * {@link ImageDataReader} implementation for reading PNG images.
  */
-public class PngImageDataReader implements ImageDataReader {
+public class PngImageDataReader {
 
   private final Color transparent;
 
@@ -51,16 +51,13 @@ public class PngImageDataReader implements ImageDataReader {
     this.transparent = transparent;
   }
 
-  @Override
   public ImageDataRgba8 read(ImageDataFactory factory, InputStream inputStream) throws IOException, UnsupportedFormatException {
-    return imageToByteBuffer(factory, ImageIO.read(inputStream), transparent);
+    return readImageData(factory, ImageIO.read(inputStream), transparent);
   }
 
-  private static ImageDataRgba8 imageToByteBuffer(ImageDataFactory factory, BufferedImage image, Color transparent) throws IOException, UnsupportedFormatException {
+  private static ImageDataRgba8 readImageData(ImageDataFactory factory, BufferedImage image, Color transparent) throws IOException, UnsupportedFormatException {
     int width = image.getWidth();
     int height = image.getHeight();
-
-    ImageDataRgba8 imageData = factory.create(ImageDataRgba8.class, width, height);
 
     WritableRaster raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, 4, null);
     BufferedImage texImage = new BufferedImage(GL_ALPHA_COLOR_MODEL, raster, false, new Hashtable<>());
@@ -98,8 +95,14 @@ public class PngImageDataReader implements ImageDataReader {
       }
     }
 
-    imageData.getBuffer().write(new ByteArrayInputStream(data));
+    ImageDataRgba8 imageData = factory.create(ImageDataRgba8.class, width, height);
+    ImageBuffer buffer = imageData.getBuffer();
+    try {
+      buffer.write(new ByteArrayInputStream(data));
+    } catch (IOException e) {
+      factory.release(imageData);
+      throw e;
+    }
     return imageData;
   }
-
 }

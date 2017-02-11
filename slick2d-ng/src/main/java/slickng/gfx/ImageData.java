@@ -6,17 +6,16 @@ package slickng.gfx;
 public interface ImageData {
 
   /**
-   * Retrieves the {@link PixelFormat}.
-   *
-   * @return The {@link PixelFormat}.
-   */
-  PixelFormat getPixelFormat();
-
-  /**
    * Retrieves the {@link ImageBuffer}.
    *
    * @return The {@link ImageBuffer}.
    */
   ImageBuffer getBuffer();
 
+  /**
+   * Creates a new {@link Surface}.
+   *
+   * @return The {@link Surface}.
+   */
+  Surface createSurface();
 }

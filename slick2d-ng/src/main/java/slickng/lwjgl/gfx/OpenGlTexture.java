@@ -4,8 +4,6 @@ import java.nio.IntBuffer;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
-import slickng.gfx.ImageBuffer;
-import slickng.gfx.ImageData;
 import slickng.gfx.PixelFormat;
 
 import static org.lwjgl.BufferUtils.createIntBuffer;
@@ -33,24 +31,17 @@ class OpenGlTexture {
   private final int textureWidth;
   private final int textureHeight;
 
-  static OpenGlTexture create(ImageData imageData) {
-    // This can only happen if an ImageData from another renderer gets passed in (or if there is a programmatical error).
-    if (imageData.getPixelFormat() != EXPECTED_PIXEL_FORMAT) {
-      throw new IllegalArgumentException(String.format("This implementation only supports pixel format %s, but received %s.", EXPECTED_PIXEL_FORMAT, imageData.getPixelFormat()));
-    }
-
+  static OpenGlTexture create(OpenGlImageBuffer imageBuffer) {
     int textureId = createTextureID();
     glBindTexture(TARGET, textureId);
 
     glTexParameteri(TARGET, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(TARGET, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    ImageBuffer imageBuffer = imageData.getBuffer();
-
     // produce a texture from the byte buffer
     glTexImage2D(TARGET,
             0,
-            toOpenGl(imageData.getPixelFormat()),
+            toOpenGl(imageBuffer.getPixelFormat()),
             imageBuffer.getSurfaceWidth(),
             imageBuffer.getSurfaceHeight(),
             0,

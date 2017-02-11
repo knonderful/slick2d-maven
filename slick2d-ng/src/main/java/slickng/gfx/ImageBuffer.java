@@ -2,7 +2,6 @@ package slickng.gfx;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 /**
  * An {@link ImageBuffer} manages the raw data for an image.
@@ -17,11 +16,11 @@ import java.nio.ByteBuffer;
 public interface ImageBuffer {
 
   /**
-   * Retrieves the image data.
+   * Retrieves the {@link PixelFormat}.
    *
-   * @return A {@link ByteBuffer} containing the image data.
+   * @return The {@link PixelFormat}.
    */
-  ByteBuffer getData();
+  PixelFormat getPixelFormat();
 
   /**
    * Reads image data from the input stream and writes it into the buffer.

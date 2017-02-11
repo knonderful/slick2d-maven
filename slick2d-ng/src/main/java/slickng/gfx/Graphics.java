@@ -25,13 +25,6 @@ public interface Graphics {
   void deinit();
 
   /**
-   * Retrieves a {@link SurfaceFactory} for creating surfaces.
-   *
-   * @return The {@link SurfaceFactory}.
-   */
-  SurfaceFactory getSurfaceFactory();
-
-  /**
    * Retrieves a {@link ImageDataFactory} for creating image data.
    *
    * @return The {@link ImageDataFactory}.

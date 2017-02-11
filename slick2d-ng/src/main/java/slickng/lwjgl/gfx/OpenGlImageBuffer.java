@@ -1,18 +1,21 @@
-package slickng.gfx;
+package slickng.lwjgl.gfx;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import slickng.gfx.ImageBuffer;
+import slickng.gfx.PixelFormat;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * {@link ImageBuffer} implementation based on {@link ByteBuffer}.
+ * {@link ImageBuffer} implementation for the OpenGL renderer.
  */
-public class ByteBufferImageBuffer implements ImageBuffer {
+public class OpenGlImageBuffer implements ImageBuffer {
 
+  private final OpenGlByteBufferFactory bufferFactory;
   private final ByteBuffer data;
-  private final int bytesPerPixel;
+  private final PixelFormat pixelFormat;
   private final int imageWidth;
   private final int imageHeight;
   private final int surfaceWidth;
@@ -22,23 +25,25 @@ public class ByteBufferImageBuffer implements ImageBuffer {
    * Creates a new instance.
    *
    * @param data          The buffer for storing image data.
-   * @param bytesPerPixel The number of bytes per pixel.
+   * @param pixelFormat   The {@link PixelFormat}.
    * @param imageWidth    The image width.
    * @param imageHeight   The image height.
    * @param surfaceWidth  The surface width.
    * @param surfaceHeight The surface height.
    */
-  public ByteBufferImageBuffer(ByteBuffer data, int bytesPerPixel, int imageWidth, int imageHeight, int surfaceWidth, int surfaceHeight) {
-    this.data = requireNonNull(data, "Argument data must be non-null.");
-    this.bytesPerPixel = bytesPerPixel;
+  OpenGlImageBuffer(OpenGlByteBufferFactory bufferFactory, PixelFormat pixelFormat, int imageWidth, int imageHeight) {
+    this.bufferFactory = requireNonNull(bufferFactory, "Argument bufferFactory must be non-null.");
+    this.pixelFormat = requireNonNull(pixelFormat, "Argument pixelFormat must be non-null.");
     this.imageWidth = imageWidth;
     this.imageHeight = imageHeight;
-    this.surfaceWidth = surfaceWidth;
-    this.surfaceHeight = surfaceHeight;
+    this.surfaceWidth = nextPowerOfTwo(imageWidth);
+    this.surfaceHeight = nextPowerOfTwo(imageHeight);
+    this.data = requireNonNull(
+            createBuffer(bufferFactory, this.surfaceWidth, this.surfaceHeight, this.pixelFormat.getBytesPerPixel()),
+            "Argument dataLease must be non-null.");
   }
 
-  @Override
-  public ByteBuffer getData() {
+  ByteBuffer getData() {
     return data;
   }
 
@@ -50,6 +55,11 @@ public class ByteBufferImageBuffer implements ImageBuffer {
   @Override
   public int getImageWidth() {
     return imageWidth;
+  }
+
+  @Override
+  public PixelFormat getPixelFormat() {
+    return pixelFormat;
   }
 
   @Override
@@ -65,9 +75,9 @@ public class ByteBufferImageBuffer implements ImageBuffer {
   @Override
   public void write(InputStream inputStream) throws IOException {
     // Number of bytes for image data per line
-    int bytesPerLine = bytesPerPixel * imageWidth;
+    int bytesPerLine = pixelFormat.getBytesPerPixel() * imageWidth;
     // Number of bytes to skip in the destination buffer after each line
-    int skipPerLine = bytesPerPixel * (surfaceWidth - imageWidth);
+    int skipPerLine = pixelFormat.getBytesPerPixel() * (surfaceWidth - imageWidth);
 
     // The current line
     byte[] line = new byte[bytesPerLine];
@@ -94,5 +104,23 @@ public class ByteBufferImageBuffer implements ImageBuffer {
 
     // Note: do not flip() here, because we want to keep the limit at the capacity of the buffer
     data.rewind();
+  }
+
+  void release() {
+    bufferFactory.release(data);
+  }
+
+  private static int nextPowerOfTwo(int value) {
+    int powOfTwo = 2;
+
+    while (powOfTwo < value) {
+      powOfTwo *= 2;
+    }
+
+    return powOfTwo;
+  }
+
+  private static ByteBuffer createBuffer(OpenGlByteBufferFactory bufferFactory, int width, int height, int bytesPerPixel) {
+    return bufferFactory.create(width * height * bytesPerPixel);
   }
 }

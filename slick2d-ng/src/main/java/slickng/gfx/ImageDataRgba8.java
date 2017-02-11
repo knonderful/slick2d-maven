@@ -3,17 +3,24 @@ package slickng.gfx;
 /**
  * RGBA with 8 bits per pixel.
  */
-public class ImageDataRgba8 extends DefaultImageData {
+public class ImageDataRgba8 extends AbstractImageDataDecorator {
+
+  /**
+   * Retrieves the {@link PixelFormat} for this {@link ImageData}.
+   *
+   * @return The {@link PixelFormat}.
+   */
+  public static PixelFormat getPixelFormat() {
+    return PixelFormat.RGBA_8;
+  }
 
   /**
    * Creates a new instance.
    *
-   * @param bufferFactory The {@link ImageBufferFactory} for creating the
-   *                      {@link ImageBuffer}.
-   * @param width         The width of the image.
-   * @param height        The height of the image.
+   * @param decorated The decorated {@link ImageData}.
    */
-  public ImageDataRgba8(ImageBufferFactory bufferFactory, int width, int height) {
-    super(bufferFactory, width, height, PixelFormat.RGBA_8);
+  public ImageDataRgba8(ImageData decorated) {
+    super(decorated);
   }
+
 }

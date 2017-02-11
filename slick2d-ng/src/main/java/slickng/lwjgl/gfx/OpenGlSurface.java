@@ -1,7 +1,6 @@
 package slickng.lwjgl.gfx;
 
 import java.util.Objects;
-import slickng.gfx.ImageData;
 import slickng.gfx.Surface;
 import slickng.gfx.TileSheet;
 
@@ -14,8 +13,8 @@ class OpenGlSurface implements Surface {
 
   private final OpenGlTexture texture;
 
-  static OpenGlSurface fromImageData(ImageData imageData) {
-    return new OpenGlSurface(OpenGlTexture.create(imageData));
+  static OpenGlSurface fromImageData(OpenGlImageBuffer imageBuffer) {
+    return new OpenGlSurface(OpenGlTexture.create(imageBuffer));
   }
 
   private OpenGlSurface(OpenGlTexture texture) {

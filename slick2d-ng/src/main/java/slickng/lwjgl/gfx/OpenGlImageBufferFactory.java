@@ -1,38 +1,22 @@
 package slickng.lwjgl.gfx;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import slickng.gfx.ByteBufferImageBuffer;
-import slickng.gfx.ImageBuffer;
-import slickng.gfx.ImageBufferFactory;
+import slickng.gfx.PixelFormat;
 
-class OpenGlImageBufferFactory implements ImageBufferFactory {
+import static java.util.Objects.requireNonNull;
 
-  OpenGlImageBufferFactory() {
+class OpenGlImageBufferFactory {
+
+  private final OpenGlByteBufferFactory byteBufferFactory;
+
+  OpenGlImageBufferFactory(OpenGlByteBufferFactory byteBufferFactory) {
+    this.byteBufferFactory = requireNonNull(byteBufferFactory, "Argument byteBufferFactory must be non-null.");
   }
 
-  @Override
-  public ImageBuffer create(int width, int height, int bytesPerPixel) {
-    int surfaceWidth = nextPowerOfTwo(width);
-    int surfaceHeight = nextPowerOfTwo(height);
-    ByteBuffer buffer = createBuffer(surfaceWidth, surfaceHeight, bytesPerPixel);
-    return new ByteBufferImageBuffer(buffer, bytesPerPixel, width, height, surfaceWidth, surfaceHeight);
+  OpenGlImageBuffer create(PixelFormat pixelFormat, int width, int height) {
+    return new OpenGlImageBuffer(byteBufferFactory, pixelFormat, width, height);
   }
 
-  private static int nextPowerOfTwo(int value) {
-    int powOfTwo = 2;
-
-    while (powOfTwo < value) {
-      powOfTwo *= 2;
-    }
-
-    return powOfTwo;
-  }
-
-  private static ByteBuffer createBuffer(int surfaceWidth, int surfaceHeight, int bytesPerPixel) {
-    ByteBuffer buffer = ByteBuffer.allocateDirect(surfaceWidth * surfaceHeight * bytesPerPixel);
-    // Use native byte order for passing into OpenGL
-    buffer.order(ByteOrder.nativeOrder());
-    return buffer;
+  void release(OpenGlImageBuffer imageBuffer) {
+    imageBuffer.release();
   }
 }

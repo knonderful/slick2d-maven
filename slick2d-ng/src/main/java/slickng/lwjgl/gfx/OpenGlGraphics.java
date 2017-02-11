@@ -6,7 +6,6 @@ import slickng.RenderContext;
 import slickng.SlickException;
 import slickng.gfx.Graphics;
 import slickng.gfx.ImageDataFactory;
-import slickng.gfx.SurfaceFactory;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -18,8 +17,9 @@ public class OpenGlGraphics implements Graphics {
   private static final Logger LOG = Logger.getLogger(OpenGlGraphics.class.getName());
 
   private final OpenGlRenderContext renderContext = new OpenGlRenderContext();
-  private final OpenGlSurfaceFactory surfaceFactory = new OpenGlSurfaceFactory();
-  private final OpenGlImageDataFactory imageDataFactory = new OpenGlImageDataFactory();
+  private final OpenGlByteBufferFactory byteBufferFactory = new OpenGlByteBufferFactory();
+  private final OpenGlImageBufferFactory imageBufferFactory = new OpenGlImageBufferFactory(byteBufferFactory);
+  private final OpenGlImageDataFactory imageDataFactory = new OpenGlImageDataFactory(imageBufferFactory);
 
   private final OpenGlGraphicsOptions options;
 
@@ -75,11 +75,6 @@ public class OpenGlGraphics implements Graphics {
   @Override
   public ImageDataFactory getImageDataFactory() {
     return imageDataFactory;
-  }
-
-  @Override
-  public SurfaceFactory getSurfaceFactory() {
-    return surfaceFactory;
   }
 
   @Override

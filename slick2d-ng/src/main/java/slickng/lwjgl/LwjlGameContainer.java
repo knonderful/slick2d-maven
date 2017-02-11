@@ -1,7 +1,5 @@
 package slickng.lwjgl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import slickng.Game;
@@ -9,15 +7,9 @@ import slickng.GameContainer;
 import slickng.InitContext;
 import slickng.Input;
 import slickng.SlickException;
-import slickng.UnsupportedFormatException;
 import slickng.UpdateContext;
 import slickng.gfx.Display;
-import slickng.gfx.Graphics;
-import slickng.gfx.ImageData;
 import slickng.gfx.ImageDataFactory;
-import slickng.gfx.ImageDataReader;
-import slickng.gfx.Surface;
-import slickng.gfx.SurfaceFactory;
 import slickng.lwjgl.gfx.OpenGlGraphics;
 import slickng.lwjgl.gfx.OpenGlGraphicsOptions;
 
@@ -32,7 +24,7 @@ public class LwjlGameContainer implements GameContainer {
   private static final Logger LOG = Logger.getLogger(LwjlGameContainer.class.getName());
 
   private final Game game;
-  private final Graphics graphics;
+  private final OpenGlGraphics graphics;
   private final float deltaStep;
   private final GameContext gameContext;
 
@@ -131,20 +123,11 @@ public class LwjlGameContainer implements GameContainer {
   private static class GameContext implements InitContext, UpdateContext {
 
     private final Input input;
-    private final Graphics graphics;
+    private final OpenGlGraphics graphics;
 
-    GameContext(Input input, Graphics graphics) {
+    GameContext(Input input, OpenGlGraphics graphics) {
       this.input = requireNonNull(input, "Argument input must be non-null.");
       this.graphics = requireNonNull(graphics, "Argument graphics must be non-null.");
-    }
-
-    @Override
-    public Surface createSurface(ImageDataReader reader, InputStream inputStream) throws IOException, UnsupportedFormatException {
-      ImageDataFactory fact = graphics.getImageDataFactory();
-      ImageData imageData = reader.read(fact, inputStream);
-      Surface surf = graphics.getSurfaceFactory().create(imageData);
-      fact.release(imageData);
-      return surf;
     }
 
     @Override
@@ -155,11 +138,6 @@ public class LwjlGameContainer implements GameContainer {
     @Override
     public Input getInput() {
       return input;
-    }
-
-    @Override
-    public SurfaceFactory getSurfaceFactory() {
-      return graphics.getSurfaceFactory();
     }
   }
 

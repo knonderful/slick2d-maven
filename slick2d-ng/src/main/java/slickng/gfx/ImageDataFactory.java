@@ -20,15 +20,12 @@ public interface ImageDataFactory {
    * must use {@link ImageData#getTextureWidth()},
    * {@link ImageData#getTextureHeight()} to determine how to write data to the
    * buffer.
-   * <p>
-   * The obtained {@link ImageData} <b>must</b> be released by after use calling
-   * {@link #release(slickng.gfx.ImageData)}.
    *
    * @param <T>    The type of {@link ImageData}.
    * @param type   The type of {@link ImageData}.
    * @param width  The minimal width.
    * @param height The minimal height.
-   * @return The {@link ImageData}.
+   * @return A {@link Lease} on the {@link ImageData}.
    * @throws UnsupportedFormatException If the {@link ImageData} is not
    *                                    supported by the
    *                                    {@link ImageDataFactory}.
@@ -36,11 +33,8 @@ public interface ImageDataFactory {
   <T extends ImageData> T create(Class<T> type, int width, int height) throws UnsupportedFormatException;
 
   /**
-   * Releases a previously created {@link ImageData}.
-   * <p>
-   * This method <b>must</b> be called after the consumer does not want to use
-   * the {@link ImageData} anymore. The {@link ImageData} should not be used
-   * after it has been released.
+   * Releases a {@link ImageData} that was created using this
+   * {@link ImageDataFactory}.
    *
    * @param imageData The {@link ImageData}.
    */
