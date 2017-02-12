@@ -1,6 +1,6 @@
 package slickng;
 
-import slickng.gfx.ImageDataFactory;
+import slickng.gfx.SurfaceTemplateFactory;
 
 /**
  * The context for {@link Game#init(slickng.InitContext)}.
@@ -8,11 +8,11 @@ import slickng.gfx.ImageDataFactory;
 public interface InitContext {
 
   /**
-   * Retrieves the {@link ImageDataFactory}.
+   * Retrieves the {@link SurfaceTemplateFactory}.
    *
-   * @return The {@link ImageDataFactory}.
+   * @return The {@link SurfaceTemplateFactory}.
    */
-  ImageDataFactory getImageDataFactory();
+  SurfaceTemplateFactory getSurfaceTemplateFactory();
 
   /**
    * Gets the {@link Input}.

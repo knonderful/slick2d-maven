@@ -1,19 +1,20 @@
 package slickng.lwjgl.gfx;
 
-import slickng.gfx.ImageData;
 import slickng.gfx.PixelFormat;
 
 import static java.util.Objects.requireNonNull;
 
+import slickng.gfx.SurfaceTemplate;
+
 /**
- * {@link ImageData} implementation for the OpenGL renderer.
+ * {@link SurfaceTemplate} implementation for the OpenGL renderer.
  */
-public class OpenGlImageData implements ImageData {
+public class OpenGlSurfaceTemplate implements SurfaceTemplate {
 
   private final OpenGlImageBufferFactory factory;
   private final OpenGlImageBuffer buffer;
 
-  OpenGlImageData(OpenGlImageBufferFactory factory, PixelFormat pixelFormat, int width, int height) {
+  OpenGlSurfaceTemplate(OpenGlImageBufferFactory factory, PixelFormat pixelFormat, int width, int height) {
     this.factory = requireNonNull(factory, "Argument factory must be non-null.");
     this.buffer = factory.create(pixelFormat, width, height);
   }

@@ -52,11 +52,11 @@ public class PngImageDataReader {
     this.transparent = transparent;
   }
   
-  public Lease<ImageData> read(ImageDataFactory factory, InputStream inputStream) throws IOException, UnsupportedFormatException {
+  public Lease<SurfaceTemplate> read(SurfaceTemplateFactory factory, InputStream inputStream) throws IOException, UnsupportedFormatException {
     return readImageData(factory, ImageIO.read(inputStream), transparent);
   }
   
-  private static Lease<ImageData> readImageData(ImageDataFactory factory, BufferedImage image, Color transparent) throws IOException, UnsupportedFormatException {
+  private static Lease<SurfaceTemplate> readImageData(SurfaceTemplateFactory factory, BufferedImage image, Color transparent) throws IOException, UnsupportedFormatException {
     int width = image.getWidth();
     int height = image.getHeight();
     
@@ -96,13 +96,13 @@ public class PngImageDataReader {
       }
     }
     
-    Lease<ImageData> lease = factory.create(PixelFormat.RGBA_8, width, height);
-    ImageData imageData = lease.borrowSubject();
+    Lease<SurfaceTemplate> lease = factory.create(PixelFormat.RGBA_8, width, height);
+    SurfaceTemplate template = lease.borrowSubject();
     try {
-      ImageBuffer buffer = imageData.getBuffer();
+      ImageBuffer buffer = template.getBuffer();
       buffer.write(new ByteArrayInputStream(data));
     } finally {
-      lease.returnSubject(imageData);
+      lease.returnSubject(template);
     }
     return lease;
   }

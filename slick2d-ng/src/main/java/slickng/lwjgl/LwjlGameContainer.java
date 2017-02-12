@@ -9,11 +9,12 @@ import slickng.Input;
 import slickng.SlickException;
 import slickng.UpdateContext;
 import slickng.gfx.Display;
-import slickng.gfx.ImageDataFactory;
 import slickng.lwjgl.gfx.OpenGlGraphics;
 import slickng.lwjgl.gfx.OpenGlGraphicsOptions;
 
 import static java.util.Objects.requireNonNull;
+
+import slickng.gfx.SurfaceTemplateFactory;
 
 /**
  * A {@link GameContainer} implementation is implemented using the LWJGL
@@ -131,8 +132,8 @@ public class LwjlGameContainer implements GameContainer {
     }
 
     @Override
-    public ImageDataFactory getImageDataFactory() {
-      return graphics.getImageDataFactory();
+    public SurfaceTemplateFactory getSurfaceTemplateFactory() {
+      return graphics.getSurfaceTemplateFactory();
     }
 
     @Override

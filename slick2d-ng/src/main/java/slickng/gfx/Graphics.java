@@ -25,11 +25,11 @@ public interface Graphics {
   void deinit();
 
   /**
-   * Retrieves a {@link ImageDataFactory} for creating image data.
+   * Retrieves a {@link SurfaceTemplateFactory} for creating image data.
    *
-   * @return The {@link ImageDataFactory}.
+   * @return The {@link SurfaceTemplateFactory}.
    */
-  ImageDataFactory getImageDataFactory();
+  SurfaceTemplateFactory getSurfaceTemplateFactory();
 
   /**
    * Signals the start of a render iteration.
