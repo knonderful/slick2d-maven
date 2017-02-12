@@ -28,8 +28,7 @@ public class OpenGlImageData implements ImageData {
     return buffer;
   }
 
-  @Override
-  public void release() {
+  void release() {
     factory.release(buffer);
   }
 }

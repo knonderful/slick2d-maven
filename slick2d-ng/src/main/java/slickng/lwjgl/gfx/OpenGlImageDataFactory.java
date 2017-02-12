@@ -27,6 +27,6 @@ class OpenGlImageDataFactory implements ImageDataFactory {
   @Override
   public Lease<ImageData> create(PixelFormat pixelFormat, int width, int height) throws UnsupportedFormatException {
     OpenGlImageData imageData = createImageData(pixelFormat, width, height);
-    return Leases.createLease(imageData, imgData -> imgData.release());
+    return Leases.createLease(imageData, imgData -> ((OpenGlImageData) imgData).release());
   }
 }
