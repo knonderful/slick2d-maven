@@ -31,5 +31,5 @@ public interface ImageDataFactory {
    *                                    supported by the
    *                                    {@link ImageDataFactory}.
    */
-  <T extends ImageData> Lease<T> create(Class<T> type, int width, int height) throws UnsupportedFormatException;
+  Lease<ImageData> create(PixelFormat pixelFormat, int width, int height) throws UnsupportedFormatException;
 }

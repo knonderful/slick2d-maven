@@ -16,7 +16,6 @@ import slickng.UpdateContext;
 import slickng.gfx.CompositeSprite;
 import slickng.gfx.ImageData;
 import slickng.gfx.ImageDataFactory;
-import slickng.gfx.ImageDataRgba8;
 import slickng.gfx.PngImageDataReader;
 import slickng.gfx.Surface;
 import slickng.gfx.SurfaceLibrary;
@@ -47,7 +46,7 @@ public class RefGame implements Game {
     Surface surf;
     PngImageDataReader reader = new PngImageDataReader(new Color(255, 0, 255));
     try (InputStream pngStream = getResourceStream("resources/megaman_parts.png")) {
-      Lease<ImageDataRgba8> lease = reader.read(imageDataFactory, pngStream);
+      Lease<ImageData> lease = reader.read(imageDataFactory, pngStream);
       surf = lease.applyAndExpire(ImageData::createSurface);
     } catch (IOException e) {
       throw new SlickException(String.format("I/O error while trying to load the graphics data."), e);
@@ -75,7 +74,7 @@ public class RefGame implements Game {
     TMapReader mapReader = new TMapReader(source -> {
       try (InputStream stream = getResourceStream("resources/" + source)) {
         // TODO: get transparency from TMX file...
-        Lease<ImageDataRgba8> lease = reader.read(imageDataFactory, stream);
+        Lease<ImageData> lease = reader.read(imageDataFactory, stream);
         return lease.applyAndExpire(ImageData::createSurface);
       }
     });
