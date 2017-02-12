@@ -15,13 +15,14 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import slickng.Color;
+import slickng.Lease;
 import slickng.UnsupportedFormatException;
 
 /**
  * {@link ImageDataReader} implementation for reading PNG images.
  */
 public class PngImageDataReader {
-
+  
   private final Color transparent;
 
   /**
@@ -50,15 +51,15 @@ public class PngImageDataReader {
   public PngImageDataReader(Color transparent) {
     this.transparent = transparent;
   }
-
-  public ImageDataRgba8 read(ImageDataFactory factory, InputStream inputStream) throws IOException, UnsupportedFormatException {
+  
+  public Lease<ImageDataRgba8> read(ImageDataFactory factory, InputStream inputStream) throws IOException, UnsupportedFormatException {
     return readImageData(factory, ImageIO.read(inputStream), transparent);
   }
-
-  private static ImageDataRgba8 readImageData(ImageDataFactory factory, BufferedImage image, Color transparent) throws IOException, UnsupportedFormatException {
+  
+  private static Lease<ImageDataRgba8> readImageData(ImageDataFactory factory, BufferedImage image, Color transparent) throws IOException, UnsupportedFormatException {
     int width = image.getWidth();
     int height = image.getHeight();
-
+    
     WritableRaster raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, 4, null);
     BufferedImage texImage = new BufferedImage(GL_ALPHA_COLOR_MODEL, raster, false, new Hashtable<>());
 
@@ -73,13 +74,13 @@ public class PngImageDataReader {
     // build a byte buffer from the temporary image 
     // that be used by OpenGL to produce a texture.
     byte[] data = ((DataBufferByte) texImage.getRaster().getDataBuffer()).getData();
-
+    
     if (transparent != null) {
       int[] trans = new int[3];
       trans[0] = (int) (transparent.r * 255);
       trans[1] = (int) (transparent.g * 255);
       trans[2] = (int) (transparent.b * 255);
-
+      
       for (int i = 0; i < data.length; i += 4) {
         boolean match = true;
         for (int c = 0; c < 3; c++) {
@@ -88,21 +89,21 @@ public class PngImageDataReader {
             match = false;
           }
         }
-
+        
         if (match) {
           data[i + 3] = 0;
         }
       }
     }
-
-    ImageDataRgba8 imageData = factory.create(ImageDataRgba8.class, width, height);
-    ImageBuffer buffer = imageData.getBuffer();
+    
+    Lease<ImageDataRgba8> lease = factory.create(ImageDataRgba8.class, width, height);
+    ImageDataRgba8 imageData = lease.borrowSubject();
     try {
+      ImageBuffer buffer = imageData.getBuffer();
       buffer.write(new ByteArrayInputStream(data));
-    } catch (IOException e) {
-      factory.release(imageData);
-      throw e;
+    } finally {
+      lease.returnSubject(imageData);
     }
-    return imageData;
+    return lease;
   }
 }

@@ -18,4 +18,11 @@ public interface ImageData {
    * @return The {@link Surface}.
    */
   Surface createSurface();
+
+  /**
+   * Releases the {@link ImageData}.
+   * <p>
+   * After this method has been called, this object should no longer be used.
+   */
+  void release();
 }

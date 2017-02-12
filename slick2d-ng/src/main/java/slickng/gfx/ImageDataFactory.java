@@ -1,5 +1,6 @@
 package slickng.gfx;
 
+import slickng.Lease;
 import slickng.UnsupportedFormatException;
 
 /**
@@ -30,13 +31,5 @@ public interface ImageDataFactory {
    *                                    supported by the
    *                                    {@link ImageDataFactory}.
    */
-  <T extends ImageData> T create(Class<T> type, int width, int height) throws UnsupportedFormatException;
-
-  /**
-   * Releases a {@link ImageData} that was created using this
-   * {@link ImageDataFactory}.
-   *
-   * @param imageData The {@link ImageData}.
-   */
-  void release(ImageData imageData);
+  <T extends ImageData> Lease<T> create(Class<T> type, int width, int height) throws UnsupportedFormatException;
 }

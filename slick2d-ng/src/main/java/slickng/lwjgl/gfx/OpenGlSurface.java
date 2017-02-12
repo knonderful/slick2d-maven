@@ -9,7 +9,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * The {@link Surface} implementation for the OpenGL renderer.
  */
-class OpenGlSurface implements Surface {
+public class OpenGlSurface implements Surface {
 
   private final OpenGlTexture texture;
 

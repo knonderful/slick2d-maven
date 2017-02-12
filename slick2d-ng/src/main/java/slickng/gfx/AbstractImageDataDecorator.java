@@ -22,4 +22,9 @@ public abstract class AbstractImageDataDecorator implements ImageData {
   public ImageBuffer getBuffer() {
     return decorated.getBuffer();
   }
+
+  @Override
+  public void release() {
+    decorated.release();
+  }
 }
