@@ -13,7 +13,6 @@ import static java.util.Objects.requireNonNull;
  */
 public class OpenGlImageBuffer implements ImageBuffer {
 
-  private final OpenGlByteBufferFactory bufferFactory;
   private final GuardedByteBuffer data;
   private final PixelFormat pixelFormat;
   private final int imageWidth;
@@ -32,7 +31,6 @@ public class OpenGlImageBuffer implements ImageBuffer {
    * @param surfaceHeight The surface height.
    */
   OpenGlImageBuffer(OpenGlByteBufferFactory bufferFactory, PixelFormat pixelFormat, int imageWidth, int imageHeight) {
-    this.bufferFactory = requireNonNull(bufferFactory, "Argument bufferFactory must be non-null.");
     this.pixelFormat = requireNonNull(pixelFormat, "Argument pixelFormat must be non-null.");
     this.imageWidth = imageWidth;
     this.imageHeight = imageHeight;
@@ -110,9 +108,5 @@ public class OpenGlImageBuffer implements ImageBuffer {
     }
 
     return powOfTwo;
-  }
-
-  private static ByteBuffer createBuffer(OpenGlByteBufferFactory bufferFactory, int width, int height, int bytesPerPixel) {
-    return bufferFactory.create(width * height * bytesPerPixel);
   }
 }
