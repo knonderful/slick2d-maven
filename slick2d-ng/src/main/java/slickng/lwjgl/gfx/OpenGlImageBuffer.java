@@ -14,7 +14,7 @@ import static java.util.Objects.requireNonNull;
 public class OpenGlImageBuffer implements ImageBuffer {
 
   private final OpenGlByteBufferFactory bufferFactory;
-  private final ByteBuffer data;
+  private final GuardedByteBuffer data;
   private final PixelFormat pixelFormat;
   private final int imageWidth;
   private final int imageHeight;
@@ -38,13 +38,21 @@ public class OpenGlImageBuffer implements ImageBuffer {
     this.imageHeight = imageHeight;
     this.surfaceWidth = nextPowerOfTwo(imageWidth);
     this.surfaceHeight = nextPowerOfTwo(imageHeight);
-    this.data = requireNonNull(
-            createBuffer(bufferFactory, this.surfaceWidth, this.surfaceHeight, this.pixelFormat.getBytesPerPixel()),
-            "Argument dataLease must be non-null.");
+    this.data = new GuardedByteBuffer(bufferFactory, this.imageWidth, this.imageHeight, this.surfaceWidth, this.surfaceHeight, this.pixelFormat.getBytesPerPixel());
   }
 
-  ByteBuffer getData() {
-    return data;
+  @Override
+  public void writeByte(int value) {
+    writeByte((byte) (value & 0xFF));
+  }
+
+  @Override
+  public void writeByte(byte value) {
+    data.put(value);
+  }
+
+  ByteBuffer rewindAndGetData() {
+    return data.rewind();
   }
 
   @Override
@@ -74,40 +82,24 @@ public class OpenGlImageBuffer implements ImageBuffer {
 
   @Override
   public void write(InputStream inputStream) throws IOException {
-    // Number of bytes for image data per line
-    int bytesPerLine = pixelFormat.getBytesPerPixel() * imageWidth;
-    // Number of bytes to skip in the destination buffer after each line
-    int skipPerLine = pixelFormat.getBytesPerPixel() * (surfaceWidth - imageWidth);
-
-    // The current line
-    byte[] line = new byte[bytesPerLine];
-    for (int i = 0; i < imageHeight; i++) {
-      // The number of bytes that have already been read for the current line
-      int readInLine = 0;
+    // The image data
+    byte[] imgData = new byte[imageWidth * imageHeight * pixelFormat.getBytesPerPixel()];
+    int readInLine = 0;
       // Read until we have a complete line
-      while (readInLine < bytesPerLine) {
-        int lastRead = inputStream.read(line, readInLine, bytesPerLine - readInLine);
+      while (readInLine < imgData.length) {
+      int lastRead = inputStream.read(imgData, readInLine, imgData.length - readInLine);
         if (lastRead < 0) {
           throw new IOException("Reached end of input stream, but expected more data.");
         }
         readInLine += lastRead;
       }
 
-      // Write the line
-      data.put(line);
-
-      // Skip the "excess" surface space
-      if (skipPerLine > 0) {
-        data.position(data.position() + skipPerLine);
-      }
-    }
-
-    // Note: do not flip() here, because we want to keep the limit at the capacity of the buffer
-    data.rewind();
+    // Write the data
+    data.put(imgData);
   }
 
   void release() {
-    bufferFactory.release(data);
+    data.release();
   }
 
   private static int nextPowerOfTwo(int value) {

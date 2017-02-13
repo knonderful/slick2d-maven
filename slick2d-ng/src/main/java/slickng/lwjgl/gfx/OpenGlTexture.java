@@ -47,7 +47,7 @@ class OpenGlTexture {
             0,
             SRC_PIXEL_FORMAT,
             GL_UNSIGNED_BYTE,
-            imageBuffer.getData());
+            imageBuffer.rewindAndGetData());
 
     return new OpenGlTexture(textureId, imageBuffer.getImageWidth(), imageBuffer.getImageHeight(), imageBuffer.getSurfaceWidth(), imageBuffer.getSurfaceHeight());
   }
