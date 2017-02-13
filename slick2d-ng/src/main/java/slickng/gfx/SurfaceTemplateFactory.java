@@ -15,17 +15,12 @@ public interface SurfaceTemplateFactory {
   /**
    * Creates a new {@link SurfaceTemplate}.
    * <p>
-   * This method returns an {@link SurfaceTemplate} with at least the width and height
-   * as requested. Note that the resulting {@link SurfaceTemplate} is <b>not</b>
-   * guaranteed to be of the requested width and height. This means that caller
-   * must use {@link SurfaceTemplate#getTextureWidth()},
-   * {@link SurfaceTemplate#getTextureHeight()} to determine how to write data to the
-   * buffer.
+   * This method returns a {@link SurfaceTemplate} with the provided image width
+   * and height.
    *
-   * @param <T>    The type of {@link SurfaceTemplate}.
-   * @param type   The type of {@link SurfaceTemplate}.
-   * @param width  The minimal width.
-   * @param height The minimal height.
+   * @param pixelFormat The {@link PixelFormat}.
+   * @param width       The image width.
+   * @param height      The image height.
    * @return A {@link Lease} on the {@link SurfaceTemplate}.
    * @throws UnsupportedFormatException If the {@link SurfaceTemplate} is not
    *                                    supported by the
