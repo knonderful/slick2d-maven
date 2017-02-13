@@ -8,6 +8,7 @@ import slickng.gfx.PixelFormat;
 
 import static org.lwjgl.BufferUtils.createIntBuffer;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.GL_R8;
 
 /**
  * An OpenGL texture.
@@ -19,11 +20,7 @@ import static org.lwjgl.opengl.GL11.*;
 class OpenGlTexture {
 
   private static final int TARGET = GL_TEXTURE_2D;
-  private static final PixelFormat EXPECTED_PIXEL_FORMAT = PixelFormat.RGBA_8;
-  private static final int SRC_PIXEL_FORMAT = GL_RGBA;
-  private static final int DEST_PIXEL_FORMAT = GL_RGBA8;
-
-  private static final Map<PixelFormat, Integer> PIXEL_FORMAT_MAP = createPixelFormatMap();
+  private static final Map<PixelFormat, FormatPair> PIXEL_FORMAT_MAP = createPixelFormatMap();
 
   private final int textureId;
   private final int width;
@@ -38,32 +35,30 @@ class OpenGlTexture {
     glTexParameteri(TARGET, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(TARGET, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+    FormatPair pair = PIXEL_FORMAT_MAP.get(imageBuffer.getPixelFormat());
+    if (pair == null) {
+      throw new IllegalStateException(String.format("Pixel format %s not supported by graphics implementation.", imageBuffer.getPixelFormat()));
+    }
+
     // produce a texture from the byte buffer
     glTexImage2D(TARGET,
             0,
-            toOpenGl(imageBuffer.getPixelFormat()),
+            pair.getDestFormat(),
             imageBuffer.getSurfaceWidth(),
             imageBuffer.getSurfaceHeight(),
             0,
-            SRC_PIXEL_FORMAT,
+            pair.getSrcFormat(),
             GL_UNSIGNED_BYTE,
             imageBuffer.rewindAndGetData());
 
     return new OpenGlTexture(textureId, imageBuffer.getImageWidth(), imageBuffer.getImageHeight(), imageBuffer.getSurfaceWidth(), imageBuffer.getSurfaceHeight());
   }
 
-  private static Map<PixelFormat, Integer> createPixelFormatMap() {
-    Map<PixelFormat, Integer> pixelFormatMap = new EnumMap<>(PixelFormat.class);
-    pixelFormatMap.put(PixelFormat.RGBA_8, GL_RGBA8);
+  private static Map<PixelFormat, FormatPair> createPixelFormatMap() {
+    Map<PixelFormat, FormatPair> pixelFormatMap = new EnumMap<>(PixelFormat.class);
+    pixelFormatMap.put(PixelFormat.RGBA_8, new FormatPair(GL_RGBA, GL_RGBA8));
+    pixelFormatMap.put(PixelFormat.INDEXED_8, new FormatPair(GL_RED, GL_R8));
     return Collections.unmodifiableMap(pixelFormatMap);
-  }
-
-  private static int toOpenGl(PixelFormat pixelFormat) {
-    Integer openGlFormat = PIXEL_FORMAT_MAP.get(pixelFormat);
-    if (openGlFormat == null) {
-      throw new IllegalStateException(String.format("Pixel format %s not supported by graphics implementation.", pixelFormat));
-    }
-    return openGlFormat;
   }
 
   private static int createTextureID() {
@@ -129,4 +124,22 @@ class OpenGlTexture {
     return hash;
   }
 
+  private static class FormatPair {
+
+    private final int srcFormat;
+    private final int destFormat;
+
+    FormatPair(int srcFormat, int destFormat) {
+      this.srcFormat = srcFormat;
+      this.destFormat = destFormat;
+    }
+
+    int getDestFormat() {
+      return destFormat;
+    }
+
+    int getSrcFormat() {
+      return srcFormat;
+    }
+  }
 }
