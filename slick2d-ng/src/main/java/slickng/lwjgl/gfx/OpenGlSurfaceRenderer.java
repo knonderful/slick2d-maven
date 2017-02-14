@@ -23,7 +23,7 @@ class OpenGlSurfaceRenderer implements Renderer2D {
 
   @Override
   public void render(float x, float y, float width, float height) {
-    renderFragmentInternal(x, y, x + width, y + height, 0f, 0f, 1f, 1f);
+    renderFragmentInternal(x, y, x + width, y + height, 0f, 0f, width / surface.getTextureWidth(), height / surface.getTextureHeight());
   }
 
   /**
