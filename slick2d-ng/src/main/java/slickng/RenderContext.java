@@ -10,12 +10,21 @@ import slickng.gfx.Surface;
 public interface RenderContext {
 
   /**
-   * Performs rendering operations with the provided {@link Surface}.
+   * Performs rendering operations with the provided image.
    *
-   * @param surface  The {@link Surface}.
+   * @param surface  The {@link Surface} that contains the image data.
    * @param consumer The {@link Renderer2D} consumer.
    */
   void with(Surface surface, Consumer<Renderer2D> consumer);
+
+  /**
+   * Performs rendering operations with the provided image and palette.
+   *
+   * @param surface  The {@link Surface} that contains the image data.
+   * @param palette  The {@link Surface} that contains the palette data.
+   * @param consumer The {@link Renderer2D} consumer.
+   */
+  void with(Surface surface, Surface palette, Consumer<Renderer2D> consumer);
 
   /**
    * Scales the context.

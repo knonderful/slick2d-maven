@@ -95,7 +95,7 @@ public class PngImageDataReader {
         }
       }
     }
-    
+
     Lease<SurfaceTemplate> lease = factory.create(PixelFormat.RGBA_8, width, height);
     SurfaceTemplate template = lease.borrowSubject();
     try {

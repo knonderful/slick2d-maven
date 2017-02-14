@@ -12,9 +12,13 @@ import slickng.InitContext;
 import slickng.Lease;
 import slickng.RenderContext;
 import slickng.SlickException;
+import slickng.UnsupportedFormatException;
 import slickng.UpdateContext;
 import slickng.gfx.CompositeSprite;
+import slickng.gfx.ImageBuffer;
+import slickng.gfx.PixelFormat;
 import slickng.gfx.PngImageDataReader;
+import slickng.gfx.Rgba8Writer;
 import slickng.gfx.Surface;
 import slickng.gfx.SurfaceLibrary;
 import slickng.gfx.SurfaceTemplate;
@@ -33,6 +37,8 @@ public class RefGame implements Game {
 
   private final SurfaceLibrary surfaceLibrary = new SurfaceLibrary();
   private CompositeSprite sprite;
+  private Surface palette;
+  private Surface indexedSurface;
 
   @Override
   public void deinit() {
@@ -42,6 +48,26 @@ public class RefGame implements Game {
   @Override
   public void init(InitContext context) throws SlickException {
     SurfaceTemplateFactory stf = context.getSurfaceTemplateFactory();
+
+    Color[] paletteColors = {
+      // 0: transparent
+      new Color(255, 0, 255, 0),
+      // 1: general color #1 (black)
+      new Color(0, 0, 0, 255),
+      // 2: general color #2 (white)
+      new Color(255, 255, 255, 255),
+      // 3: general color #3 (skin color)
+      new Color(252, 216, 168, 255),
+      // 4: mega man color 1 (black)
+      new Color(0, 0, 0, 255),
+      // 5: mega man color 2 (dark blue)
+      new Color(0, 112, 236, 255),
+      // 6: mega man color 3 (light blue)
+      new Color(0, 232, 216, 255)
+    };
+
+    this.palette = createPalette(stf, paletteColors);
+    this.indexedSurface = createIndexedSurface(stf, paletteColors);
 
     Surface surf;
     PngImageDataReader reader = new PngImageDataReader(new Color(255, 0, 255));
@@ -87,6 +113,40 @@ public class RefGame implements Game {
     }
   }
 
+  private Surface createIndexedSurface(SurfaceTemplateFactory stf, Color[] paletteColors) throws UnsupportedFormatException {
+    // An 10x6 indexed image
+    byte[] image = {
+      0, 0, 2, 0, 4, 4, 0, 2, 0, 0,
+      0, 2, 0, 4, 3, 3, 4, 0, 2, 0,
+      2, 0, 4, 5, 3, 3, 5, 4, 0, 2,
+      0, 4, 5, 6, 5, 5, 6, 5, 4, 0,
+      0, 0, 4, 6, 4, 4, 6, 4, 0, 0,
+      0, 0, 4, 4, 0, 0, 4, 4, 0, 0
+    };
+
+    return stf.create(PixelFormat.RGBA_8, 10, 6).applyAndExpire(template -> {
+      ImageBuffer buf = template.getBuffer();
+      for (int i : image) {
+        buf.writeByte(i); // r
+        buf.writeByte(0); // g
+        buf.writeByte(0); // b
+        buf.writeByte(255); // a
+      }
+      return template.createSurface();
+    });
+  }
+
+  private Surface createPalette(SurfaceTemplateFactory stf, Color... colors) throws UnsupportedFormatException {
+    return stf.create(PixelFormat.RGBA_8, 256, 1)
+            .applyAndExpire(template -> {
+              Rgba8Writer writer = new Rgba8Writer(template.getBuffer());
+              for (Color color : colors) {
+                writer.writePixel(color);
+              }
+              return template.createSurface();
+            });
+  }
+
   private InputStream getResourceStream(String path) throws IOException {
     return new FileInputStream(new File(path));
   }
@@ -97,6 +157,10 @@ public class RefGame implements Game {
 
     context.with(surfaceLibrary.get(MEGAMAN_PARTS), renderer -> {
       sprite.render(renderer, 16f, 16f);
+    });
+
+    context.with(indexedSurface, palette, renderer -> {
+      renderer.render(64, 64);
     });
   }
 

@@ -20,7 +20,6 @@ public class OpenGlGraphics implements Graphics {
   private final OpenGlByteBufferFactory byteBufferFactory = new OpenGlByteBufferFactory();
   private final OpenGlImageBufferFactory imageBufferFactory = new OpenGlImageBufferFactory(byteBufferFactory);
   private final OpenGlSurfaceTemplateFactory surfaceTemplateFactory = new OpenGlSurfaceTemplateFactory(imageBufferFactory);
-
   private final OpenGlGraphicsOptions options;
 
   /**
@@ -39,7 +38,7 @@ public class OpenGlGraphics implements Graphics {
     }
   }
 
-  private void initOpenGl(int width, int height) {
+  private void initOpenGl(int width, int height) throws SlickException {
     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
@@ -64,6 +63,8 @@ public class OpenGlGraphics implements Graphics {
 
   @Override
   public void deinit() {
+    renderContext.deinit();
+
     Display.destroy();
   }
 
@@ -90,6 +91,8 @@ public class OpenGlGraphics implements Graphics {
     enterOrtho(width, height);
 
     LOG.info(String.format("OpenGL version: %s", glGetString(GL_VERSION)));
+
+    renderContext.init();
 
     return display;
   }

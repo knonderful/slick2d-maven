@@ -38,10 +38,7 @@ public class OpenGlSurface implements Surface {
       return false;
     }
     final OpenGlSurface other = (OpenGlSurface) obj;
-    if (!Objects.equals(this.texture, other.texture)) {
-      return false;
-    }
-    return true;
+    return Objects.equals(this.texture, other.texture);
   }
 
   @Override
