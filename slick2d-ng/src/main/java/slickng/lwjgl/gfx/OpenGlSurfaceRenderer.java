@@ -26,12 +26,34 @@ class OpenGlSurfaceRenderer implements Renderer2D {
     renderFragmentInternal(x, y, x + width, y + height, 0f, 0f, 1f, 1f);
   }
 
-  @Override
+  /**
+   * Renders a fragment of the surface with the provided location. The render
+   * target will have the size of the fragment.
+   *
+   * @param x          The X-position at which to render.
+   * @param y          The Y-position at which to render.
+   * @param fragOffX   The X-offset of the fragment in the surface.
+   * @param fragOffY   The Y-offset of the fragment in the surface.
+   * @param fragWidth  The width of the fragment.
+   * @param fragHeight The heigh of the fragment.
+   */
   public void renderFragment(float x, float y, float fragOffX, float fragOffY, float fragWidth, float fragHeight) {
     renderFragment(x, y, fragWidth, fragHeight, fragOffX, fragOffY, fragWidth, fragHeight);
   }
 
-  @Override
+  /**
+   * Renders a fragment of the surface with the provided location and
+   * dimensions.
+   *
+   * @param x          The X-position at which to render.
+   * @param y          The Y-position at which to render.
+   * @param width      The width of the render target.
+   * @param height     The height of the render target.
+   * @param fragOffX   The X-offset of the fragment in the surface.
+   * @param fragOffY   The Y-offset of the fragment in the surface.
+   * @param fragWidth  The width of the fragment.
+   * @param fragHeight The heigh of the fragment.
+   */
   public void renderFragment(float x, float y, float width, float height, float fragOffX, float fragOffY, float fragWidth, float fragHeight) {
     float textOffX = fragOffX / surface.getTextureWidth();
     float textWidth = fragWidth / surface.getTextureWidth();
