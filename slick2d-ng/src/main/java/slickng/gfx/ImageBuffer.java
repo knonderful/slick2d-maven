@@ -36,7 +36,7 @@ public interface ImageBuffer {
   void write(InputStream inputStream) throws IOException;
 
   /**
-   * Writes a byte into the buffer and advances the writing position.
+   * Writes a byte into the buffer and advances the cursor.
    *
    * @param value The value to write. Only the least-significant 8 bits of the
    *              provided value will be written.
@@ -46,13 +46,25 @@ public interface ImageBuffer {
   void writeByte(int value);
 
   /**
-   * Writes a byte into the buffer and advances the writing position.
+   * Writes a byte into the buffer and advances the cursor.
    *
    * @param value The value to write.
    * @throws ArrayIndexOutOfBoundsException If the capacity of the underlying
    *                                        buffer has been exceeded.
    */
   void writeByte(byte value);
+
+  /**
+   * Reads a byte from the buffer and advances the cursor.
+   *
+   * @return The value that was read.
+   */
+  byte readByte();
+
+  /**
+   * Rewinds the cursor to the start of the buffer.
+   */
+  void rewind();
 
   /**
    * Retrieves the width of the image.

@@ -40,6 +40,16 @@ public class OpenGlImageBuffer implements ImageBuffer {
   }
 
   @Override
+  public byte readByte() {
+    return data.get();
+  }
+
+  @Override
+  public void rewind() {
+    data.rewind();
+  }
+
+  @Override
   public void writeByte(int value) {
     writeByte((byte) (value & 0xFF));
   }

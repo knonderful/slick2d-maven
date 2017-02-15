@@ -40,7 +40,6 @@ class GuardedByteBuffer {
    * Adds a byte to the buffer.
    *
    * @param b The byte.
-   * @return The number of bytes that have been written.
    */
   void put(byte b) {
     putInternal(b);
@@ -50,7 +49,6 @@ class GuardedByteBuffer {
    * Adds an array of bytes to the buffer.
    *
    * @param src The bytes.
-   * @return The number of bytes that have been written.
    */
   void put(byte[] src) {
     // Not the most efficient way, but it will do for now...
@@ -59,7 +57,11 @@ class GuardedByteBuffer {
     }
   }
 
-  private void putInternal(byte b) {
+  byte get() {
+    return getInternal();
+  }
+
+  private void advanceState() throws IndexOutOfBoundsException {
     // Check for the horizontal edge
     if (xOffset == writableWidth) {
       // Check for the vertical edge
@@ -78,6 +80,18 @@ class GuardedByteBuffer {
 
     // Inxrement the horizontal offset
     xOffset++;
+  }
+
+  private byte getInternal() {
+    // Advance the internal position state
+    advanceState();
+    // Read the byte
+    return byteBuffer.get();
+  }
+
+  private void putInternal(byte b) {
+    // Advance the internal position state
+    advanceState();
     // Write the byte
     byteBuffer.put(b);
   }

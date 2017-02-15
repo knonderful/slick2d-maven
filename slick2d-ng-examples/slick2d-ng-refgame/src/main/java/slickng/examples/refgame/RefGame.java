@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import slickng.Color;
@@ -16,12 +18,17 @@ import slickng.UnsupportedFormatException;
 import slickng.UpdateContext;
 import slickng.gfx.CompositeSprite;
 import slickng.gfx.ImageBuffer;
+import slickng.gfx.Indexed8Writer;
 import slickng.gfx.PixelFormat;
 import slickng.gfx.PngImageDataReader;
+import slickng.gfx.Rgba8Indexed8Converter;
+import slickng.gfx.Rgba8Pixel;
+import slickng.gfx.Rgba8Reader;
 import slickng.gfx.Rgba8Writer;
 import slickng.gfx.Surface;
 import slickng.gfx.SurfaceLibrary;
 import slickng.gfx.SurfaceTemplate;
+import slickng.gfx.SurfaceTemplateConverter;
 import slickng.gfx.SurfaceTemplateFactory;
 import slickng.gfx.TileSheet;
 import slickng.lwjgl.LwjlGameContainer;
@@ -49,31 +56,57 @@ public class RefGame implements Game {
   public void init(InitContext context) throws SlickException {
     SurfaceTemplateFactory stf = context.getSurfaceTemplateFactory();
 
-    Color[] paletteColors = {
+    Rgba8Pixel[] paletteColors = {
+      // Group 1
       // 0: transparent
-      new Color(255, 0, 255, 0),
+      new Rgba8Pixel(255, 0, 255, 0),
       // 1: general color #1 (black)
-      new Color(0, 0, 0, 255),
+      new Rgba8Pixel(0, 0, 0, 255),
       // 2: general color #2 (white)
-      new Color(255, 255, 255, 255),
+      new Rgba8Pixel(255, 255, 255, 255),
       // 3: general color #3 (skin color)
-      new Color(252, 216, 168, 255),
-      // 4: mega man color 1 (black)
-      new Color(0, 0, 0, 255),
-      // 5: mega man color 2 (dark blue)
-      new Color(0, 112, 236, 255),
-      // 6: mega man color 3 (light blue)
-      new Color(0, 232, 216, 255)
+      new Rgba8Pixel(252, 216, 168, 255),
+      // Group 2
+      // 4: transparent
+      new Rgba8Pixel(255, 0, 255, 0),
+      // 5: mega man color 1 (black)
+      new Rgba8Pixel(0, 0, 0, 255),
+      // 6: mega man color 2 (dark blue)
+      new Rgba8Pixel(0, 112, 236, 255),
+      // 7: mega man color 3 (light blue)
+      new Rgba8Pixel(0, 232, 216, 255)
     };
 
     this.palette = createPalette(stf, paletteColors);
-    this.indexedSurface = createIndexedSurface(stf, paletteColors);
+    this.indexedSurface = createIndexedSurface(stf);
+
+    Map<Rgba8Pixel, Byte> conversionMap = new HashMap<>(4);
+    conversionMap.put(new Rgba8Pixel(116, 116, 116), (byte) 0);
+    conversionMap.put(new Rgba8Pixel(0, 0, 0), (byte) 1);
+    conversionMap.put(new Rgba8Pixel(0, 112, 236), (byte) 2);
+    conversionMap.put(new Rgba8Pixel(0, 232, 216), (byte) 3);
 
     Surface surf;
     PngImageDataReader reader = new PngImageDataReader(new Color(255, 0, 255));
     try (InputStream pngStream = getResourceStream("resources/megaman_parts.png")) {
-      Lease<SurfaceTemplate> lease = reader.read(stf, pngStream);
-      surf = lease.applyAndExpire(SurfaceTemplate::createSurface);
+      Lease<SurfaceTemplate> srcLease = reader.read(stf, pngStream);
+      SurfaceTemplate srcTemplate = srcLease.borrowSubject();
+      try {
+        Lease<SurfaceTemplate> destLease = stf.create(PixelFormat.INDEXED_8, srcTemplate.getBuffer().getImageWidth(), srcTemplate.getBuffer().getImageHeight());
+        SurfaceTemplate destTemplate = destLease.borrowSubject();
+        try {
+          SurfaceTemplateConverter<Rgba8Pixel, Byte> converter = new SurfaceTemplateConverter<>(
+                  new Rgba8Indexed8Converter(conversionMap), Rgba8Reader::new, Indexed8Writer::new);
+
+          converter.convert(srcTemplate, destTemplate);
+
+          surf = destTemplate.createSurface();
+        } finally {
+          destLease.expire();
+        }
+      } finally {
+        srcLease.expire();
+      }
     } catch (IOException e) {
       throw new SlickException(String.format("I/O error while trying to load the graphics data."), e);
     }
@@ -113,7 +146,7 @@ public class RefGame implements Game {
     }
   }
 
-  private Surface createIndexedSurface(SurfaceTemplateFactory stf, Color[] paletteColors) throws UnsupportedFormatException {
+  private Surface createIndexedSurface(SurfaceTemplateFactory stf) throws UnsupportedFormatException {
     // An 10x6 indexed image
     byte[] image = {
       0, 0, 2, 0, 4, 4, 0, 2, 0, 0,
@@ -136,12 +169,12 @@ public class RefGame implements Game {
     });
   }
 
-  private Surface createPalette(SurfaceTemplateFactory stf, Color... colors) throws UnsupportedFormatException {
+  private Surface createPalette(SurfaceTemplateFactory stf, Rgba8Pixel... colors) throws UnsupportedFormatException {
     return stf.create(PixelFormat.RGBA_8, 256, 1)
             .applyAndExpire(template -> {
               Rgba8Writer writer = new Rgba8Writer(template.getBuffer());
-              for (Color color : colors) {
-                writer.writePixel(color);
+              for (Rgba8Pixel color : colors) {
+                writer.write(color);
               }
               return template.createSurface();
             });
@@ -155,7 +188,7 @@ public class RefGame implements Game {
   public void render(RenderContext context) throws SlickException {
     context.scale(2.0f, 2.0f);
 
-    context.with(surfaceLibrary.get(MEGAMAN_PARTS), renderer -> {
+    context.with(surfaceLibrary.get(MEGAMAN_PARTS), palette, renderer -> {
       sprite.render(renderer, 16f, 16f);
     });
 

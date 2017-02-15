@@ -1,10 +1,8 @@
 package slickng.gfx;
 
-import slickng.Color;
-
 import static java.util.Objects.requireNonNull;
 
-public class Rgba8Writer {
+public class Rgba8Writer implements ImageBufferWriter<Rgba8Pixel> {
 
   private final ImageBuffer target;
 
@@ -12,7 +10,8 @@ public class Rgba8Writer {
     this.target = requireNonNull(target, "Argument target must be non-null.");
   }
 
-  public void writePixel(Color color) {
+  @Override
+  public void write(Rgba8Pixel color) {
     target.writeByte(color.getRed());
     target.writeByte(color.getGreen());
     target.writeByte(color.getBlue());
