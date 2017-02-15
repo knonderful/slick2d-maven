@@ -70,17 +70,28 @@ class OpenGlIndexedSurfaceProgram {
   }
 
   void bind() {
+    assertInitialized();
+
     glUseProgram(programId);
   }
 
   void setPalette(OpenGlSurface palette) {
+    assertInitialized();
+
     int location = glGetUniformLocation(programId, "palette");
     glUniform1i(location, 1);
     glActiveTexture(GL_TEXTURE1);
     palette.bind();
   }
 
+  void setPaletteIndex(int index) {
+    assertInitialized();
+
+  }
+
   void setImage(OpenGlSurface texture) {
+    assertInitialized();
+
     int location = glGetUniformLocation(programId, "texture");
     glUniform1i(location, 0);
     glActiveTexture(GL_TEXTURE0);
@@ -88,6 +99,8 @@ class OpenGlIndexedSurfaceProgram {
   }
 
   void unbind() {
+    assertInitialized();
+
     glUseProgram(0);
   }
 
@@ -109,6 +122,12 @@ class OpenGlIndexedSurfaceProgram {
       out.put(bla);
       out.flip();
       return out;
+    }
+  }
+
+  private void assertInitialized() throws IllegalStateException {
+    if (programId == 0) {
+      throw new IllegalStateException(String.format("%s has not been initialized.", OpenGlIndexedSurfaceProgram.class.getSimpleName()));
     }
   }
 

@@ -19,6 +19,7 @@ import slickng.UpdateContext;
 import slickng.gfx.CompositeSprite;
 import slickng.gfx.ImageBuffer;
 import slickng.gfx.Indexed8Writer;
+import slickng.gfx.PaletteBasedSprite;
 import slickng.gfx.PixelFormat;
 import slickng.gfx.PngImageDataReader;
 import slickng.gfx.Rgba8Indexed8Converter;
@@ -30,6 +31,7 @@ import slickng.gfx.SurfaceLibrary;
 import slickng.gfx.SurfaceTemplate;
 import slickng.gfx.SurfaceTemplateConverter;
 import slickng.gfx.SurfaceTemplateFactory;
+import slickng.gfx.TileBasedSprite;
 import slickng.gfx.TileSheet;
 import slickng.lwjgl.LwjlGameContainer;
 import slickng.tiled.TMap;
@@ -116,19 +118,24 @@ public class RefGame implements Game {
     TileSheet tileSheet = surf.createTileSheet(8, 8);
     sprite = new CompositeSprite(9);
 
+    // First index in the palette for the body colors
+    int bodyIndex = 4;
+    // First index in the palette for the face colors
+    int faceIndex = 0;
+
     // Head
-    sprite.add(4, 0, tileSheet.getTile(7, 0));
-    sprite.add(12, 0, tileSheet.getTile(8, 0));
+    sprite.add(4, 0, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(7, 0)), bodyIndex));
+    sprite.add(12, 0, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(8, 0)), bodyIndex));
     // Torso
-    sprite.add(0, 8, tileSheet.getTile(9, 1));
-    sprite.add(8, 8, tileSheet.getTile(10, 1));
-    sprite.add(16, 8, tileSheet.getTile(11, 1));
+    sprite.add(0, 8, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(9, 1)), bodyIndex));
+    sprite.add(8, 8, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(10, 1)), bodyIndex));
+    sprite.add(16, 8, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(11, 1)), bodyIndex));
     // Legs
-    sprite.add(0, 16, tileSheet.getTile(9, 2));
-    sprite.add(8, 16, tileSheet.getTile(10, 2));
-    sprite.add(16, 16, tileSheet.getTile(11, 2));
+    sprite.add(0, 16, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(9, 2)), bodyIndex));
+    sprite.add(8, 16, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(10, 2)), bodyIndex));
+    sprite.add(16, 16, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(11, 2)), bodyIndex));
     // Face
-    sprite.add(7, 6, tileSheet.getTile(0, 0));
+    sprite.add(7, 6, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(0, 0)), faceIndex));
 
     TMapReader mapReader = new TMapReader(source -> {
       try (InputStream stream = getResourceStream("resources/" + source)) {

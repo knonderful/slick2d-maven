@@ -5,6 +5,8 @@ package slickng.gfx;
  */
 public interface Renderer2D {
 
+  void setPaletteIndex(int index);
+
   /**
    * Renders the entire surface with the provided location.
    *

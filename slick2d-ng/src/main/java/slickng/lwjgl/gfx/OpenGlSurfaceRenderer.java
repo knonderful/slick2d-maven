@@ -1,5 +1,6 @@
 package slickng.lwjgl.gfx;
 
+import java.util.function.Consumer;
 import slickng.gfx.Renderer2D;
 import slickng.gfx.Tile;
 
@@ -11,9 +12,20 @@ import static org.lwjgl.opengl.GL11.*;
 class OpenGlSurfaceRenderer implements Renderer2D {
 
   private final OpenGlSurface surface;
+  private final Consumer<Integer> paletteIndexCallback;
 
   OpenGlSurfaceRenderer(OpenGlSurface surface) {
+    this(surface, null);
+  }
+
+  OpenGlSurfaceRenderer(OpenGlSurface surface, Consumer<Integer> paletteIndexCallback) {
     this.surface = surface;
+    this.paletteIndexCallback = paletteIndexCallback == null ? index -> {} : paletteIndexCallback;
+  }
+
+  @Override
+  public void setPaletteIndex(int index) {
+    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
