@@ -47,7 +47,7 @@ class OpenGlTileSheet implements TileSheet {
     if (indexX >= width) {
       throw new IllegalArgumentException(String.format("Argument indexX (%d) is out of range for the tile sheet (%dx%d).", indexX, width, height));
     }
-    if (indexX >= height) {
+    if (indexY >= height) {
       throw new IllegalArgumentException(String.format("Argument indexY (%d) is out of range for the tile sheet (%dx%d).", indexX, width, height));
     }
 
