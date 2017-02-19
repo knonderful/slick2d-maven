@@ -1,5 +1,7 @@
 package slickng.lwjgl.gfx;
 
+import java.util.Deque;
+import java.util.LinkedList;
 import slickng.gfx.Renderer2D;
 import slickng.gfx.Surface;
 import slickng.gfx.Tile;
@@ -15,6 +17,7 @@ class OpenGlSurfaceRenderer implements Renderer2D {
   static final int IMAGE_TEXTURE_UNIT = 0;
   static final int PALETTE_TEXTURE_UNIT = 1;
   private final OpenGlIndexedSurfaceProgram paletteProgram;
+  private final Deque<OpenGlRenderer2DState> states = new LinkedList<>();
   private OpenGlSurface image;
   private OpenGlSurface palette;
 
@@ -45,20 +48,39 @@ class OpenGlSurfaceRenderer implements Renderer2D {
   }
 
   @Override
-  public Renderer2D rotate(float angle) {
+  public OpenGlSurfaceRenderer restoreState() {
+    states.pop().restore(this);
+
+    return this;
+  }
+
+  @Override
+  public OpenGlSurfaceRenderer rotate(float angle) {
     glRotatef(angle, 0f, 0f, 1f);
     return this;
   }
 
   @Override
-  public Renderer2D scale(float x, float y) {
+  public OpenGlSurfaceRenderer saveState() {
+    states.push(OpenGlRenderer2DState.save(this));
+
+    return this;
+  }
+
+  @Override
+  public OpenGlSurfaceRenderer scale(float x, float y) {
     glScalef(x, y, 1f);
     return this;
   }
 
   @Override
-  public Renderer2D setImage(Surface image) {
-    this.image = castSurface(image);
+  public OpenGlSurfaceRenderer setImage(Surface image) {
+    OpenGlSurface newImage = castSurface(image);
+    if (this.image == newImage) {
+      return this;
+    }
+
+    this.image = newImage;
 
     // Only use the palette shader program if the current image requires it
     if (this.image.getPixelFormat().isIndexed()) {
@@ -74,8 +96,13 @@ class OpenGlSurfaceRenderer implements Renderer2D {
   }
 
   @Override
-  public Renderer2D setPalette(Surface palette) {
-    this.palette = castSurface(palette);
+  public OpenGlSurfaceRenderer setPalette(Surface palette) {
+    OpenGlSurface newPalette = castSurface(palette);
+    if (this.palette == newPalette) {
+      return this;
+    }
+
+    this.palette = newPalette;
 
     paletteProgram.setPaletteSize(this.palette.getTextureWidth(), this.palette.getTextureHeight());
 
@@ -86,16 +113,40 @@ class OpenGlSurfaceRenderer implements Renderer2D {
   }
 
   @Override
-  public Renderer2D setPaletteOffset(int x, int y) {
+  public OpenGlSurfaceRenderer setPaletteOffset(int x, int y) {
     paletteProgram.setPaletteOffset(x, y);
 
     return this;
   }
 
   @Override
-  public Renderer2D translate(float x, float y) {
+  public OpenGlSurfaceRenderer translate(float x, float y) {
     glTranslatef(x, y, 0f);
     return this;
+  }
+
+  OpenGlSurface getImage() {
+    return image;
+  }
+
+  OpenGlSurface getPalette() {
+    return palette;
+  }
+
+  int getPaletteOffsetX() {
+    return paletteProgram.getPaletteOffsetX();
+  }
+
+  int getPaletteOffsetY() {
+    return paletteProgram.getPaletteOffsetY();
+  }
+
+  void pushMatrix() {
+    glPushMatrix();
+  }
+
+  void popMatrix() {
+    glPopMatrix();
   }
 
   private static OpenGlSurface castSurface(Surface surface) {

@@ -6,6 +6,21 @@ package slickng.gfx;
 public interface Renderer2D {
 
   /**
+   * Saves the renderer state. The state can be restored by calling
+   * {@link #restoreState()}.
+   *
+   * @return This {@link Renderer2D}.
+   */
+  Renderer2D saveState();
+
+  /**
+   * Restores the previously saved renderer state.
+   *
+   * @return This {@link Renderer2D}.
+   */
+  Renderer2D restoreState();
+
+  /**
    * Applies a scale transformation.
    *
    * @param x The horizontal scaling factor.

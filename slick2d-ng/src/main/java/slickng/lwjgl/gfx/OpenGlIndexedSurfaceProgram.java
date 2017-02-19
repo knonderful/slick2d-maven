@@ -33,6 +33,14 @@ class OpenGlIndexedSurfaceProgram {
     this.paletteTextureUnit = paletteTextureUnit;
   }
 
+  public int getPaletteOffsetX() {
+    return paletteOffsetX;
+  }
+
+  public int getPaletteOffsetY() {
+    return paletteOffsetY;
+  }
+
   void init() throws SlickException {
     int fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
     try {
