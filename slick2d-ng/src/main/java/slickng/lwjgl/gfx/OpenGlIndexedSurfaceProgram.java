@@ -122,10 +122,10 @@ class OpenGlIndexedSurfaceProgram {
         read = stream.read(data);
       }
 
-      byte[] bla = baos.toByteArray();
+      byte[] shaderSource = baos.toByteArray();
       // Must be a direct buffer
-      ByteBuffer out = ByteBuffer.allocateDirect(bla.length);
-      out.put(bla);
+      ByteBuffer out = ByteBuffer.allocateDirect(shaderSource.length);
+      out.put(shaderSource);
       out.flip();
       return out;
     }
