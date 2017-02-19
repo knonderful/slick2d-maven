@@ -65,10 +65,10 @@ public class RefGame implements Game {
       new Rgba8Pixel(255, 0, 255, 0),
       // 1: general color #1 (black)
       new Rgba8Pixel(0, 0, 0, 255),
-      // 2: general color #2 (white)
-      new Rgba8Pixel(255, 255, 255, 255),
-      // 3: general color #3 (skin color)
+      // 2: general color #2 (skin color)
       new Rgba8Pixel(252, 216, 168, 255),
+      // 3: general color #3 (white)
+      new Rgba8Pixel(255, 255, 255, 255),
       // Group 2
       // 4: transparent
       new Rgba8Pixel(255, 0, 255, 0),
