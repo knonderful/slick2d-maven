@@ -7,9 +7,6 @@ import java.nio.ByteBuffer;
 import slickng.SlickException;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE1;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.*;
 
 /**
@@ -21,9 +18,14 @@ import static org.lwjgl.opengl.GL20.*;
  */
 class OpenGlIndexedSurfaceProgram {
 
+  private final int imageTextureUnit;
+  private final int paletteTextureUnit;
+
   private int programId;
 
-  OpenGlIndexedSurfaceProgram() {
+  OpenGlIndexedSurfaceProgram(int imageTextureUnit, int paletteTextureUnit) {
+    this.imageTextureUnit = imageTextureUnit;
+    this.paletteTextureUnit = paletteTextureUnit;
   }
 
   void init() throws SlickException {
@@ -73,15 +75,12 @@ class OpenGlIndexedSurfaceProgram {
     assertInitialized();
 
     glUseProgram(programId);
-  }
 
-  void setPalette(OpenGlSurface palette) {
-    assertInitialized();
-
-    int location = glGetUniformLocation(programId, "palette");
-    glUniform1i(location, 1);
-    glActiveTexture(GL_TEXTURE1);
-    palette.bind();
+    // Bind the uniforms to the appropriate texture units
+    int textureLocation = glGetUniformLocation(programId, "texture");
+    glUniform1i(textureLocation, imageTextureUnit);
+    int paletteLocation = glGetUniformLocation(programId, "palette");
+    glUniform1i(paletteLocation, paletteTextureUnit);
   }
 
   void setPaletteIndex(int index) {
@@ -89,18 +88,7 @@ class OpenGlIndexedSurfaceProgram {
 
   }
 
-  void setImage(OpenGlSurface texture) {
-    assertInitialized();
-
-    int location = glGetUniformLocation(programId, "texture");
-    glUniform1i(location, 0);
-    glActiveTexture(GL_TEXTURE0);
-    texture.bind();
-  }
-
   void unbind() {
-    assertInitialized();
-
     glUseProgram(0);
   }
 

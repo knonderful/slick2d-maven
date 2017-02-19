@@ -22,6 +22,7 @@ import slickng.gfx.Indexed8Writer;
 import slickng.gfx.PaletteBasedSprite;
 import slickng.gfx.PixelFormat;
 import slickng.gfx.PngImageDataReader;
+import slickng.gfx.Renderer2D;
 import slickng.gfx.Rgba8Indexed8Converter;
 import slickng.gfx.Rgba8Pixel;
 import slickng.gfx.Rgba8Reader;
@@ -193,15 +194,13 @@ public class RefGame implements Game {
 
   @Override
   public void render(RenderContext context) throws SlickException {
-    context.scale(2.0f, 2.0f);
+    Renderer2D r = context.getRenderer2D()
+      .scale(2f, 2f)
+      .translate(32f, 32f)
+      .setImage(surfaceLibrary.get(MEGAMAN_PARTS))
+      .setPalette(palette);
 
-    context.with(surfaceLibrary.get(MEGAMAN_PARTS), palette, renderer -> {
-      sprite.render(renderer, 16f, 16f);
-    });
-
-    context.with(indexedSurface, palette, renderer -> {
-      renderer.render(64, 64);
-    });
+    sprite.render(r);
   }
 
   @Override

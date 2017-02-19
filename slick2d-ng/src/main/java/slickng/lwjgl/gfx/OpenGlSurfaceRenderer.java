@@ -1,9 +1,10 @@
 package slickng.lwjgl.gfx;
 
-import java.util.function.Consumer;
 import slickng.gfx.Renderer2D;
+import slickng.gfx.Surface;
 import slickng.gfx.Tile;
 
+import static java.util.Objects.requireNonNull;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -11,78 +12,90 @@ import static org.lwjgl.opengl.GL11.*;
  */
 class OpenGlSurfaceRenderer implements Renderer2D {
 
-  private final OpenGlSurface surface;
-  private final Consumer<Integer> paletteIndexCallback;
+  static final int IMAGE_TEXTURE_UNIT = 0;
+  static final int PALETTE_TEXTURE_UNIT = 1;
+  private final OpenGlIndexedSurfaceProgram paletteProgram;
+  private OpenGlSurface image;
+  private OpenGlSurface palette;
 
-  OpenGlSurfaceRenderer(OpenGlSurface surface) {
-    this(surface, null);
-  }
-
-  OpenGlSurfaceRenderer(OpenGlSurface surface, Consumer<Integer> paletteIndexCallback) {
-    this.surface = surface;
-    this.paletteIndexCallback = paletteIndexCallback == null ? index -> {} : paletteIndexCallback;
-  }
-
-  @Override
-  public void setPaletteIndex(int index) {
-    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  OpenGlSurfaceRenderer(OpenGlIndexedSurfaceProgram paletteProgram) {
+    this.paletteProgram = requireNonNull(paletteProgram, "Argument paletteProgram must be non-null.");
   }
 
   @Override
-  public void render(float x, float y) {
-    render(x, y, surface.getWidth(), surface.getHeight());
+  public OpenGlSurfaceRenderer render() {
+    render(image.getWidth(), image.getHeight());
+    return this;
   }
 
   @Override
-  public void render(float x, float y, float width, float height) {
-    renderFragmentInternal(x, y, x + width, y + height, 0f, 0f, width / surface.getTextureWidth(), height / surface.getTextureHeight());
-  }
-
-  /**
-   * Renders a fragment of the surface with the provided location. The render
-   * target will have the size of the fragment.
-   *
-   * @param x          The X-position at which to render.
-   * @param y          The Y-position at which to render.
-   * @param fragOffX   The X-offset of the fragment in the surface.
-   * @param fragOffY   The Y-offset of the fragment in the surface.
-   * @param fragWidth  The width of the fragment.
-   * @param fragHeight The heigh of the fragment.
-   */
-  public void renderFragment(float x, float y, float fragOffX, float fragOffY, float fragWidth, float fragHeight) {
-    renderFragment(x, y, fragWidth, fragHeight, fragOffX, fragOffY, fragWidth, fragHeight);
-  }
-
-  /**
-   * Renders a fragment of the surface with the provided location and
-   * dimensions.
-   *
-   * @param x          The X-position at which to render.
-   * @param y          The Y-position at which to render.
-   * @param width      The width of the render target.
-   * @param height     The height of the render target.
-   * @param fragOffX   The X-offset of the fragment in the surface.
-   * @param fragOffY   The Y-offset of the fragment in the surface.
-   * @param fragWidth  The width of the fragment.
-   * @param fragHeight The heigh of the fragment.
-   */
-  public void renderFragment(float x, float y, float width, float height, float fragOffX, float fragOffY, float fragWidth, float fragHeight) {
-    float textOffX = fragOffX / surface.getTextureWidth();
-    float textWidth = fragWidth / surface.getTextureWidth();
-    float textOffY = fragOffY / surface.getTextureHeight();
-    float textHeight = fragHeight / surface.getTextureHeight();
-
-    renderFragmentInternal(
-            x, y, x + width, y + height,
-            textOffX, textOffY, textOffX + textWidth, textOffY + textHeight);
+  public OpenGlSurfaceRenderer render(float width, float height) {
+    renderFragmentInternal(0f, 0f, width, height, 0f, 0f, width / image.getTextureWidth(), height / image.getTextureHeight());
+    return this;
   }
 
   @Override
-  public void renderTile(Tile tile, float x, float y) {
+  public OpenGlSurfaceRenderer render(Tile tile) {
     OpenGlTile t = castTile(tile);
     renderFragmentInternal(
-            x, y, x + t.getWidth(), y + t.getHeight(),
+            0, 0, t.getWidth(), t.getHeight(),
             t.getTx1(), t.getTy1(), t.getTx2(), t.getTy2());
+
+    return this;
+  }
+
+  @Override
+  public Renderer2D rotate(float angle) {
+    glRotatef(angle, 0f, 0f, 1f);
+    return this;
+  }
+
+  @Override
+  public Renderer2D scale(float x, float y) {
+    glScalef(x, y, 1f);
+    return this;
+  }
+
+  @Override
+  public Renderer2D setImage(Surface image) {
+    this.image = castSurface(image);
+
+    // Only use the palette shader program if the current image requires it
+    if (this.image.getPixelFormat().isIndexed()) {
+      paletteProgram.bind();
+    } else {
+      paletteProgram.unbind();
+    }
+
+    // Bind the image
+    this.image.bind(IMAGE_TEXTURE_UNIT);
+
+    return this;
+  }
+
+  @Override
+  public Renderer2D setPalette(Surface palette) {
+    this.palette = castSurface(palette);
+
+    // Bind the palette
+    this.palette.bind(PALETTE_TEXTURE_UNIT);
+
+    return this;
+  }
+
+  @Override
+  public Renderer2D setPaletteOffset(int x, int y) {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public Renderer2D translate(float x, float y) {
+    glTranslatef(x, y, 0f);
+    return this;
+  }
+
+  private static OpenGlSurface castSurface(Surface surface) {
+    return (OpenGlSurface) surface;
   }
 
   private static OpenGlTile castTile(Tile tile) {
@@ -100,6 +113,8 @@ class OpenGlSurfaceRenderer implements Renderer2D {
 
   private void renderInternal(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4,
           float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4) {
+
+    glBegin(GL_QUADS);
     glTexCoord2f(tx1, ty1);
     glVertex3f(x1, y1, 0);
     glTexCoord2f(tx2, ty2);
@@ -108,5 +123,7 @@ class OpenGlSurfaceRenderer implements Renderer2D {
     glVertex3f(x3, y3, 0);
     glTexCoord2f(tx4, ty4);
     glVertex3f(x4, y4, 0);
+    glEnd();
   }
+
 }

@@ -11,7 +11,7 @@ public class TileBasedSprite implements Sprite {
   }
 
   @Override
-  public void render(Renderer2D renderer, float x, float y) {
-    renderer.renderTile(tile, x, y);
+  public void render(Renderer2D renderer) {
+    renderer.render(tile);
   }
 }

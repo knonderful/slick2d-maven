@@ -6,6 +6,13 @@ package slickng.gfx;
 public interface Surface {
 
   /**
+   * Retrieves the {@link PixelFormat}.
+   *
+   * @return The {@link PixelFormat}.
+   */
+  PixelFormat getPixelFormat();
+
+  /**
    * Retrieves the width of the surface.
    *
    * @return The width in pixels.

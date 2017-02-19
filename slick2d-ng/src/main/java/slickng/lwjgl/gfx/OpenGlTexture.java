@@ -8,6 +8,8 @@ import slickng.gfx.PixelFormat;
 
 import static org.lwjgl.BufferUtils.createIntBuffer;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL30.GL_R8;
 
 /**
@@ -27,6 +29,7 @@ class OpenGlTexture {
   private final int height;
   private final int textureWidth;
   private final int textureHeight;
+  private final PixelFormat pixelFormat;
 
   static OpenGlTexture create(OpenGlImageBuffer imageBuffer) {
     int textureId = createTextureID();
@@ -35,9 +38,11 @@ class OpenGlTexture {
     glTexParameteri(TARGET, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(TARGET, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    FormatPair pair = PIXEL_FORMAT_MAP.get(imageBuffer.getPixelFormat());
+    PixelFormat pixelFormat = imageBuffer.getPixelFormat();
+
+    FormatPair pair = PIXEL_FORMAT_MAP.get(pixelFormat);
     if (pair == null) {
-      throw new IllegalStateException(String.format("Pixel format %s not supported by graphics implementation.", imageBuffer.getPixelFormat()));
+      throw new IllegalStateException(String.format("Pixel format %s not supported by graphics implementation.", pixelFormat));
     }
 
     // produce a texture from the byte buffer
@@ -51,7 +56,7 @@ class OpenGlTexture {
             GL_UNSIGNED_BYTE,
             imageBuffer.rewindAndGetData());
 
-    return new OpenGlTexture(textureId, imageBuffer.getImageWidth(), imageBuffer.getImageHeight(), imageBuffer.getSurfaceWidth(), imageBuffer.getSurfaceHeight());
+    return new OpenGlTexture(textureId, imageBuffer.getImageWidth(), imageBuffer.getImageHeight(), imageBuffer.getSurfaceWidth(), imageBuffer.getSurfaceHeight(), pixelFormat);
   }
 
   private static Map<PixelFormat, FormatPair> createPixelFormatMap() {
@@ -67,12 +72,17 @@ class OpenGlTexture {
     return tmp.get(0);
   }
 
-  private OpenGlTexture(int textureId, int width, int height, int textureWidth, int textureHeight) {
+  private OpenGlTexture(int textureId, int width, int height, int textureWidth, int textureHeight, PixelFormat pixelFormat) {
     this.textureId = textureId;
     this.width = width;
     this.height = height;
     this.textureWidth = textureWidth;
     this.textureHeight = textureHeight;
+    this.pixelFormat = pixelFormat;
+  }
+
+  PixelFormat getPixelFormat() {
+    return pixelFormat;
   }
 
   int getHeight() {
@@ -97,8 +107,11 @@ class OpenGlTexture {
 
   /**
    * Binds the {@link OpenGlTexture} to the OpenGL context.
+   *
+   * @param textureUnit The target texture unit (starting at zero).
    */
-  void bind() {
+  void bind(int textureUnit) {
+    glActiveTexture(GL_TEXTURE0 + textureUnit);
     glBindTexture(TARGET, textureId);
   }
 

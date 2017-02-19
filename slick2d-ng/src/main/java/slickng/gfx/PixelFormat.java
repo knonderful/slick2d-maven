@@ -8,18 +8,20 @@ public enum PixelFormat {
   /**
    * RGBA with 8 bits per pixel.
    */
-  RGBA_8(4),
+  RGBA_8(4, false),
   /**
    * Indexed with 8 bits per pixel.
    */
-  INDEXED_8(1);
+  INDEXED_8(1, true);
 
   private final int bytesPerPixel;
   private final int bitsPerPixel;
+  private final boolean indexed;
 
-  private PixelFormat(int bytesPerPixel) {
+  private PixelFormat(int bytesPerPixel, boolean indexed) {
     this.bytesPerPixel = bytesPerPixel;
     this.bitsPerPixel = bytesPerPixel * 8;
+    this.indexed = indexed;
   }
 
   /**
@@ -41,5 +43,16 @@ public enum PixelFormat {
    */
   public int getBytesPerPixel() {
     return bytesPerPixel;
+  }
+
+  /**
+   * Determines whether this is an indexed pixel format, i.e. if the pixels are
+   * to be interpreted as indices into another surface.
+   *
+   * @return {@code true} if this {@link PixelFormat} is indexed, otherwise
+   *         {@code false}.
+   */
+  public boolean isIndexed() {
+    return indexed;
   }
 }

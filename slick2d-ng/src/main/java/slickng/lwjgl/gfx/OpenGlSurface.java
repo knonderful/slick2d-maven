@@ -1,6 +1,7 @@
 package slickng.lwjgl.gfx;
 
 import java.util.Objects;
+import slickng.gfx.PixelFormat;
 import slickng.gfx.Surface;
 import slickng.gfx.TileSheet;
 
@@ -47,6 +48,15 @@ public class OpenGlSurface implements Surface {
   }
 
   @Override
+  public PixelFormat getPixelFormat() {
+    return texture.getPixelFormat();
+  }
+
+  public OpenGlTexture getTexture() {
+    return texture;
+  }
+
+  @Override
   public int hashCode() {
     int hash = 3;
     hash = 17 * hash + Objects.hashCode(this.texture);
@@ -67,10 +77,11 @@ public class OpenGlSurface implements Surface {
   }
 
   /**
-   * Binds the {@link OpenGlTexture} to the OpenGL context. This method must be
-   * called in order to use the {@link OpenGlSurface} for rendering.
+   * Binds the {@link OpenGlTexture} to the OpenGL context.
+   *
+   * @param  textureUnit The target texture unit (starting at zero).
    */
-  void bind() {
-    texture.bind();
+  void bind(int textureUnit) {
+    texture.bind(textureUnit);
   }
 }

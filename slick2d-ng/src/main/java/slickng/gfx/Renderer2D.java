@@ -5,32 +5,79 @@ package slickng.gfx;
  */
 public interface Renderer2D {
 
-  void setPaletteIndex(int index);
+  /**
+   * Applies a scale transformation.
+   *
+   * @param x The horizontal scaling factor.
+   * @param y The vertical scaling factor.
+   * @return This {@link Renderer2D}.
+   */
+  Renderer2D scale(float x, float y);
 
   /**
-   * Renders the entire surface with the provided location.
+   * Applies a translate transformation.
    *
-   * @param x The X-position at which to render.
-   * @param y The Y-position at which to render.
+   * @param x The horizontal translation.
+   * @param y The vertical translation.
+   * @return This {@link Renderer2D}.
    */
-  void render(float x, float y);
+  Renderer2D translate(float x, float y);
 
   /**
-   * Renders the entire surface with the provided location and dimensions.
+   * Applies a rotate transformation.
    *
-   * @param x      The X-position at which to render.
-   * @param y      The Y-position at which to render.
-   * @param width  The width of the render target.
-   * @param height The height of the render target.
+   * @param angle The angle in degrees.
+   * @return This {@link Renderer2D}.
    */
-  void render(float x, float y, float width, float height);
+  Renderer2D rotate(float angle);
 
   /**
-   * Renders a {@link Tile} at the provided location.
+   * Sets the current image.
    *
-   * @param tile The {@link Tile} to render.
-   * @param x    The X-position at which to render.
-   * @param y    The Y-position at which to render.
+   * @param image The image.
+   * @return This {@link Renderer2D}.
    */
-  void renderTile(Tile tile, float x, float y);
+  Renderer2D setImage(Surface image);
+
+  /**
+   * Renders the current palette.
+   *
+   * @param palette The palette.
+   * @return This {@link Renderer2D}.
+   */
+  Renderer2D setPalette(Surface palette);
+
+  /**
+   * Sets the offset in the current palette. This offset will be added to all
+   * indices in an indexed image when rendering.
+   *
+   * @param x The horizontal offset.
+   * @param y The vertical offset.
+   * @return This {@link Renderer2D}.
+   */
+  Renderer2D setPaletteOffset(int x, int y);
+
+  /**
+   * Renders the current image.
+   *
+   * @return This {@link Renderer2D}.
+   */
+  Renderer2D render();
+
+  /**
+   * Renders the current image.
+   *
+   * @param width  The width with which to render the image.
+   * @param height The height with which to render the image.
+   * @return This {@link Renderer2D}.
+   */
+  Renderer2D render(float width, float height);
+
+  /**
+   * Renders a tile from the current image.
+   *
+   * @param tile The {@link Tile}.
+   * @return This {@link Renderer2D}.
+   */
+  Renderer2D render(Tile tile);
 }
