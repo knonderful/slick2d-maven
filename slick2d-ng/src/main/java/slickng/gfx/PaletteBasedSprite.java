@@ -14,7 +14,7 @@ public class PaletteBasedSprite implements Sprite {
 
   @Override
   public void render(Renderer2D renderer) {
-//    renderer.setPaletteOffset(paletteIndexOffset, 0);
+    renderer.setPaletteOffset(paletteIndexOffset, 0);
     sprite.render(renderer);
   }
 

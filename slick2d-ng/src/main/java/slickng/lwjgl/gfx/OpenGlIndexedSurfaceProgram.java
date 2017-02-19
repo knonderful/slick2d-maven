@@ -20,6 +20,11 @@ class OpenGlIndexedSurfaceProgram {
 
   private final int imageTextureUnit;
   private final int paletteTextureUnit;
+  private boolean bound;
+  private int paletteWidth;
+  private int paletteHeight;
+  private int paletteOffsetX;
+  private int paletteOffsetY;
 
   private int programId;
 
@@ -75,21 +80,34 @@ class OpenGlIndexedSurfaceProgram {
     assertInitialized();
 
     glUseProgram(programId);
+    bound = true;
 
     // Bind the uniforms to the appropriate texture units
     int textureLocation = glGetUniformLocation(programId, "texture");
     glUniform1i(textureLocation, imageTextureUnit);
     int paletteLocation = glGetUniformLocation(programId, "palette");
     glUniform1i(paletteLocation, paletteTextureUnit);
+
+    updatePaletteOffsetUniform();
   }
 
-  void setPaletteIndex(int index) {
-    assertInitialized();
+  void setPaletteSize(int width, int height) {
+    this.paletteWidth = width;
+    this.paletteHeight = height;
 
+    updatePaletteOffsetUniform();
+  }
+
+  void setPaletteOffset(int x, int y) {
+    this.paletteOffsetX = x;
+    this.paletteOffsetY = y;
+
+    updatePaletteOffsetUniform();
   }
 
   void unbind() {
     glUseProgram(0);
+    bound = false;
   }
 
   private static ByteBuffer readShaderSource(String filename) throws IOException {
@@ -119,4 +137,10 @@ class OpenGlIndexedSurfaceProgram {
     }
   }
 
+  private void updatePaletteOffsetUniform() {
+    if (bound) {
+      int paletteOffsetLocation = glGetUniformLocation(programId, "paletteOffset");
+      glUniform2f(paletteOffsetLocation, ((float) paletteOffsetX / paletteWidth), ((float) paletteOffsetY / paletteHeight));
+    }
+  }
 }

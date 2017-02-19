@@ -77,6 +77,8 @@ class OpenGlSurfaceRenderer implements Renderer2D {
   public Renderer2D setPalette(Surface palette) {
     this.palette = castSurface(palette);
 
+    paletteProgram.setPaletteSize(this.palette.getTextureWidth(), this.palette.getTextureHeight());
+
     // Bind the palette
     this.palette.bind(PALETTE_TEXTURE_UNIT);
 
@@ -85,7 +87,9 @@ class OpenGlSurfaceRenderer implements Renderer2D {
 
   @Override
   public Renderer2D setPaletteOffset(int x, int y) {
-    throw new UnsupportedOperationException("Not supported yet.");
+    paletteProgram.setPaletteOffset(x, y);
+
+    return this;
   }
 
   @Override
