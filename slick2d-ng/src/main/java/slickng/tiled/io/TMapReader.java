@@ -181,7 +181,7 @@ public class TMapReader {
             })
             .collect(Collectors.toList());
 
-    TTileSet tileSet = new TTileSet(name, tileWidth, tileHeight, firstGid, image, tiles);
+    TTileSet tileSet = new TTileSet(name, tileWidth, tileHeight, image, tiles);
     tileSets.add(tileSet);
   }
 

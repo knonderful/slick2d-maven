@@ -15,7 +15,7 @@ public class TTileSet {
   private final TImage image;
   private final Map<Integer, TTile> tiles;
 
-  public TTileSet(String name, int tileWidth, int tileHeight, int firstGid, TImage image, Collection<TTile> tiles) {
+  public TTileSet(String name, int tileWidth, int tileHeight, TImage image, Collection<TTile> tiles) {
     this.tiles = groupById(tiles);
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
