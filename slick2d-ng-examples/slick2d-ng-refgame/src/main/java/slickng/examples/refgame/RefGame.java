@@ -127,16 +127,9 @@ public class RefGame implements Game {
     // Face
     sprite.add(7, 6, new PaletteBasedSprite(new TileBasedSprite(tileSheet.getTile(0, 0)), faceIndex));
 
-    TMapReader mapReader = new TMapReader(source -> {
-      try (InputStream stream = getResourceStream("resources/" + source)) {
-        // TODO: get transparency from TMX file...
-        return reader.read(stf, stream).createSurface();
-      }
-    });
-
     TMap map;
     try {
-      map = mapReader.read(getResourceStream("resources/testlevel_new.tmx"));
+      map = new TMapReader().read(getResourceStream("resources/testlevel_new.tmx"));
     } catch (IOException | ParserConfigurationException | SAXException | SlickException e) {
       throw new SlickException("Could not not read map file.", e);
     }

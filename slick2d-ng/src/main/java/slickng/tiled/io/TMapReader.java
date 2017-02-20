@@ -29,17 +29,10 @@ import slickng.tiled.TMap;
 import slickng.tiled.TTile;
 import slickng.tiled.TTileSet;
 
-import static java.util.Objects.requireNonNull;
 
 public class TMapReader {
 
   private static final Logger LOG = Logger.getLogger(TMapReader.class.getName());
-
-  private final SurfaceResolver surfaceResolver;
-
-  public TMapReader(SurfaceResolver surfaceResolver) {
-    this.surfaceResolver = requireNonNull(surfaceResolver, "Argument surfaceResolver must be non-null.");
-  }
 
   public TMap read(InputStream inputStream) throws SAXException, IOException, ParserConfigurationException, SlickException {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
