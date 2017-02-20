@@ -1,24 +1,51 @@
 package slickng.tiled;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
-import slickng.gfx.Surface;
-import slickng.gfx.Tile;
-import slickng.gfx.TileSheet;
+import java.util.TreeMap;
 
 public class TTileSet {
 
   private final String name;
+  private final int tileWidth;
+  private final int tileHeight;
   private final int firstGid;
   private final int lastGid;
-  private final Surface surface;
-  private final TileSheet tileSheet;
+  private final TImage image;
+  private final Map<Integer, TTile> tiles;
 
-  public TTileSet(String name, int firstGid, Surface surface, TileSheet tileSheet) {
+  public TTileSet(String name, int tileWidth, int tileHeight, int firstGid, TImage image, Collection<TTile> tiles) {
+    this.tiles = groupById(tiles);
+    this.tileWidth = tileWidth;
+    this.tileHeight = tileHeight;
     this.name = name;
-    this.firstGid = firstGid;
-    this.lastGid = firstGid + tileSheet.getWidth() * tileSheet.getHeight() - 1;
-    this.surface = surface;
-    this.tileSheet = tileSheet;
+    this.firstGid = getFirst(this.tiles);
+    this.lastGid = getLast(this.tiles);
+    this.image = image;
+  }
+
+  private static Map<Integer, TTile> groupById(Collection<TTile> tiles) {
+    Map<Integer, TTile> out = new TreeMap<>();
+    tiles.forEach(tile -> {
+      out.put(tile.getId(), tile);
+    });
+
+    return out;
+  }
+
+  private static Integer getFirst(Map<Integer, TTile> tiles) {
+    return tiles.keySet().stream()
+            .findFirst()
+            .orElse(null);
+  }
+
+  private static Integer getLast(Map<Integer, TTile> tiles) {
+    Integer last = null;
+    for (Integer id : tiles.keySet()) {
+      last = id;
+    }
+    return last;
   }
 
   @Override
@@ -42,14 +69,21 @@ public class TTileSet {
     if (!Objects.equals(this.name, other.name)) {
       return false;
     }
-    if (!Objects.equals(this.surface, other.surface)) {
+    if (!Objects.equals(this.image, other.image)) {
       return false;
     }
-    return Objects.equals(this.tileSheet, other.tileSheet);
+    if (!Objects.equals(this.tiles, other.tiles)) {
+      return false;
+    }
+    return true;
   }
 
   public int getFirstGid() {
     return firstGid;
+  }
+
+  public TImage getImage() {
+    return image;
   }
 
   public int getLastGid() {
@@ -60,27 +94,26 @@ public class TTileSet {
     return name;
   }
 
-  public Surface getSurface() {
-    return surface;
+  public TTile getTile(int gid) {
+    return tiles.get(gid);
   }
 
-  public Tile getTile(int gid) {
-    // Normalize the GID so that it is 0-based
-    int normalizedGid = gid - firstGid;
+  public int getTileHeight() {
+    return tileHeight;
+  }
 
-    return tileSheet.getTile(
-            normalizedGid % tileSheet.getWidth(),
-            normalizedGid / tileSheet.getWidth());
+  public int getTileWidth() {
+    return tileWidth;
   }
 
   @Override
   public int hashCode() {
-    int hash = 3;
-    hash = 29 * hash + Objects.hashCode(this.name);
-    hash = 29 * hash + this.firstGid;
-    hash = 29 * hash + this.lastGid;
-    hash = 29 * hash + Objects.hashCode(this.surface);
-    hash = 29 * hash + Objects.hashCode(this.tileSheet);
+    int hash = 7;
+    hash = 79 * hash + Objects.hashCode(this.name);
+    hash = 79 * hash + this.firstGid;
+    hash = 79 * hash + this.lastGid;
+    hash = 79 * hash + Objects.hashCode(this.image);
+    hash = 79 * hash + Objects.hashCode(this.tiles);
     return hash;
   }
 }
