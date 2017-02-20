@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * The {@link Renderer2D} implementation for the OpenGL renderer.
  */
-class OpenGlSurfaceRenderer implements Renderer2D {
+class OpenGlRenderer2D implements Renderer2D {
 
   static final int IMAGE_TEXTURE_UNIT = 0;
   static final int PALETTE_TEXTURE_UNIT = 1;
@@ -21,24 +21,24 @@ class OpenGlSurfaceRenderer implements Renderer2D {
   private OpenGlSurface image;
   private OpenGlSurface palette;
 
-  OpenGlSurfaceRenderer(OpenGlIndexedSurfaceProgram paletteProgram) {
+  OpenGlRenderer2D(OpenGlIndexedSurfaceProgram paletteProgram) {
     this.paletteProgram = requireNonNull(paletteProgram, "Argument paletteProgram must be non-null.");
   }
 
   @Override
-  public OpenGlSurfaceRenderer render() {
+  public OpenGlRenderer2D render() {
     render(image.getWidth(), image.getHeight());
     return this;
   }
 
   @Override
-  public OpenGlSurfaceRenderer render(float width, float height) {
+  public OpenGlRenderer2D render(float width, float height) {
     renderFragmentInternal(0f, 0f, width, height, 0f, 0f, width / image.getTextureWidth(), height / image.getTextureHeight());
     return this;
   }
 
   @Override
-  public OpenGlSurfaceRenderer render(Tile tile) {
+  public OpenGlRenderer2D render(Tile tile) {
     OpenGlTile t = castTile(tile);
     renderFragmentInternal(
             0, 0, t.getWidth(), t.getHeight(),
@@ -48,33 +48,33 @@ class OpenGlSurfaceRenderer implements Renderer2D {
   }
 
   @Override
-  public OpenGlSurfaceRenderer restoreState() {
+  public OpenGlRenderer2D restoreState() {
     states.pop().restore(this);
 
     return this;
   }
 
   @Override
-  public OpenGlSurfaceRenderer rotate(float angle) {
+  public OpenGlRenderer2D rotate(float angle) {
     glRotatef(angle, 0f, 0f, 1f);
     return this;
   }
 
   @Override
-  public OpenGlSurfaceRenderer saveState() {
+  public OpenGlRenderer2D saveState() {
     states.push(OpenGlRenderer2DState.save(this));
 
     return this;
   }
 
   @Override
-  public OpenGlSurfaceRenderer scale(float x, float y) {
+  public OpenGlRenderer2D scale(float x, float y) {
     glScalef(x, y, 1f);
     return this;
   }
 
   @Override
-  public OpenGlSurfaceRenderer setImage(Surface image) {
+  public OpenGlRenderer2D setImage(Surface image) {
     OpenGlSurface newImage = castSurface(image);
     if (this.image == newImage) {
       return this;
@@ -96,7 +96,7 @@ class OpenGlSurfaceRenderer implements Renderer2D {
   }
 
   @Override
-  public OpenGlSurfaceRenderer setPalette(Surface palette) {
+  public OpenGlRenderer2D setPalette(Surface palette) {
     OpenGlSurface newPalette = castSurface(palette);
     if (this.palette == newPalette) {
       return this;
@@ -113,14 +113,14 @@ class OpenGlSurfaceRenderer implements Renderer2D {
   }
 
   @Override
-  public OpenGlSurfaceRenderer setPaletteOffset(int x, int y) {
+  public OpenGlRenderer2D setPaletteOffset(int x, int y) {
     paletteProgram.setPaletteOffset(x, y);
 
     return this;
   }
 
   @Override
-  public OpenGlSurfaceRenderer translate(float x, float y) {
+  public OpenGlRenderer2D translate(float x, float y) {
     glTranslatef(x, y, 0f);
     return this;
   }

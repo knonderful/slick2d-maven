@@ -10,9 +10,9 @@ import slickng.gfx.Renderer2D;
 class OpenGlRenderContext implements RenderContext {
 
   private final OpenGlIndexedSurfaceProgram paletteProgram = new OpenGlIndexedSurfaceProgram(
-          OpenGlSurfaceRenderer.IMAGE_TEXTURE_UNIT,
-          OpenGlSurfaceRenderer.PALETTE_TEXTURE_UNIT);
-  private final OpenGlSurfaceRenderer renderer2d = new OpenGlSurfaceRenderer(paletteProgram);
+          OpenGlRenderer2D.IMAGE_TEXTURE_UNIT,
+          OpenGlRenderer2D.PALETTE_TEXTURE_UNIT);
+  private final OpenGlRenderer2D renderer2d = new OpenGlRenderer2D(paletteProgram);
 
   OpenGlRenderContext() {
   }

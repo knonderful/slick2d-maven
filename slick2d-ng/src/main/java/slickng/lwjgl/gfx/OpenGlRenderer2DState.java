@@ -1,10 +1,10 @@
 package slickng.lwjgl.gfx;
 
 /**
- * A state in the {@link OpenGlSurfaceRenderer}.
+ * A state in the {@link OpenGlRenderer2D}.
  * <p>
  * Note that this class is designed to work closely together with
- * {@link OpenGlSurfaceRenderer}. It is presumed that the state that is being
+ * {@link OpenGlRenderer2D}. It is presumed that the state that is being
  * restores is always the last state that was saved. This assumption allows the
  * implementation to avoid unnecessary tracking for internals (such as the
  * transformation matrices).
@@ -23,14 +23,14 @@ public class OpenGlRenderer2DState {
     this.paletteOffsetY = paletteOffsetY;
   }
 
-  void restore(OpenGlSurfaceRenderer renderer) {
+  void restore(OpenGlRenderer2D renderer) {
     renderer.setImage(image)
             .setPalette(palette)
             .setPaletteOffset(paletteOffsetX, paletteOffsetY)
             .popMatrix();
   }
 
-  static OpenGlRenderer2DState save(OpenGlSurfaceRenderer r) {
+  static OpenGlRenderer2DState save(OpenGlRenderer2D r) {
     r.pushMatrix();
     return new OpenGlRenderer2DState(
             r.getImage(),
