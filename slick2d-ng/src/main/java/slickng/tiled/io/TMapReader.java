@@ -43,23 +43,20 @@ public class TMapReader {
     Node mapNode = getChildNodeOrFail(doc, "map");
 
     Collection<TTileSet> tileSets = new LinkedList<>();
-    List<TLayer> layers = new LinkedList<>();
-
-    NodeList mapChildren = mapNode.getChildNodes();
-    for (int i = 0; i < mapChildren.getLength(); i++) {
-      Node node = mapChildren.item(i);
+    forEachChild(mapNode, node -> {
       String nodeName = node.getNodeName();
       if (nodeName.equals("tileset")) {
         handleTilesetNode(node, tileSets);
-      } else if (nodeName.equals("layer")) {
-        handleTileLayerNode(node, layers);
-      } else if (nodeName.equals("objectgroup")) {
-        // Not yet supported
-        LOG.info(String.format("Skipping unsupported XML node: '%s'.", nodeName));
-      } else {
-        LOG.finest(String.format("Skipping unexpected XML node: '%s'.", nodeName));
       }
-    }
+    });
+
+    List<TLayer> layers = new LinkedList<>();
+    forEachChild(mapNode, node -> {
+      String nodeName = node.getNodeName();
+      if (nodeName.equals("layer")) {
+        handleTileLayerNode(node, layers);
+      }
+    });
 
     return new TMap(tileSets, layers);
   }
@@ -126,7 +123,7 @@ public class TMapReader {
     return properties;
   }
 
-  private void handleTilesetNode(Node node, Collection<TTileSet> tileSets) throws IOException, SlickException {
+  private void handleTilesetNode(Node node, Collection<TTileSet> tileSets) throws SlickException {
     NamedNodeMap atts = node.getAttributes();
     String name = getValueOrFail(atts, "name");
     int firstGid = Integer.parseInt(getValueOrFail(atts, "firstgid"));

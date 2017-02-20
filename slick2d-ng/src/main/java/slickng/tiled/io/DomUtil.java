@@ -2,6 +2,8 @@ package slickng.tiled.io;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import slickng.SlickConsumer;
 import slickng.SlickException;
 
 /**
@@ -54,6 +56,20 @@ public class DomUtil {
     }
 
     return val;
+  }
+
+  /**
+   * Passes each child node of the provided node to a consumer.
+   *
+   * @param node     The (parent) node.
+   * @param consumer The child node consumer.
+   * @throws SlickException The exception from the consumer.
+   */
+  public static void forEachChild(Node node, SlickConsumer<Node> consumer) throws SlickException {
+    NodeList list = node.getChildNodes();
+    for (int i = 0; i < list.getLength(); i++) {
+      consumer.accept(list.item(i));
+    }
   }
 
   private static Node getChildNode(Node node, String name, boolean required) throws SlickException {
