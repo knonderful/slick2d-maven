@@ -1,6 +1,5 @@
 package slickng.gfx;
 
-import slickng.Lease;
 import slickng.UnsupportedFormatException;
 
 /**
@@ -21,10 +20,10 @@ public interface SurfaceTemplateFactory {
    * @param pixelFormat The {@link PixelFormat}.
    * @param width       The image width.
    * @param height      The image height.
-   * @return A {@link Lease} on the {@link SurfaceTemplate}.
+   * @return A {@link SurfaceTemplate}.
    * @throws UnsupportedFormatException If the {@link SurfaceTemplate} is not
    *                                    supported by the
    *                                    {@link SurfaceTemplateFactory}.
    */
-  Lease<SurfaceTemplate> create(PixelFormat pixelFormat, int width, int height) throws UnsupportedFormatException;
+  SurfaceTemplate create(PixelFormat pixelFormat, int width, int height) throws UnsupportedFormatException;
 }

@@ -11,7 +11,6 @@ import org.xml.sax.SAXException;
 import slickng.Color;
 import slickng.Game;
 import slickng.InitContext;
-import slickng.Lease;
 import slickng.RenderContext;
 import slickng.SlickException;
 import slickng.UnsupportedFormatException;
@@ -92,24 +91,14 @@ public class RefGame implements Game {
     Surface surf;
     PngImageDataReader reader = new PngImageDataReader(new Color(255, 0, 255));
     try (InputStream pngStream = getResourceStream("resources/megaman_parts.png")) {
-      Lease<SurfaceTemplate> srcLease = reader.read(stf, pngStream);
-      SurfaceTemplate srcTemplate = srcLease.borrowSubject();
-      try {
-        Lease<SurfaceTemplate> destLease = stf.create(PixelFormat.INDEXED_8, srcTemplate.getBuffer().getImageWidth(), srcTemplate.getBuffer().getImageHeight());
-        SurfaceTemplate destTemplate = destLease.borrowSubject();
-        try {
-          SurfaceTemplateConverter<Rgba8Pixel, Byte> converter = new SurfaceTemplateConverter<>(
-                  new Rgba8Indexed8Converter(conversionMap), Rgba8Reader::new, Indexed8Writer::new);
+      SurfaceTemplate srcTemplate = reader.read(stf, pngStream);
+      SurfaceTemplate destTemplate = stf.create(PixelFormat.INDEXED_8, srcTemplate.getBuffer().getImageWidth(), srcTemplate.getBuffer().getImageHeight());
+      SurfaceTemplateConverter<Rgba8Pixel, Byte> converter = new SurfaceTemplateConverter<>(
+              new Rgba8Indexed8Converter(conversionMap), Rgba8Reader::new, Indexed8Writer::new);
 
-          converter.convert(srcTemplate, destTemplate);
+      converter.convert(srcTemplate, destTemplate);
 
-          surf = destTemplate.createSurface();
-        } finally {
-          destLease.expire();
-        }
-      } finally {
-        srcLease.expire();
-      }
+      surf = destTemplate.createSurface();
     } catch (IOException e) {
       throw new SlickException(String.format("I/O error while trying to load the graphics data."), e);
     }
@@ -141,8 +130,7 @@ public class RefGame implements Game {
     TMapReader mapReader = new TMapReader(source -> {
       try (InputStream stream = getResourceStream("resources/" + source)) {
         // TODO: get transparency from TMX file...
-        Lease<SurfaceTemplate> lease = reader.read(stf, stream);
-        return lease.applyAndExpire(SurfaceTemplate::createSurface);
+        return reader.read(stf, stream).createSurface();
       }
     });
 
@@ -165,27 +153,24 @@ public class RefGame implements Game {
       0, 0, 4, 4, 0, 0, 4, 4, 0, 0
     };
 
-    return stf.create(PixelFormat.RGBA_8, 10, 6).applyAndExpire(template -> {
-      ImageBuffer buf = template.getBuffer();
-      for (int i : image) {
-        buf.writeByte(i); // r
-        buf.writeByte(0); // g
-        buf.writeByte(0); // b
-        buf.writeByte(255); // a
-      }
-      return template.createSurface();
-    });
+    SurfaceTemplate template = stf.create(PixelFormat.RGBA_8, 10, 6);
+    ImageBuffer buf = template.getBuffer();
+    for (int i : image) {
+      buf.writeByte(i); // r
+      buf.writeByte(0); // g
+      buf.writeByte(0); // b
+      buf.writeByte(255); // a
+    }
+    return template.createSurface();
   }
 
   private Surface createPalette(SurfaceTemplateFactory stf, Rgba8Pixel... colors) throws UnsupportedFormatException {
-    return stf.create(PixelFormat.RGBA_8, 256, 1)
-            .applyAndExpire(template -> {
-              Rgba8Writer writer = new Rgba8Writer(template.getBuffer());
-              for (Rgba8Pixel color : colors) {
-                writer.write(color);
-              }
-              return template.createSurface();
-            });
+    SurfaceTemplate template = stf.create(PixelFormat.RGBA_8, 256, 1);
+    Rgba8Writer writer = new Rgba8Writer(template.getBuffer());
+    for (Rgba8Pixel color : colors) {
+      writer.write(color);
+    }
+    return template.createSurface();
   }
 
   private InputStream getResourceStream(String path) throws IOException {
@@ -195,10 +180,10 @@ public class RefGame implements Game {
   @Override
   public void render(RenderContext context) throws SlickException {
     Renderer2D r = context.getRenderer2D()
-      .scale(2f, 2f)
-      .translate(32f, 32f)
-      .setImage(surfaceLibrary.get(MEGAMAN_PARTS))
-      .setPalette(palette);
+            .scale(2f, 2f)
+            .translate(32f, 32f)
+            .setImage(surfaceLibrary.get(MEGAMAN_PARTS))
+            .setPalette(palette);
 
     sprite.render(r);
   }

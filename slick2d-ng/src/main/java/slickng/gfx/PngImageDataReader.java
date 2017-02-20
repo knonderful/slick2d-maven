@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import slickng.Color;
-import slickng.Lease;
 import slickng.UnsupportedFormatException;
 
 /**
@@ -52,11 +51,11 @@ public class PngImageDataReader {
     this.transparent = transparent;
   }
   
-  public Lease<SurfaceTemplate> read(SurfaceTemplateFactory factory, InputStream inputStream) throws IOException, UnsupportedFormatException {
+  public SurfaceTemplate read(SurfaceTemplateFactory factory, InputStream inputStream) throws IOException, UnsupportedFormatException {
     return readImageData(factory, ImageIO.read(inputStream), transparent);
   }
   
-  private static Lease<SurfaceTemplate> readImageData(SurfaceTemplateFactory factory, BufferedImage image, Color transparent) throws IOException, UnsupportedFormatException {
+  private static SurfaceTemplate readImageData(SurfaceTemplateFactory factory, BufferedImage image, Color transparent) throws IOException, UnsupportedFormatException {
     int width = image.getWidth();
     int height = image.getHeight();
     
@@ -96,14 +95,9 @@ public class PngImageDataReader {
       }
     }
 
-    Lease<SurfaceTemplate> lease = factory.create(PixelFormat.RGBA_8, width, height);
-    SurfaceTemplate template = lease.borrowSubject();
-    try {
-      ImageBuffer buffer = template.getBuffer();
-      buffer.write(new ByteArrayInputStream(data));
-    } finally {
-      lease.returnSubject(template);
-    }
-    return lease;
+    SurfaceTemplate template = factory.create(PixelFormat.RGBA_8, width, height);
+    ImageBuffer buffer = template.getBuffer();
+    buffer.write(new ByteArrayInputStream(data));
+    return template;
   }
 }
