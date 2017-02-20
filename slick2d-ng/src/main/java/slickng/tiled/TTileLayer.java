@@ -13,7 +13,7 @@ public class TTileLayer implements TLayer {
   private final String name;
   private final int width;
   private final int height;
-  private final Collection<Integer> tiles;
+  private final Collection<TTile> tiles;
 
   /**
    * Creates a new instance.
@@ -23,7 +23,7 @@ public class TTileLayer implements TLayer {
    * @param height The height.
    * @param tiles  The tiles.
    */
-  public TTileLayer(String name, int width, int height, Collection<Integer> tiles) {
+  public TTileLayer(String name, int width, int height, Collection<TTile> tiles) {
     this.name = name;
     this.width = width;
     this.height = height;
@@ -69,11 +69,11 @@ public class TTileLayer implements TLayer {
   }
 
   /**
-   * Retrieves GIDs of the tiles.
+   * Retrieves the tiles.
    *
-   * @return A collection of GIDs.
+   * @return A collection of tiles.
    */
-  public Collection<Integer> getTiles() {
+  public Collection<TTile> getTiles() {
     return Collections.unmodifiableCollection(tiles);
   }
 
