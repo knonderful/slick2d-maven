@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
+/**
+ * A tile layer in a {@link TMap}.
+ */
 public class TTileLayer implements TLayer {
 
   private final String name;
@@ -12,6 +15,14 @@ public class TTileLayer implements TLayer {
   private final int height;
   private final Collection<Integer> tiles;
 
+  /**
+   * Creates a new instance.
+   *
+   * @param name   The name.
+   * @param width  The width.
+   * @param height The height.
+   * @param tiles  The tiles.
+   */
   public TTileLayer(String name, int width, int height, Collection<Integer> tiles) {
     this.name = name;
     this.width = width;
@@ -43,6 +54,11 @@ public class TTileLayer implements TLayer {
     return Objects.equals(this.tiles, other.tiles);
   }
 
+  /**
+   * Retrieves the height.
+   *
+   * @return The height.
+   */
   public int getHeight() {
     return height;
   }
@@ -61,6 +77,11 @@ public class TTileLayer implements TLayer {
     return Collections.unmodifiableCollection(tiles);
   }
 
+  /**
+   * Retrieves the width.
+   *
+   * @return The width.
+   */
   public int getWidth() {
     return width;
   }

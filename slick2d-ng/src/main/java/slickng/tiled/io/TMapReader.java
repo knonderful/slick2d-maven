@@ -169,7 +169,7 @@ public class TMapReader {
             .boxed()
             .map(tileId -> {
               TTile tile = explicitTiles.stream()
-                      .filter(t -> t.getId() == tileId)
+                      .filter(t -> t.getGid() == tileId)
                       .findAny()
                       .orElse(null);
 
