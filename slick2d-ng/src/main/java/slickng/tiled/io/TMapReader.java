@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javax.xml.parsers.DocumentBuilder;
@@ -27,13 +27,12 @@ import slickng.tiled.TImage;
 import slickng.tiled.TLayer;
 import slickng.tiled.TMap;
 import slickng.tiled.TTile;
+import slickng.tiled.TTileLayer;
 import slickng.tiled.TTileSet;
 
 import static slickng.tiled.io.DomUtil.*;
 
 public class TMapReader {
-
-  private static final Logger LOG = Logger.getLogger(TMapReader.class.getName());
 
   public TMap read(InputStream inputStream) throws SAXException, IOException, ParserConfigurationException, SlickException {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -46,15 +45,26 @@ public class TMapReader {
     forEachChild(mapNode, node -> {
       String nodeName = node.getNodeName();
       if (nodeName.equals("tileset")) {
-        handleTilesetNode(node, tileSets);
+        tileSets.add(getTileSet(node));
       }
     });
+
+    Function<Integer, TTile> tileResolver = gid -> {
+      for (TTileSet ts : tileSets) {
+        TTile tile = ts.getTile(gid);
+        if (tile != null) {
+          return tile;
+        }
+      }
+
+      return null;
+    };
 
     List<TLayer> layers = new LinkedList<>();
     forEachChild(mapNode, node -> {
       String nodeName = node.getNodeName();
       if (nodeName.equals("layer")) {
-        handleTileLayerNode(node, layers);
+        layers.add(getTileLayer(node, tileResolver));
       }
     });
 
@@ -123,7 +133,7 @@ public class TMapReader {
     return properties;
   }
 
-  private void handleTilesetNode(Node node, Collection<TTileSet> tileSets) throws SlickException {
+  private TTileSet getTileSet(Node node) throws SlickException {
     NamedNodeMap atts = node.getAttributes();
     String name = getValueOrFail(atts, "name");
     int firstGid = Integer.parseInt(getValueOrFail(atts, "firstgid"));
@@ -165,12 +175,40 @@ public class TMapReader {
             })
             .collect(Collectors.toList());
 
-    TTileSet tileSet = new TTileSet(name, tileWidth, tileHeight, image, tiles);
-    tileSets.add(tileSet);
+    return new TTileSet(name, tileWidth, tileHeight, image, tiles);
   }
 
-  private void handleTileLayerNode(Node node, List<TLayer> layers) {
+  private TTileLayer getTileLayer(Node node, Function<Integer, TTile> tileResolver) throws SlickException {
+    NamedNodeMap attribs = node.getAttributes();
+    String name = getValueOrFail(attribs, "name");
+    int width = Integer.parseInt(getValueOrFail(attribs, "width"));
+    int height = Integer.parseInt(getValueOrFail(attribs, "height"));
 
+    Node dataNode = getChildNodeOrFail(node, "data");
+
+    List<TTile> tiles = new LinkedList<>();
+    forEachChild(dataNode, tileNode -> {
+      if (!"tile".equals(tileNode.getNodeName())) {
+        return;
+      }
+
+      TTile tile;
+      int gid = Integer.parseInt(getValueOrFail(tileNode.getAttributes(), "gid"));
+
+      // Tiled has GID 0 reserved for "empty"
+      if (gid == 0) {
+        tile = null;
+      } else {
+        tile = tileResolver.apply(gid);
+        if (tile == null) {
+          throw new SlickException(String.format("No tile found with GID %d.", gid));
+        }
+      }
+
+      tiles.add(tile);
+    });
+
+    return new TTileLayer(name, width, height, tiles);
   }
 
 }

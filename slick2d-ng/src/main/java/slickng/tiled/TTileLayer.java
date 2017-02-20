@@ -1,8 +1,8 @@
 package slickng.tiled;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,17 +13,17 @@ public class TTileLayer implements TLayer {
   private final String name;
   private final int width;
   private final int height;
-  private final Collection<TTile> tiles;
+  private final List<TTile> tiles;
 
   /**
    * Creates a new instance.
    *
    * @param name   The name.
-   * @param width  The width.
-   * @param height The height.
+   * @param width  The width in tiles.
+   * @param height The height in tiles.
    * @param tiles  The tiles.
    */
-  public TTileLayer(String name, int width, int height, Collection<TTile> tiles) {
+  public TTileLayer(String name, int width, int height, List<TTile> tiles) {
     this.name = name;
     this.width = width;
     this.height = height;
@@ -57,7 +57,7 @@ public class TTileLayer implements TLayer {
   /**
    * Retrieves the height.
    *
-   * @return The height.
+   * @return The height in tiles.
    */
   public int getHeight() {
     return height;
@@ -73,14 +73,14 @@ public class TTileLayer implements TLayer {
    *
    * @return A collection of tiles.
    */
-  public Collection<TTile> getTiles() {
-    return Collections.unmodifiableCollection(tiles);
+  public List<TTile> getTiles() {
+    return Collections.unmodifiableList(tiles);
   }
 
   /**
    * Retrieves the width.
    *
-   * @return The width.
+   * @return The width in tiles.
    */
   public int getWidth() {
     return width;
