@@ -29,6 +29,7 @@ import slickng.tiled.TMap;
 import slickng.tiled.TTile;
 import slickng.tiled.TTileSet;
 
+import static slickng.tiled.io.DomUtil.*;
 
 public class TMapReader {
 
@@ -63,21 +64,7 @@ public class TMapReader {
     return new TMap(tileSets, layers);
   }
 
-  private static String getValueOrFail(NamedNodeMap map, String name) throws IOException {
-    Node node = map.getNamedItem(name);
-    if (node == null) {
-      throw new IOException(String.format("Missing mandatory attribute '%s'.", name));
-    }
-
-    String val = node.getNodeValue();
-    if (val == null || val.isEmpty()) {
-      throw new IOException(String.format("Missing value for attribute '%s'.", name));
-    }
-
-    return val;
-  }
-
-  private TTile getTile(Node tileNode, int firstGid) throws NumberFormatException, IOException {
+  private TTile getTile(Node tileNode, int firstGid) throws NumberFormatException, SlickException {
     // This ID is actually the index of the tile in the current tile set, so we need to convert to GID
     int tileId = Integer.parseInt(getValueOrFail(tileNode.getAttributes(), "id")) + firstGid;
 
@@ -100,7 +87,7 @@ public class TMapReader {
     return new TTile(tileId, properties, animation);
   }
 
-  private TAnimation getTileAnimation(Node animationNode, int firstGid) throws NumberFormatException, IOException {
+  private TAnimation getTileAnimation(Node animationNode, int firstGid) throws NumberFormatException, SlickException {
     TAnimation animation;
     NodeList animChildren = animationNode.getChildNodes();
     List<TAnimationFrame> frames = new ArrayList<>(animChildren.getLength());
@@ -122,7 +109,7 @@ public class TMapReader {
     return animation;
   }
 
-  private Map<String, String> getTileProperties(Node propertiesNode) throws IOException {
+  private Map<String, String> getTileProperties(Node propertiesNode) throws SlickException {
     NodeList propNodes = propertiesNode.getChildNodes();
     Map<String, String> properties = new HashMap<>(propNodes.getLength());
     for (int j = 0; j < propNodes.getLength(); j++) {
@@ -187,31 +174,6 @@ public class TMapReader {
 
   private void handleTileLayerNode(Node node, List<TLayer> layers) {
 
-  }
-
-  private static Node getChildNode(Node node, String name) throws IOException {
-    return getChildNode(node, name, false);
-  }
-
-  private static Node getChildNodeOrFail(Node node, String name) throws IOException {
-    return getChildNode(node, name, true);
-  }
-
-  private static Node getChildNode(Node node, String name, boolean required) throws IOException {
-    Node curNode = node.getFirstChild();
-    while (curNode != null) {
-      if (curNode.getNodeName().equals(name)) {
-        return curNode;
-      }
-
-      curNode = curNode.getNextSibling();
-    }
-
-    if (required) {
-      throw new IOException(String.format("Node '%s' not found.", name));
-    }
-
-    return null;
   }
 
 }
