@@ -1,5 +1,7 @@
 package slickng.tiled;
 
+import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -22,6 +24,27 @@ public class TImage {
     this.source = requireNonNull(source, "Argument source must be non-null.");
     this.width = width;
     this.height = height;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final TImage other = (TImage) obj;
+    if (!Objects.equals(this.source, other.source)) {
+      return false;
+    }
+    if (this.width != other.width) {
+      return false;
+    }
+    return this.height == other.height;
   }
 
   /**
@@ -49,5 +72,14 @@ public class TImage {
    */
   public int getWidth() {
     return width;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 5;
+    hash = 97 * hash + Objects.hashCode(this.source);
+    hash = 97 * hash + this.width;
+    hash = 97 * hash + this.height;
+    return hash;
   }
 }

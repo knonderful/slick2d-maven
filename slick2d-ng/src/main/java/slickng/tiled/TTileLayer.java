@@ -42,13 +42,13 @@ public class TTileLayer implements TLayer {
       return false;
     }
     final TTileLayer other = (TTileLayer) obj;
+    if (!Objects.equals(this.name, other.name)) {
+      return false;
+    }
     if (this.width != other.width) {
       return false;
     }
     if (this.height != other.height) {
-      return false;
-    }
-    if (!Objects.equals(this.name, other.name)) {
       return false;
     }
     return Objects.equals(this.tiles, other.tiles);

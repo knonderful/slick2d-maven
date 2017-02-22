@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A Tiled map (http://www.mapeditor.org/).
@@ -29,6 +30,24 @@ public class TMap {
   public TMap(Collection<TTileSet> tileSets, List<TLayer> layers) {
     this.tileSets = new ArrayList<>(tileSets);
     this.layers = new ArrayList<>(layers);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final TMap other = (TMap) obj;
+    if (!Objects.equals(this.tileSets, other.tileSets)) {
+      return false;
+    }
+    return Objects.equals(this.layers, other.layers);
   }
 
   /**
@@ -62,5 +81,13 @@ public class TMap {
             .filter(ts -> ts.containsTile(gid))
             .findAny()
             .orElse(null);
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 97 * hash + Objects.hashCode(this.tileSets);
+    hash = 97 * hash + Objects.hashCode(this.layers);
+    return hash;
   }
 }

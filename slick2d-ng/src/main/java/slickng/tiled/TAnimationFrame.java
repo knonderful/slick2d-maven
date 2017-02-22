@@ -19,6 +19,24 @@ public class TAnimationFrame {
     this.duration = duration;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final TAnimationFrame other = (TAnimationFrame) obj;
+    if (this.tileGid != other.tileGid) {
+      return false;
+    }
+    return this.duration == other.duration;
+  }
+
   /**
    * Retrieves the duration.
    *
@@ -35,5 +53,13 @@ public class TAnimationFrame {
    */
   public int getTileGid() {
     return tileGid;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 37 * hash + this.tileGid;
+    hash = 37 * hash + this.duration;
+    return hash;
   }
 }

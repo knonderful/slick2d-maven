@@ -3,6 +3,7 @@ package slickng.tiled;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -26,6 +27,24 @@ public class TObjectGroup implements TLayer {
   }
 
   @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final TObjectGroup other = (TObjectGroup) obj;
+    if (!Objects.equals(this.name, other.name)) {
+      return false;
+    }
+    return Objects.equals(this.objects, other.objects);
+  }
+
+  @Override
   public String getName() {
     return name;
   }
@@ -37,5 +56,13 @@ public class TObjectGroup implements TLayer {
    */
   public Collection<TObject> getObjects() {
     return Collections.unmodifiableCollection(objects);
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 97 * hash + Objects.hashCode(this.name);
+    hash = 97 * hash + Objects.hashCode(this.objects);
+    return hash;
   }
 }

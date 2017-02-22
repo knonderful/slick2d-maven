@@ -3,6 +3,7 @@ package slickng.tiled;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An object in an {@link TObjectGroup}.
@@ -60,6 +61,57 @@ public class TObject {
     this.tile = tile;
     this.properties = new HashMap<>(properties);
     this.visible = visible;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final TObject other = (TObject) obj;
+    if (this.id != other.id) {
+      return false;
+    }
+    if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
+      return false;
+    }
+    if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
+      return false;
+    }
+    if (Float.floatToIntBits(this.width) != Float.floatToIntBits(other.width)) {
+      return false;
+    }
+    if (Float.floatToIntBits(this.height) != Float.floatToIntBits(other.height)) {
+      return false;
+    }
+    if (Float.floatToIntBits(this.rotation) != Float.floatToIntBits(other.rotation)) {
+      return false;
+    }
+    if (this.flippedHorizontally != other.flippedHorizontally) {
+      return false;
+    }
+    if (this.flippedVertically != other.flippedVertically) {
+      return false;
+    }
+    if (this.visible != other.visible) {
+      return false;
+    }
+    if (!Objects.equals(this.name, other.name)) {
+      return false;
+    }
+    if (!Objects.equals(this.type, other.type)) {
+      return false;
+    }
+    if (!Objects.equals(this.tile, other.tile)) {
+      return false;
+    }
+    return Objects.equals(this.properties, other.properties);
   }
 
   /**
@@ -150,6 +202,25 @@ public class TObject {
    */
   public float getY() {
     return y;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 17 * hash + this.id;
+    hash = 17 * hash + Objects.hashCode(this.name);
+    hash = 17 * hash + Objects.hashCode(this.type);
+    hash = 17 * hash + Float.floatToIntBits(this.x);
+    hash = 17 * hash + Float.floatToIntBits(this.y);
+    hash = 17 * hash + Float.floatToIntBits(this.width);
+    hash = 17 * hash + Float.floatToIntBits(this.height);
+    hash = 17 * hash + Float.floatToIntBits(this.rotation);
+    hash = 17 * hash + (this.flippedHorizontally ? 1 : 0);
+    hash = 17 * hash + (this.flippedVertically ? 1 : 0);
+    hash = 17 * hash + Objects.hashCode(this.tile);
+    hash = 17 * hash + Objects.hashCode(this.properties);
+    hash = 17 * hash + (this.visible ? 1 : 0);
+    return hash;
   }
 
   /**

@@ -3,6 +3,7 @@ package slickng.tiled;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * An animation in a {@link TMap}.
@@ -20,6 +21,21 @@ public class TAnimation {
     this.frames = new ArrayList<>(frames);
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final TAnimation other = (TAnimation) obj;
+    return Objects.equals(this.frames, other.frames);
+  }
+
   /**
    * Retrieves the frames.
    *
@@ -27,5 +43,12 @@ public class TAnimation {
    */
   public List<TAnimationFrame> getFrames() {
     return Collections.unmodifiableList(frames);
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 3;
+    hash = 17 * hash + Objects.hashCode(this.frames);
+    return hash;
   }
 }
