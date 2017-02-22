@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" nextobjectid="11">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="16" tileheight="16" nextobjectid="16">
  <tileset firstgid="1" name="flashman_level" tilewidth="16" tileheight="16" tilecount="40" columns="8">
   <image source="flashman_level.png" width="128" height="80"/>
   <tile id="0">
@@ -332,7 +332,20 @@
   </data>
  </layer>
  <objectgroup name="entities">
-  <object id="10" type="player" gid="2147483689" x="156" y="60" width="24" height="24"/>
+  <object id="10" name="some_name" type="player" gid="3221225513" x="156" y="60.5" width="24" height="24">
+   <properties>
+    <property name="custom_prop" type="color" value="#ffaa55ff"/>
+   </properties>
+  </object>
+  <object id="11" name="some_name" gid="28" x="92" y="76" width="16" height="16"/>
+  <object id="12" x="160" y="120" width="52" height="56"/>
+  <object id="13" x="32" y="148">
+   <polyline points="0,0 28,56 60,24 44,-32 0,0"/>
+  </object>
+  <object id="14" x="148" y="64" width="60" height="40">
+   <ellipse/>
+  </object>
+  <object id="15" x="228" y="28" width="28" height="40" visible="0"/>
  </objectgroup>
  <layer name="terrain" width="20" height="15">
   <properties>

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -26,6 +27,8 @@ import slickng.tiled.TAnimationFrame;
 import slickng.tiled.TImage;
 import slickng.tiled.TLayer;
 import slickng.tiled.TMap;
+import slickng.tiled.TObject;
+import slickng.tiled.TObjectGroup;
 import slickng.tiled.TTile;
 import slickng.tiled.TTileLayer;
 import slickng.tiled.TTileSet;
@@ -36,6 +39,10 @@ import static slickng.tiled.io.DomUtil.*;
  * A reader for {@link TMap}s.
  */
 public class TMapReader {
+
+  private static final int GID_HFLIP_MASK = 0b10000000_00000000_00000000_00000000;
+  private static final int GID_VFLIP_MASK = 0b01000000_00000000_00000000_00000000;
+  private static final int GID_NUMBER_MASK = 0b00111111_11111111_11111111_11111111;
 
   /**
    * Reads the map from the provided input stream.
@@ -81,10 +88,62 @@ public class TMapReader {
       String nodeName = node.getNodeName();
       if (nodeName.equals("layer")) {
         layers.add(getTileLayer(node, tileResolver));
+      } else if (nodeName.equals("objectgroup")) {
+        layers.add(getObjectGroup(node, tileResolver));
       }
     });
 
     return new TMap(tileSets, layers);
+  }
+
+  private TObject getObject(Node node, Function<Integer, TTile> tileResolver) throws SlickException {
+    NamedNodeMap atts = node.getAttributes();
+    int id = Integer.parseInt(getValueOrFail(atts, "id"));
+    String name = getValue(atts, "name");
+    String type = getValue(atts, "type");
+    float x = Float.parseFloat(getValueOrFail(atts, "x"));
+    float y = Float.parseFloat(getValueOrFail(atts, "y"));
+    float width = Float.parseFloat(Optional.ofNullable(getValue(atts, "width")).orElse("0"));
+    float height = Float.parseFloat(Optional.ofNullable(getValue(atts, "height")).orElse("0"));
+    float rotation = Float.parseFloat(Optional.ofNullable(getValue(atts, "rotation")).orElse("0"));
+    Map<String, String> properties = getProperties(node);
+    boolean visibile = Integer.parseInt(Optional.ofNullable(getValue(atts, "visible")).orElse("1")) != 0;
+
+    TTile tile;
+    boolean flippedHorizontally;
+    boolean flippedVertically;
+
+    String gidStr = getValue(atts, "gid");
+    if (gidStr == null || gidStr.isEmpty()) {
+      tile = null;
+      flippedHorizontally = false;
+      flippedVertically = false;
+    } else {
+      long gid = Long.parseLong(gidStr);
+      // If bit 32 is set, the object is horizontally flipped
+      flippedHorizontally = (gid & GID_HFLIP_MASK) != 0;
+      // If bit 31 is set, the object is vertically flipped
+      flippedVertically = (gid & GID_VFLIP_MASK) != 0;
+      // Mask away the previous two bits for looking up the tile
+      tile = tileResolver.apply((int) (gid & GID_NUMBER_MASK));
+    }
+
+    return new TObject(id, name, type, x, y, width, height, rotation, flippedHorizontally, flippedVertically, tile, properties, visibile);
+  }
+
+  private TObjectGroup getObjectGroup(Node node, Function<Integer, TTile> tileResolver) throws SlickException {
+    String name = getValueOrFail(node.getAttributes(), "name");
+
+    Collection<TObject> objects = new LinkedList<>();
+    forEachChild(node, childNode -> {
+      if (!"object".equals(childNode.getNodeName())) {
+        return;
+      }
+
+      objects.add(getObject(childNode, tileResolver));
+    });
+
+    return new TObjectGroup(name, objects);
   }
 
   private TTile getTile(Node tileNode, int firstGid) throws NumberFormatException, SlickException {
@@ -96,7 +155,7 @@ public class TMapReader {
     if (propertiesNode == null) {
       properties = Collections.emptyMap();
     } else {
-      properties = getTileProperties(propertiesNode);
+      properties = getProperties(propertiesNode);
     }
 
     TAnimation animation;
@@ -132,7 +191,7 @@ public class TMapReader {
     return animation;
   }
 
-  private Map<String, String> getTileProperties(Node propertiesNode) throws SlickException {
+  private Map<String, String> getProperties(Node propertiesNode) throws SlickException {
     NodeList propNodes = propertiesNode.getChildNodes();
     Map<String, String> properties = new HashMap<>(propNodes.getLength());
     for (int j = 0; j < propNodes.getLength(); j++) {

@@ -45,17 +45,19 @@ public class DomUtil {
    * @throws SlickException If the attribute was not found.
    */
   public static String getValueOrFail(NamedNodeMap map, String name) throws SlickException {
-    Node node = map.getNamedItem(name);
-    if (node == null) {
-      throw new SlickException(String.format("Missing mandatory attribute '%s'.", name));
-    }
+    return getValue(map, name, true);
+  }
 
-    String val = node.getNodeValue();
-    if (val == null || val.isEmpty()) {
-      throw new SlickException(String.format("Missing value for attribute '%s'.", name));
-    }
-
-    return val;
+  /**
+   * Retrieves an attribute from the provided map.
+   *
+   * @param map  The map.
+   * @param name The name of the attribute.
+   * @return The attribute value.
+   * @throws SlickException If the attribute was not found.
+   */
+  public static String getValue(NamedNodeMap map, String name) throws SlickException {
+    return getValue(map, name, false);
   }
 
   /**
@@ -87,6 +89,26 @@ public class DomUtil {
     }
 
     return null;
+  }
+
+  private static String getValue(NamedNodeMap map, String name, boolean required) throws SlickException {
+    Node node = map.getNamedItem(name);
+    if (node == null) {
+      if (required) {
+        throw new SlickException(String.format("Missing mandatory attribute '%s'.", name));
+      } else {
+        return null;
+      }
+    }
+
+    String val = node.getNodeValue();
+    if (val == null || val.isEmpty()) {
+      if (required) {
+        throw new SlickException(String.format("Missing value for attribute '%s'.", name));
+      }
+    }
+
+    return val;
   }
 
   private DomUtil() {
