@@ -32,8 +32,24 @@ import slickng.tiled.TTileSet;
 
 import static slickng.tiled.io.DomUtil.*;
 
+/**
+ * A reader for {@link TMap}s.
+ */
 public class TMapReader {
 
+  /**
+   * Reads the map from the provided input stream.
+   *
+   * @param inputStream The source input stream.
+   * @return The {@link TMap}.
+   * @throws SAXException                 If the input stream contains syntactic
+   *                                      errors.
+   * @throws IOException                  If an I/O error occurred while
+   *                                      reading.
+   * @throws ParserConfigurationException If the parser could not be created.
+   * @throws SlickException               If the input stream contains
+   *                                      unexpected data.
+   */
   public TMap read(InputStream inputStream) throws SAXException, IOException, ParserConfigurationException, SlickException {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder = dbf.newDocumentBuilder();
