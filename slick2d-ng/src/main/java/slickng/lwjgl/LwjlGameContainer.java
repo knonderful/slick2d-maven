@@ -9,15 +9,15 @@ import slickng.Input;
 import slickng.SlickException;
 import slickng.UpdateContext;
 import slickng.gfx.Display;
+import slickng.gfx.SurfaceTemplateFactory;
 import slickng.lwjgl.gfx.OpenGlGraphics;
 import slickng.lwjgl.gfx.OpenGlGraphicsOptions;
+import slickng.lwjgl.input.LwjglInput;
 
 import static java.util.Objects.requireNonNull;
 
-import slickng.gfx.SurfaceTemplateFactory;
-
 /**
- * A {@link GameContainer} implementation is implemented using the LWJGL
+ * A {@link GameContainer} implementation that is implemented using the LWJGL
  * library.
  */
 public class LwjlGameContainer implements GameContainer {
@@ -53,7 +53,7 @@ public class LwjlGameContainer implements GameContainer {
             .setFpsLimit(frameRate)
     );
     this.deltaStep = 1000f / frameRate;
-    this.gameContext = new GameContext(new DummyInput(), graphics);
+    this.gameContext = new GameContext(new LwjglInput(), graphics);
   }
 
   private int nextDelta() {
@@ -140,8 +140,5 @@ public class LwjlGameContainer implements GameContainer {
     public Input getInput() {
       return input;
     }
-  }
-
-  private static class DummyInput implements Input {
   }
 }
