@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
 import slickng.Color;
 import slickng.Game;
 import slickng.InitContext;
+import slickng.Keyboard;
 import slickng.RenderContext;
 import slickng.SlickException;
 import slickng.UnsupportedFormatException;
@@ -48,6 +49,8 @@ public class RefGame implements Game {
   private CompositeSprite sprite;
   private Surface palette;
   private Surface indexedSurface;
+  private float posX = 32f;
+  private float posY = 32f;
 
   @Override
   public void deinit() {
@@ -174,7 +177,7 @@ public class RefGame implements Game {
   public void render(RenderContext context) throws SlickException {
     Renderer2D r = context.getRenderer2D()
             .scale(2f, 2f)
-            .translate(32f, 32f)
+            .translate(posX, posY)
             .setImage(surfaceLibrary.get(MEGAMAN_PARTS))
             .setPalette(palette);
 
@@ -188,7 +191,19 @@ public class RefGame implements Game {
 
   @Override
   public void update(UpdateContext context, int delta) throws SlickException {
-    // To be implemented
+    Keyboard kb = context.getInput().getKeyboard();
+    if (kb.isPressed(Keyboard.KEY_LEFT)) {
+      this.posX--;
+    }
+    if (kb.isPressed(Keyboard.KEY_RIGHT)) {
+      this.posX++;
+    }
+    if (kb.isPressed(Keyboard.KEY_UP)) {
+      this.posY--;
+    }
+    if (kb.isPressed(Keyboard.KEY_DOWN)) {
+      this.posY++;
+    }
   }
 
   public static void main(String[] args) throws SlickException {
